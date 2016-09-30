@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="306.0" prefWidth="381.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="projektTabelle" prefHeight="306.0" prefWidth="381.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="projektNameColumn" maxWidth="1.7976931348623157E308" prefWidth="104.33334350585938" text="Projekt Name" />
+          <TableColumn fx:id="projektErstellerColumn" maxWidth="1.7976931348623157E308" prefWidth="85.66665649414062" text="Ersteller" />
+            <TableColumn fx:id="projektStartColumn" maxWidth="1.7976931348623157E308" prefWidth="77.0" text="Start Datum" />
+            <TableColumn fx:id="projektEndeColumn" maxWidth="1.7976931348623157E308" prefWidth="113.0" text="End Datum" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
