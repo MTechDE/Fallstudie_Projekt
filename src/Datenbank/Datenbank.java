@@ -59,8 +59,6 @@ public class Datenbank {
 	}
 
 	public boolean speicherProjekt(Projekt projekt) {
-		boolean result;
-
 		/*
 		 * Ein Projekt wird komplett auf einmal in die Datenbank geschrieben.
 		 * Existiert ein Projekt und seine Phasen und deren Personen bereits,
@@ -84,7 +82,6 @@ public class Datenbank {
 					.addParameter("abgeschickt", projekt.isAbgeschickt())
 					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
 					.executeUpdate();
-			result = true;
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 			return false;
@@ -172,21 +169,21 @@ public class Datenbank {
 		}
 	}
 
-	public Projekt getProjekt(String projektName, String projektErsteller, Boolean abgeschickt) {
+	public Projekt getProjekt(Projekt projekt) {
 
 		/*
 		 * Diese Methode gibt ein komplettes Projekt mit allen Phasen und
 		 * Personen zurück.
 		 */
 
-		Projekt projekt = new Projekt(projektName, projektErsteller, abgeschickt);
+		Projekt newprojekt = new Projekt(projekt.getName(), projekt.getErsteller(), projekt.isAbgeschickt());
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Person> personen = new ArrayList<Person>();
 
 		// Hole Phasen anhand des Projektnamens
 		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
-			phasen = con.createQuery(sql).addParameter("projektName", projektName).executeAndFetch(Phase.class);
+			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName()).executeAndFetch(Phase.class);
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 		}
@@ -199,7 +196,7 @@ public class Datenbank {
 			for (Phase phase : phasen) {
 				personen = con.createQuery(sql)
 						.addParameter("phasenName", phase.getName())
-						.addParameter("projektName", projekt.getName())
+						.addParameter("projektName", newprojekt.getName())
 						.executeAndFetch(Person.class);
 				phase.setPersonen(personen);
 			}
@@ -208,21 +205,21 @@ public class Datenbank {
 		}
 
 		// Schreibe die Phasen in das Projekt
-		projekt.setPhasen((ArrayList<Phase>) phasen);
+		newprojekt.setPhasen((ArrayList<Phase>) phasen);
 
-		for (Phase phase : projekt.getPhasen()) {
+		for (Phase phase : newprojekt.getPhasen()) {
 			for (Person person : personen) {
 				person.setZugehoerigkeit(phase.getName());
 			}
 		}
 		
 		//Setze Projekt Start- und Enddatum
-		int endPhase = projekt.getPhasen().size() - 1;
-		projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
-		projekt.setEndDate(projekt.getPhasen().get(endPhase).getEndDate());
+		int endPhase = newprojekt.getPhasen().size() - 1;
+		newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
+		newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 
 		// Weise die Personen dem projekt hinzu
-		projekt.setPersonen((ArrayList<Person>) personen);
+		newprojekt.setPersonen((ArrayList<Person>) personen);
 		
 		
 		//Hole die Kompetenzen aus der DB
@@ -230,7 +227,7 @@ public class Datenbank {
 		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 		try (Connection con = sql2o.open()) {
 			 kompetenzen = con.createQuery(sql)
-					 .addParameter("projektName", projekt.getName())
+					 .addParameter("projektName", newprojekt.getName())
 					 .executeAndFetch(Kompetenz.class);
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
@@ -242,7 +239,7 @@ public class Datenbank {
 		try (Connection con = sql2o.open()) {
 			for (Kompetenz kompetenz : kompetenzen) {
 				 List<Person> tmpPersonen = con.createQuery(sql)
-							.addParameter("projekt", projekt.getName())
+							.addParameter("projekt", newprojekt.getName())
 							.addParameter("name", kompetenz.getName())
 							.executeAndFetch(Person.class);
 				kompetenz.setPersonen(tmpPersonen);
@@ -253,10 +250,10 @@ public class Datenbank {
 		}
 		
 		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu
-		projekt.setKompetenzen(kompetenzen);
+		newprojekt.setKompetenzen(kompetenzen);
 		
 
-		return projekt;
+		return newprojekt;
 	}
 
 	public boolean updateProjekt(Projekt projekt) {
