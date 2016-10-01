@@ -5,13 +5,10 @@ import java.util.List;
 
 import Projekt.Person;
 
-/**
- * @author Daniel Sogl
- */
 
 /*
  * Ein projekt enthaelt die jeweiligen Phasen und die enthaltenen Personen.
- * Zus√§tzlich wird gespeichert, ob ein Projekt bereits abgeschickt wurde oder
+ * Zus‰tzlich wird gespeichert, ob ein Projekt bereits abgeschickt wurde oder
  * nicht.
  */
 public class Projekt {
