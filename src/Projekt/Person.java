@@ -10,33 +10,29 @@ public class Person {
 	private String name;
 	private String zugehoerigkeit;
 	private double pt;
-	private double mak;
-	private double preisPT;
+	private double risiko;
 	private boolean intern;
 	
 	public Person(String name){
 		this.setName(name);
 		this.setPt(0);
-		this.setMak(0.0);
-		this.setPreisPT(0.0);
 		this.setIntern(true);
+		this.setRisiko(0);
 	}
 
 	public Person(String name, boolean intern) {
 		this.setName(name);
 		this.setPt(0);
-		this.setMak(0.0);
-		this.setPreisPT(0.0);
 		this.setIntern(intern);
+		this.setRisiko(0);
 	}
 	
-	public Person(String name, String zugehoerigkeit, double pt, double mak, double preisPT, boolean intern) {
+	public Person(String name, String zugehoerigkeit, double pt, boolean intern, double risiko) {
 		this.setName(name);
 		this.setZugehoerigkeit(zugehoerigkeit);
 		this.setPt(pt);
-		this.setMak(mak);
-		this.setPreisPT(preisPT);
 		this.setIntern(intern);
+		this.setRisiko(risiko);
 	}
 
 	public String getName() {
@@ -63,28 +59,20 @@ public class Person {
 		this.pt = pt;
 	}
 
-	public double getMak() {
-		return mak;
-	}
-
-	public void setMak(double mak) {
-		this.mak = mak;
-	}
-
-	public double getPreisPT() {
-		return preisPT;
-	}
-
-	public void setPreisPT(double preisPT) {
-		this.preisPT = preisPT;
-	}
-
 	public boolean isIntern() {
 		return intern;
 	}
 
 	public void setIntern(boolean intern) {
 		this.intern = intern;
+	}
+
+	public double getRisiko() {
+		return risiko;
+	}
+
+	public void setRisiko(double risiko) {
+		this.risiko = risiko;
 	}
 
 }

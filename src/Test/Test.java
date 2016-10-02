@@ -32,7 +32,7 @@ public class Test {
 		Test6();
 		Test7();
 
-		DeleteAllData();
+//		DeleteAllData();
 		System.out.println("Tests Beendet");
 
 	}
@@ -362,8 +362,8 @@ public class Test {
 				System.out.println("Phase: " + phase.getName());
 				for (Person person : phase.getPersonen()) {
 					person.setZugehoerigkeit(phase.getName());
-					System.out.println("Beteiligte: " + person.getName() + " PT: " + person.getPt() + " Kosten p.Pt: "
-							+ person.getPreisPT() + " Zugehörigkeit: " + person.getZugehoerigkeit());
+					System.out.println("Beteiligte: " + person.getName() + " PT: " + person.getPt() +
+							" Zugehörigkeit: " + person.getZugehoerigkeit());
 				}
 			}
 		}

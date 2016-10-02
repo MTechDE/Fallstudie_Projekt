@@ -91,9 +91,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Personen der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO beteiligte(beteiligteKey, person, phase, projekt, pt, mak, preisPT, intern) " + 
-		"VALUES(:beteiligteKey, :person, :phase, :projekt, :pt, :mak, :preisPT, :intern) " + 
-		"ON DUPLICATE KEY UPDATE beteiligteKey=:beteiligteKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, mak=:mak, preisPT=:preisPT, intern=:intern";
+		sql = "INSERT INTO beteiligte(beteiligteKey, person, phase, projekt, pt, intern, risiko) " + 
+		"VALUES(:beteiligteKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
+		"ON DUPLICATE KEY UPDATE beteiligteKey=:beteiligteKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
 
 		try (Connection con = sql2o.beginTransaction()) {
 			Query query = con.createQuery(sql);
@@ -106,9 +106,8 @@ public class Datenbank {
 							.addParameter("phase", phase.getName())
 							.addParameter("projekt", projekt.getName())
 							.addParameter("pt", person.getPt())
-							.addParameter("mak", person.getMak())
-							.addParameter("preisPT", person.getPreisPT())
 							.addParameter("intern", person.isIntern())
+							.addParameter("risiko", person.getRisiko())
 							.addToBatch();
 				}
 			}
@@ -169,7 +168,7 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, mak, preisPT, intern from beteiligte b " + 
+		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, intern, risiko from beteiligte b " + 
 		"WHERE b.phase=:phasenName AND b.projekt=:projektName";
 
 		try (Connection con = sql2o.open()) {
