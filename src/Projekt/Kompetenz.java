@@ -5,6 +5,10 @@ import java.util.List;
 
 import Projekt.Person;
 
+/**
+ * In einem Kompetenzen Objekt werden die beteiligten Personen abgespeichert.
+ * @author Daniel Sogl
+ */
 public class Kompetenz {
 
 	private String name;

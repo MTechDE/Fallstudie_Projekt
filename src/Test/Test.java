@@ -9,8 +9,10 @@ import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
 
-/*
+/**
  * In dieser Klasse sollen alle eigene Tests programmiert werden.
+ * @author Daniel Sogl
+ *
  */
 
 public class Test {
@@ -195,8 +197,8 @@ public class Test {
 		System.out.println("Lade Projekte aus der DB");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 1", "Daniel", true)));
 
 			System.out.println("Projekt 2 Startdatum: " + projekte.get(0).getStartDate() + " Enddatum: "
 					+ projekte.get(0).getEndDate());
@@ -227,10 +229,10 @@ public class Test {
 		projekte.clear();
 		personen.clear();
 		phasen.clear();
-		System.out.println("Hole Projekt aus der DB und füge eine neue Phase hinzu");
+		System.out.println("Hole Projekt aus der DB und fï¿½ge eine neue Phase hinzu");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
 
 			for (Phase phase : projekte.get(0).getPhasen()) {
 				System.out.println(phase.getName());
@@ -274,18 +276,13 @@ public class Test {
 		personen.clear();
 		phasen.clear();
 
-		System.out.println("Überprüfe die Datenbank auf Personen und Projekte");
+		System.out.println("ÃœberprÃ¼fe die Datenbank auf Projekte");
 
 		if (myDB.testConnection()) {
 			if (!myDB.getProjekte().isEmpty())
 				System.out.println("Projekte Gefunden: " + myDB.getProjekte().size());
 			else
 				System.out.println("Keine Projekte angelegt!");
-
-			if (!myDB.getPersonen().isEmpty())
-				System.out.println("Personen gefunden: " + myDB.getPersonen().size());
-			else
-				System.out.println("Keine Personen gefunden!");
 		}
 	}
 
@@ -296,9 +293,9 @@ public class Test {
 		personen.clear();
 		phasen.clear();
 
-		System.out.println("Hole Projekt aus der DB und lösche eine Phase und eine Person");
+		System.out.println("Hole Projekt aus der DB und lÃ¶sche eine Phase und eine Person");
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
 			projekte.get(0).getPhasen().remove(1);
 			projekte.get(0).getPhasen().get(0).getPersonen().remove(0);
 		}
@@ -319,8 +316,8 @@ public class Test {
 		System.out.println("Erste Tabelle anhand der Phasen und Personen");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
-			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 1", "Daniel", true)));
 			
 			for (Projekt projekt : projekte) {
 				for (Kompetenz kompetenz : projekt.getKompetenzen()) {
@@ -366,14 +363,14 @@ public class Test {
 				for (Person person : phase.getPersonen()) {
 					person.setZugehoerigkeit(phase.getName());
 					System.out.println("Beteiligte: " + person.getName() + " PT: " + person.getPt() + " Kosten p.Pt: "
-							+ person.getPreisPT() + " Zugehörigkeit: " + person.getZugehoerigkeit());
+							+ person.getPreisPT() + " ZugehÃ¶rigkeit: " + person.getZugehoerigkeit());
 				}
 			}
 		}
 	}
 
 	public static void DeleteAllData() {
-		System.out.println("Lösche alle Daten aus der DB");
+		System.out.println("LÃ¶sche alle Daten aus der Datenbank");
 		for (Projekt projekt : projekte) {
 			myDB.deleteProjekt(projekt);
 		}

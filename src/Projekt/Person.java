@@ -1,6 +1,7 @@
 package Projekt;
 
 /**
+ * Ein Personen Objekt beinhaltet alle Personen spezifischen Daten.
  * @author Daniel Sogl
  */
 

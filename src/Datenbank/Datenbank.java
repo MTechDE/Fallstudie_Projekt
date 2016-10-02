@@ -14,42 +14,30 @@ import Projekt.Phase;
 import Projekt.Projekt;
 
 /**
+ * Alle Opperationen welche mit der Datenbank zu tun haben (speichern und laden von Projekten),
+ * werden mit dieser Klasse realisiert.
  * @author Daniel Sogl
- */
-
-/*
- * Alle Operationen welche mit der DB zu tun haben, werden ueber diese Klasse
- * abgearbeitet. Fehler werden als Exception abgefangen. Treten fehler auf, wird
- * ein boolean Wert -false - zurueckgegeben. Ergebnisse einer SELECT Abfrage
- * werden als ArrayListen mit den passenden Objecten zurueckgegeben.
+ * @version 1.2
  */
 
 public class Datenbank {
 
-	// Variablen um Verbindung mit der DB aufnehmen zu kÃ¶nnen
 	private Sql2o sql2o;
+	private String sql;
 
-	// Query Ergebnisse werden in Listen gespeichert
-
+	/**
+	 * DB Anmeldedaten werden im Konstruktur konfiguriert
+	 */
 	public Datenbank() {
-		/*
-		 * Der SQL Nutzer halt Lediglich die Rechte: SELECT, INSTERT, UPDATE,
-		 * DELETE Somit wird verhindert, dass der Nutzer ganze Tabellen löschen
-		 * kann (Stichwort SQL-Injection). Die SQL Server URL kann am ende
-		 * belieben angepasst werden Ein CREATE TABLE Befehl ist NICHT
-		 * vorgesehen!
-		 */
 		sql2o = new Sql2o("jdbc:mysql://beta.lolstats.org:3306/fallstudie", "fallstudie_user", "Kqj5^g98");
 	}
 
+	/**
+	 * Testet die Verbindung zur Datenbank
+	 * @return boolean
+	 */
 	public boolean testConnection() {
-		/*
-		 * Ist eine Verbindung mit der Datenbank moeglich, wird true
-		 * zurueckgegeben Bei einem Fehler wird eine Exception geworfen und
-		 * false zurueckgegeben Diese Methode soll vor jedem DB Aufruf
-		 * aufgerufen werden
-		 */
-
+		
 		try (Connection con = sql2o.open()) {
 			return true;
 		} catch (Sql2oException e) {
@@ -58,39 +46,30 @@ public class Datenbank {
 		}
 	}
 
+	/**
+	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und Personen.
+	 * Bereits vorhandene Daten werden Ã¼berschrieben (UPDATE).
+	 * @param projekt
+	 * @return boolean
+	 */
 	public boolean speicherProjekt(Projekt projekt) {
-		/*
-		 * Ein Projekt wird komplett auf einmal in die Datenbank geschrieben.
-		 * Existiert ein Projekt und seine Phasen und deren Personen bereits,
-		 * werden diese Daten mit den neuen überschrieben. Somit kann das
-		 * gesammte Projekt auf einmal geupdated werden.
-		 */
 
-		// INSERT INTO projekte(name, ersteller, abgeschickt,startDate, endDate)
-		// VALUES("Projekt 3", "Peter", 1, "2011-01-01", "2015-01-01")
-
-		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
+		sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
 		"VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate) " + 
 		"ON DUPLICATE KEY UPDATE name=:name, ersteller=:ersteller, abgeschickt=:abgeschickt, startDate=:startDate, endDate=:endDate";
-
-		// Das Start und Enddatum eines Projektes entspricht dem Startdatum der
-		// Ersten Phasen und dem Enddatum der letzten Phase
 
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql).addParameter("name", projekt.getName())
 					.addParameter("ersteller", projekt.getErsteller())
 					.addParameter("abgeschickt", projekt.isAbgeschickt())
-					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
+					.addParameter("startDate", projekt.getStartDate())
+					.addParameter("endDate", projekt.getEndDate())
 					.executeUpdate();
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 			return false;
 		}
-
-		/*
-		 * Speichert Phasen in die DB. Existiert ein Eintrag Bereits, wird er
-		 * automatisch überschrieben
-		 */
+		
 		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate) "+
 		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate";
 
@@ -169,13 +148,14 @@ public class Datenbank {
 		}
 	}
 
-	public Projekt getProjekt(Projekt projekt) {
-
-		/*
-		 * Diese Methode gibt ein komplettes Projekt mit allen Phasen und
-		 * Personen zurück.
-		 */
-
+	/**
+	 * Ein Projekt wird anhand des Ã¼bergebenen Projekt Objektes aus der
+	 * Datenbank geholt und als komplettes Projekt zurÃ¼ckgegeben.
+	 * 
+	 * @param projekt
+	 * @return Projekt
+	 */
+	public Projekt getSpecificProjekt(Projekt projekt) {
 		Projekt newprojekt = new Projekt(projekt.getName(), projekt.getErsteller(), projekt.isAbgeschickt());
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Person> personen = new ArrayList<Person>();
@@ -188,7 +168,7 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Hole Alle Personen anhand des Projektnamnes
+		// Hole Alle Personen anhand des Projektnamens
 		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, mak, preisPT, intern from beteiligte b, personen p " + 
 		"WHERE b.phase=:phasenName AND b.projekt=:projektName AND p.name=b.person";
 
@@ -256,52 +236,25 @@ public class Datenbank {
 		return newprojekt;
 	}
 
+	/**
+	 * Ein Projekt wird komplett neu in die Datenbank geschrieben.
+	 * Dazu wird es zunÃ¤chst komplett gelÃ¶scht und anschlieÃŸend
+	 * neu in die Datenbank geschrieben.
+	 * @param projekt
+	 * @return boolean
+	 */
 	public boolean updateProjekt(Projekt projekt) {
-		/*
-		 * Wird ein Projekt geupdated, müssen alle vorherigen Einträge gelöscht
-		 * werden, da ansonsten die DB nach einem bestimmten Eintrag durchsucht
-		 * werden muss. Das direkte löschen und neu schreiben geht schneller!
-		 */
-
 		this.deleteProjekt(projekt);
 		return this.speicherProjekt(projekt);
 	}
 
-	public List<Person> getPersonen() {
-
-		/*
-		 * Es wird eine Liste von Personen zurückgeben. Ist diese leer/null muss
-		 * dies in der Main Klasse abgefragt werden.
-		 */
-
-		List<Person> personen = new ArrayList<Person>();
-		String sql = "SELECT * FROM personen";
-		try (Connection con = sql2o.open()) {
-			personen = con.createQuery(sql).executeAndFetch(Person.class);
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-		}
-		return personen;
-	}
-
-	public boolean deletePerson(Person person) {
-		String sql = "DELETE * FROM personen WHERE name=:name";
-
-		try (Connection con = sql2o.open()) {
-			con.createQuery(sql).addParameter("name", person.getName()).executeUpdate();
-			return true;
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-			return false;
-		}
-	}
-
+	/**
+	 * Alle Projekte die in der Datenbank gefunden wurden, werden in einer 
+	 * Liste zurÃ¼ckgegeben.
+	 * @return List<Projekt>
+	 */
 	public List<Projekt> getProjekte() {
 
-		/*
-		 * Alle Projekte welche bereits in der Datenbank gespeichert sind,
-		 * werden als Liste Zurueckgegeben
-		 */
 		List<Projekt> projekte = new ArrayList<Projekt>();
 
 		String sql = "SELECT * FROM projekte";
@@ -313,25 +266,23 @@ public class Datenbank {
 		return projekte;
 	}
 
+	
+	/**
+	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Beteiligte),
+	 * werden anhand des Projektnames aus der Datenbank gelÃ¶scht.
+	 * @param projekt
+	 * @return boolean
+	 */
 	public boolean deleteProjekt(Projekt projekt) {
-
-		/*
-		 * Alle Einträge welche mit einem Projekt zu tun ahben, werden anhand
-		 * des Projektnamens gelöscht. Anschließend kann ein projekt erneut
-		 * geschriben werden.
-		 */
 
 		String sql1 = "DELETE FROM beteiligte WHERE projekt=:projektName";
 		String sql2 = "DELETE FROM phasen WHERE projekt=:projektName";
 		String sql3 = "DELETE FROM projekte WHERE name=:projektName";
-		String sql4 = "DELETE FROM kompetenzen WHERE name=:projektName";
+		String sql4 = "DELETE FROM kompetenzen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql1).addParameter("projektName", projekt.getName()).executeUpdate();
-
 			con.createQuery(sql2).addParameter("projektName", projekt.getName()).executeUpdate();
-
 			con.createQuery(sql3).addParameter("projektName", projekt.getName()).executeUpdate();
-			
 			con.createQuery(sql4).addParameter("projektName", projekt.getName()).executeUpdate();
 			return true;
 		} catch (Sql2oException e) {

@@ -6,10 +6,11 @@ import java.util.List;
 import Projekt.Person;
 
 
-/*
- * Ein projekt enthaelt die jeweiligen Phasen und die enthaltenen Personen.
- * Zusätzlich wird gespeichert, ob ein Projekt bereits abgeschickt wurde oder
- * nicht.
+/**
+ * EIn Projekt-Objekt enthält neben den Projektdaten, die dazu gehörenden
+ * Kompetenzen, Phasen und Beteiligten Personen.
+ * @author Daniel Sogl
+ *
  */
 public class Projekt {
 	private List<Person> personen = new ArrayList<Person>();
