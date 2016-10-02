@@ -197,8 +197,8 @@ public class Test {
 		System.out.println("Lade Projekte aus der DB");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 1", "Daniel", true)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
 
 			System.out.println("Projekt 2 Startdatum: " + projekte.get(0).getStartDate() + " Enddatum: "
 					+ projekte.get(0).getEndDate());
@@ -232,7 +232,7 @@ public class Test {
 		System.out.println("Hole Projekt aus der DB und f�ge eine neue Phase hinzu");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
 
 			for (Phase phase : projekte.get(0).getPhasen()) {
 				System.out.println(phase.getName());
@@ -295,7 +295,7 @@ public class Test {
 
 		System.out.println("Hole Projekt aus der DB und lösche eine Phase und eine Person");
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
 			projekte.get(0).getPhasen().remove(1);
 			projekte.get(0).getPhasen().get(0).getPersonen().remove(0);
 		}
@@ -316,8 +316,8 @@ public class Test {
 		System.out.println("Erste Tabelle anhand der Phasen und Personen");
 
 		if (myDB.testConnection()) {
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 2", "David", false)));
-			projekte.add(myDB.getSpecificProjekt(new Projekt("Projekt 1", "Daniel", true)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
+			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
 			
 			for (Projekt projekt : projekte) {
 				for (Kompetenz kompetenz : projekt.getKompetenzen()) {
