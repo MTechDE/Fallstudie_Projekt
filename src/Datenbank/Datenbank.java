@@ -17,16 +17,15 @@ import Projekt.Projekt;
  * Alle Opperationen welche mit der Datenbank zu tun haben (speichern und laden von Projekten),
  * werden mit dieser Klasse realisiert.
  * @author Daniel Sogl
- * @version 1.2
+ * @version 1.2.1
  */
 
 public class Datenbank {
 
 	private Sql2o sql2o;
-	private String sql;
 
 	/**
-	 * DB Anmeldedaten werden im Konstruktur konfiguriert
+	 * DB Anmeldedaten werden im Konstruktur konfiguriert.
 	 */
 	public Datenbank() {
 		sql2o = new Sql2o("jdbc:mysql://beta.lolstats.org:3306/fallstudie", "fallstudie_user", "Kqj5^g98");
@@ -54,7 +53,7 @@ public class Datenbank {
 	 */
 	public boolean speicherProjekt(Projekt projekt) {
 
-		sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
+		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
 		"VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate) " + 
 		"ON DUPLICATE KEY UPDATE name=:name, ersteller=:ersteller, abgeschickt=:abgeschickt, startDate=:startDate, endDate=:endDate";
 
@@ -69,7 +68,7 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 			return false;
 		}
-		
+
 		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate) "+
 		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate";
 
@@ -155,7 +154,8 @@ public class Datenbank {
 	 * @param projekt
 	 * @return Projekt
 	 */
-	public Projekt getSpecificProjekt(Projekt projekt) {
+	public Projekt getProjekt(Projekt projekt) {
+
 		Projekt newprojekt = new Projekt(projekt.getName(), projekt.getErsteller(), projekt.isAbgeschickt());
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Person> personen = new ArrayList<Person>();
@@ -168,9 +168,9 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Hole Alle Personen anhand des Projektnamens
-		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, mak, preisPT, intern from beteiligte b, personen p " + 
-		"WHERE b.phase=:phasenName AND b.projekt=:projektName AND p.name=b.person";
+		// Hole Alle Personen anhand des Projektnamnes
+		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, mak, preisPT, intern from beteiligte b " + 
+		"WHERE b.phase=:phasenName AND b.projekt=:projektName";
 
 		try (Connection con = sql2o.open()) {
 			for (Phase phase : phasen) {
@@ -248,6 +248,35 @@ public class Datenbank {
 		return this.speicherProjekt(projekt);
 	}
 
+	public List<Person> getPersonen() {
+
+		/*
+		 * Es wird eine Liste von Personen zur�ckgeben. Ist diese leer/null muss
+		 * dies in der Main Klasse abgefragt werden.
+		 */
+
+		List<Person> personen = new ArrayList<Person>();
+		String sql = "SELECT * FROM personen";
+		try (Connection con = sql2o.open()) {
+			personen = con.createQuery(sql).executeAndFetch(Person.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		return personen;
+	}
+
+	public boolean deletePerson(Person person) {
+		String sql = "DELETE * FROM personen WHERE name=:name";
+
+		try (Connection con = sql2o.open()) {
+			con.createQuery(sql).addParameter("name", person.getName()).executeUpdate();
+			return true;
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+
 	/**
 	 * Alle Projekte die in der Datenbank gefunden wurden, werden in einer 
 	 * Liste zurückgegeben.
@@ -255,6 +284,10 @@ public class Datenbank {
 	 */
 	public List<Projekt> getProjekte() {
 
+		/*
+		 * Alle Projekte welche bereits in der Datenbank gespeichert sind,
+		 * werden als Liste Zurueckgegeben
+		 */
 		List<Projekt> projekte = new ArrayList<Projekt>();
 
 		String sql = "SELECT * FROM projekte";
@@ -266,7 +299,6 @@ public class Datenbank {
 		return projekte;
 	}
 
-	
 	/**
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Beteiligte),
 	 * werden anhand des Projektnames aus der Datenbank gelöscht.
@@ -281,8 +313,11 @@ public class Datenbank {
 		String sql4 = "DELETE FROM kompetenzen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql1).addParameter("projektName", projekt.getName()).executeUpdate();
+
 			con.createQuery(sql2).addParameter("projektName", projekt.getName()).executeUpdate();
+
 			con.createQuery(sql3).addParameter("projektName", projekt.getName()).executeUpdate();
+			
 			con.createQuery(sql4).addParameter("projektName", projekt.getName()).executeUpdate();
 			return true;
 		} catch (Sql2oException e) {
