@@ -28,7 +28,7 @@ public class Datenbank {
 	 * DB Anmeldedaten werden im Konstruktur konfiguriert.
 	 */
 	public Datenbank() {
-		sql2o = new Sql2o("jdbc:mysql://beta.lolstats.org:3306/fallstudie", "fallstudie_user", "Kqj5^g98");
+		sql2o = new Sql2o("jdbc:mysql://lolstats.org:3306/fallstudie", "fallstudie_user", "bYv735!r");
 	}
 
 	/**

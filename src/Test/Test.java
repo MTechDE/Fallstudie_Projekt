@@ -24,6 +24,7 @@ public class Test {
 	static Datenbank myDB = new Datenbank();
 
 	public static void main(String[] args) throws InterruptedException {
+		
 		Test1();
 		Test2();
 		Test3();
@@ -32,7 +33,7 @@ public class Test {
 		Test6();
 		Test7();
 
-//		DeleteAllData();
+		DeleteAllData();
 		System.out.println("Tests Beendet");
 
 	}
