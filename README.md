@@ -9,7 +9,6 @@ Software zur Erstellung von Aufwandschaetzungen und Planung von Mitarbeitern als
 4. Clone das Projekt in dein gewünschtes Verzeichnis und öffene es mit Eclipse
 5. Füge in Eclipse folgende Erweiterungen hinzu (Help -> Install new Software): 
 	- e(fx)clipse - http://download.eclipse.org/efxclipse/updates-released/2.4.0/site/
-	- Eclipse Data Tools - http://download.eclipse.org/datatools/updates/1.13/1.13.0.201603142002/repository/
 6. Installiere den JavaFX Scene Builder (http://gluonhq.com/labs/scene-builder/#download)
 7. In den Eclipse Einstellungen den Pfad zur Scenebuilder.exe Date eintragen (C:\Users\MeinBenutzerName\AppData\Local\SceneBuilder\SceneBuilder.exe)
 8. Importiere die Libarys in das Javaprojekt (Properties -> Java Build Path)
@@ -41,7 +40,6 @@ Damit der Quellcode nicht durcheinander kommt, sollten ein paar Regeln beachtet 
 ## Verwendete externe Bibliotheken
 - [sql2o](https://sql2o.org/)
 - [PDFBox](https://pdfbox.apache.org/index.html)
-- [Eclipse Data Tools](http://download.eclipse.org/datatools/updates/1.13/1.13.0.201603142002/repository/)
 - [e(fx)clipse](http://download.eclipse.org/efxclipse/updates-released/2.4.0/site/)
 - [Gluon Labs Scene Builder](http://gluonhq.com/labs/scene-builder/#download)
 - [TiwulFx2](http://tiwulfx.panemu.com/)
