@@ -6,7 +6,7 @@ import java.util.List;
 import Projekt.Person;
 
 /**
- * Eine Phase enthält den Namen, sowie das Start- und Enddatum.
+ * Eine Phase enthÃ¤lt den Namen, sowie das Start- und Enddatum.
  * Sowie eine Liste aller darin eingeteilter Personen.
  * @author Daniel Sogl
  */

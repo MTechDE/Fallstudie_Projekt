@@ -7,7 +7,7 @@ import Projekt.Person;
 
 
 /**
- * EIn Projekt-Objekt enthält neben den Projektdaten, die dazu gehörenden
+ * Ein Projekt-Objekt enthÃ¤lt neben den Projektdaten, die dazu gehÃ¶renden
  * Kompetenzen, Phasen und Beteiligten Personen.
  * @author Daniel Sogl
  *
