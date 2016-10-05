@@ -43,3 +43,4 @@ Damit der Quellcode nicht durcheinander kommt, sollten ein paar Regeln beachtet 
 - [e(fx)clipse](http://download.eclipse.org/efxclipse/updates-released/2.4.0/site/)
 - [Gluon Labs Scene Builder](http://gluonhq.com/labs/scene-builder/#download)
 - [TiwulFx2](http://tiwulfx.panemu.com/)
+- [Inno Setup](http://www.jrsoftware.org/isdl.php)
