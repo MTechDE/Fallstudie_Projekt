@@ -5,10 +5,9 @@
 			<filelist>
 				<file name="${java.home}\..\lib\ant-javafx.jar"/>
 				<file name="${java.home}\lib\jfxrt.jar"/>
-				<file name="${basedir}"/>
 			</filelist>
 		</path>
-
+	
 		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
 			uri="javafx:com.sun.javafx.tools.ant"
 			classpathref="fxant"/>
@@ -17,52 +16,52 @@
 		<delete dir="externalLibs" />
 		<delete dir="project" />
 		<delete dir="projectRefs" />
-
+	
 		<mkdir dir="externalLibs" />
-
+	
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="mysql-connector-java-5.1.39.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="bcprov-jdk15on-1.54.jar"/>
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="sql2o-1.5.4.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="pdfbox-app-2.0.3.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="bcmail-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="bcpkix-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="sql2o-1.5.4.jar"/>
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="pdfbox-app-2.0.3.jar"/>
 			</fileset>
 		</copy>
-
+		<copy todir="externalLibs">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="bcprov-jdk15on-1.54.jar"/>
+			</fileset>
+		</copy>
+	
 		<mkdir dir="project" />
 		<copy todir="project">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt">
 				<include name="src/**" />
 			</fileset>
 		</copy>
-
+	
 		<mkdir dir="projectRefs" />
 	</target>
 	<target name='do-compile'>
@@ -70,29 +69,29 @@
 		<mkdir dir="build/src" />
 		<mkdir dir="build/libs" />
 		<mkdir dir="build/classes" />
-
+	
 		<!-- Copy project-libs references -->
 		<copy todir="build/libs">
 			<fileset dir="externalLibs">
 				<include name="bcmail-jdk15on-1.54.jar"/>
 				<include name="mysql-connector-java-5.1.39.jar"/>
-				<include name="sql2o-1.5.4.jar"/>
 				<include name="bcprov-jdk15on-1.54.jar"/>
+				<include name="sql2o-1.5.4.jar"/>
 				<include name="pdfbox-app-2.0.3.jar"/>
 				<include name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
 				<include name="bcpkix-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
-
+	
 		<!-- Copy project references -->
-
+	
 		<!-- Copy project sources itself -->
 		<copy todir="build/src">
 			<fileset dir="project/src">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-
+	
 		<javac includeantruntime="false" source="1.8" target="1.8" srcdir="build/src" destdir="build/classes" encoding="UTF-8">
 			<classpath>
 				<fileset dir="build/libs">
@@ -100,52 +99,51 @@
 				</fileset>
 			</classpath>
 		</javac>
-
+	
 		<!-- Copy over none Java-Files -->
 		<copy todir="build/classes">
 		<fileset dir="project/src">
 			<exclude name="**/*.java"/>
 		</fileset>
 		</copy>
-
-
+	
+	
 	</target>
 	<target name="do-deploy" depends="setup-staging-area, do-compile, init-fx-tasks">
 		<delete file="dist"/>
 		<delete file="deploy" />
-
+	
 		<mkdir dir="dist" />
 		<mkdir dir="dist/libs" />
-
+	
 		<copy todir="dist/libs">
 			<fileset dir="externalLibs">
 				<include name="*" />
 			</fileset>
 		</copy>
-
-
+	
+	
 		<fx:resources id="appRes">
 			<fx:fileset dir="dist" includes="Fallstudie_Projekt.jar"/>
 			<fx:fileset dir="dist" includes="libs/*"/>
-			<fx:fileset dir="dist" includes="resources/**"/>
 		</fx:resources>
-
+	
 		<fx:application id="fxApplication"
 			name="FallstudieApp"
 			mainClass="UI.Main"
 			toolkit="fx"
 		/>
-
+	
 		<mkdir dir="build/classes/META-INF" />
-
-
-
+	
+	
+	
 		<fx:jar destfile="dist/Fallstudie_Projekt.jar">
 			<fx:application refid="fxApplication"/>
 			<fileset dir="build/classes">
 			</fileset>
 			<fx:resources refid="appRes"/>
-
+	
 			<manifest>
 				<attribute name="Implementation-Vendor" value="Soft Ice"/>
 				<attribute name="Implementation-Title" value="FallstudieApp"/>
@@ -154,8 +152,8 @@
 				<attribute name="JavaFX-Feature-Proxy" value="None"/>
 			</manifest>
 		</fx:jar>
-
-
+	
+	
 		<mkdir dir="deploy" />
 		<!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
 		<fx:deploy
@@ -164,16 +162,16 @@
 			includeDT="false"
 			offlineAllowed="true"
 			outdir="${basedir}/deploy"
-			outfile="Fallstudie_Projekt" nativeBundles="none"
+			outfile="Fallstudie_Projekt" nativeBundles="dmg"
 			updatemode="background" >
-
+	
 			<fx:platform basedir="${java.home}"/>
 			<fx:info title="Fallstudie_Projekt" vendor="Soft Ice"/>
-
+	
 			<fx:application refId="fxApplication"/>
 			<fx:resources refid="appRes"/>
 		</fx:deploy>
-
-
+	
+	
 	</target>
 </project>
