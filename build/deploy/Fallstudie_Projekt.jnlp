@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="Fallstudie_Projekt.jar" size="13741" download="eager" />
+    <jar href="Fallstudie_Projekt.jar" size="14602" download="eager" />
     <jar href="libs/bcmail-jdk15on-1.54.jar" size="102292" download="eager" />
     <jar href="libs/bcpkix-jdk15on-1.54.jar" size="673715" download="eager" />
     <jar href="libs/bcprov-jdk15on-1.54.jar" size="3277268" download="eager" />
