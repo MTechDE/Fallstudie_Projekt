@@ -17,11 +17,10 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	// TODO Programm Namen Eintragen
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try{
-			Parent root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
