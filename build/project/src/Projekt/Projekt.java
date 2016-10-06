@@ -3,7 +3,7 @@ package Projekt;
 import java.util.ArrayList;
 import java.util.List;
 
-import Projekt.Person;
+import Projekt.Aufwand;
 
 
 /**
@@ -13,7 +13,7 @@ import Projekt.Person;
  *
  */
 public class Projekt {
-	private List<Person> personen = new ArrayList<Person>();
+	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	private List<Phase> phasen = new ArrayList<Phase>();
 	private List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 	private boolean abgeschickt;
@@ -45,16 +45,16 @@ public class Projekt {
 		this.name = name;
 	}
 
-	public ArrayList<Person> getPersonen() {
-		return (ArrayList<Person>) personen;
+	public ArrayList<Aufwand> getAufwände() {
+		return (ArrayList<Aufwand>) aufwände;
 	}
 
-	public void setPersonen(ArrayList<Person> personen) {
-		this.personen = personen;
+	public void setAufwände(ArrayList<Aufwand> aufwände) {
+		this.aufwände = aufwände;
 	}
 	
-	public void setSinglePerson(Person person){
-		this.personen.add(person);
+	public void setSingleAufwand(Aufwand aufwand){
+		this.aufwände.add(aufwand);
 	}
 
 	public ArrayList<Phase> getPhasen() {
