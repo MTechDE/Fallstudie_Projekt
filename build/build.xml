@@ -131,7 +131,7 @@
 		</fx:resources>
 	
 		<fx:application id="fxApplication"
-			name="FrozenYogurt"
+			name="VanillaSky"
 			mainClass="UI.Main"
 			toolkit="fx"
 			version="1.0"
@@ -149,7 +149,7 @@
 	
 			<manifest>
 				<attribute name="Implementation-Vendor" value="Soft Ice"/>
-				<attribute name="Implementation-Title" value="FrozenYogurt"/>
+				<attribute name="Implementation-Title" value="VanillaSky"/>
 				<attribute name="Implementation-Version" value="1.0.0"/>
 				<attribute name="SplashScreen-Image" value=""/>
 			</manifest>
@@ -164,11 +164,11 @@
 			includeDT="false"
 			offlineAllowed="true"
 			outdir="${basedir}/deploy"
-			outfile="Fallstudie_Projekt" nativeBundles="dmg"
+			outfile="VanillaSky" nativeBundles="dmg"
 			updatemode="background" >
 	
 			<fx:platform basedir="${java.home}"/>
-			<fx:info title="Fallstudie_Projekt" vendor="Soft Ice"/>
+			<fx:info title="VanillaSky" vendor="Soft Ice"/>
 	
 			<fx:application refId="fxApplication"/>
 			<fx:resources refid="appRes"/>
