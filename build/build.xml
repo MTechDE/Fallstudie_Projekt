@@ -5,7 +5,6 @@
 			<filelist>
 				<file name="${java.home}\..\lib\ant-javafx.jar"/>
 				<file name="${java.home}\lib\jfxrt.jar"/>
-				<file name="${basedir}"/>
 			</filelist>
 		</path>
 	
@@ -21,44 +20,44 @@
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
 				<filename name="mysql-connector-java-5.1.39.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
-				<filename name="sql2o-1.5.4.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
-				<filename name="pdfbox-app-2.0.3.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
-				<filename name="bcpkix-jdk15on-1.54.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
-				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
 				<filename name="bcprov-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+				<filename name="pdfbox-app-2.0.3.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
 				<filename name="bcmail-jdk15on-1.54.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+				<filename name="bcpkix-jdk15on-1.54.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+				<filename name="sql2o-1.5.4.jar"/>
 			</fileset>
 		</copy>
 	
 		<mkdir dir="project" />
 		<copy todir="project">
-			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt">
+			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt">
 				<include name="src/**" />
 			</fileset>
 		</copy>
@@ -76,8 +75,8 @@
 			<fileset dir="externalLibs">
 				<include name="bcmail-jdk15on-1.54.jar"/>
 				<include name="mysql-connector-java-5.1.39.jar"/>
-				<include name="bcprov-jdk15on-1.54.jar"/>
 				<include name="sql2o-1.5.4.jar"/>
+				<include name="bcprov-jdk15on-1.54.jar"/>
 				<include name="pdfbox-app-2.0.3.jar"/>
 				<include name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
 				<include name="bcpkix-jdk15on-1.54.jar"/>
@@ -127,14 +126,12 @@
 		<fx:resources id="appRes">
 			<fx:fileset dir="dist" includes="Fallstudie_Projekt.jar"/>
 			<fx:fileset dir="dist" includes="libs/*"/>
-			<fx:fileset dir="dist" includes="resources/**"/>
 		</fx:resources>
 	
 		<fx:application id="fxApplication"
 			name="VanillaSky"
 			mainClass="UI.Main"
 			toolkit="fx"
-			version="1.0"
 		/>
 	
 		<mkdir dir="build/classes/META-INF" />
@@ -168,11 +165,10 @@
 			updatemode="background" >
 	
 			<fx:platform basedir="${java.home}"/>
-			<fx:info title="VanillaSky" vendor="Soft Ice" copyright="Soft Ice 2016" description="Cloud ready Aufwandsschätzungstool"/>
+			<fx:info title="Fallstudie_Projekt" vendor="Soft Ice"/>
 	
 			<fx:application refId="fxApplication"/>
 			<fx:resources refid="appRes"/>
-			<fx:preferences shortcut="true" install="false"/>
 		</fx:deploy>
 	
 	

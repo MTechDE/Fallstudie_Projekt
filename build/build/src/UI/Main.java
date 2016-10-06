@@ -24,7 +24,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
-			primaryStage.getIcons().add(new Image("https://ow.lolstats.org/VanillaSky.png"));
+			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e){
