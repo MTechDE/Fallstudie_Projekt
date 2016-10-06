@@ -22,7 +22,7 @@ public class Main extends Application {
 		try{
 			Parent root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
 			Scene scene = new Scene(root);
-			primaryStage.setTitle("PROGRAMM NAME HIER EINFÜGEN");
+			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e){
