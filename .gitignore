@@ -47,3 +47,8 @@ Temporary Items
 .apdisk
 .classpath
 *.class
+/build/
+build/build.xml
+build/build.xml
+build.fxbuild
+build/build.xml

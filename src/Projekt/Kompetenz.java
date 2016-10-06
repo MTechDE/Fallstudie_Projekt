@@ -3,7 +3,7 @@ package Projekt;
 import java.util.ArrayList;
 import java.util.List;
 
-import Projekt.Person;
+import Projekt.Aufwand;
 
 /**
  * In einem Kompetenzen Objekt werden die beteiligten Personen abgespeichert.
@@ -12,7 +12,7 @@ import Projekt.Person;
 public class Kompetenz {
 
 	private String name;
-	private List<Person> personen = new ArrayList<Person>();
+	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	
 	public Kompetenz(String name){
 		this.setName(name);
@@ -26,15 +26,15 @@ public class Kompetenz {
 		this.name = name;
 	}
 
-	public List<Person> getPersonen() {
-		return personen;
+	public List<Aufwand> getAufwände() {
+		return aufwände;
 	}
 
-	public void setPersonen(List<Person> personen) {
-		this.personen = personen;
+	public void setAufwände(List<Aufwand> aufwände) {
+		this.aufwände = aufwände;
 	}
 	
-	public void setSinglePerson(Person person){
-		this.personen.add(person);
+	public void setSingleAufwand(Aufwand aufwand){
+		this.aufwände.add(aufwand);
 	}
 }

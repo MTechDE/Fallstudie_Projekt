@@ -3,7 +3,7 @@ package Projekt;
 import java.util.ArrayList;
 import java.util.List;
 
-import Projekt.Person;
+import Projekt.Aufwand;
 
 /**
  * Eine Phase enthält den Namen, sowie das Start- und Enddatum.
@@ -14,7 +14,7 @@ public class Phase {
 	private String name;
 	private String startDate;
 	private String endDate;
-	private List<Person> personen = new ArrayList<Person>();
+	private List<Aufwand> aufwand = new ArrayList<Aufwand>();
 
 	public Phase(String name, String startDate, String endDate) {
 		this.setName(name);
@@ -46,15 +46,15 @@ public class Phase {
 		this.name = name;
 	}
 
-	public List<Person> getPersonen() {
-		return personen;
+	public List<Aufwand> getPersonen() {
+		return aufwand;
 	}
 
-	public void setPersonen(List<Person> personen) {
-		this.personen = personen;
+	public void setAufwände(List<Aufwand> aufwand) {
+		this.aufwand = aufwand;
 	}
 	
-	public void setSinglePerson(Person person){
-		this.personen.add(person);
+	public void setSingleAufwand(Aufwand aufwand){
+		this.aufwand.add(aufwand);
 	}
 }
