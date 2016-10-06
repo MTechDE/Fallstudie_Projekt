@@ -5,6 +5,7 @@
 			<filelist>
 				<file name="${java.home}\..\lib\ant-javafx.jar"/>
 				<file name="${java.home}\lib\jfxrt.jar"/>
+				<file name="${basedir}"/>
 			</filelist>
 		</path>
 	
@@ -20,44 +21,44 @@
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="mysql-connector-java-5.1.39.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="bcprov-jdk15on-1.54.jar"/>
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="sql2o-1.5.4.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="pdfbox-app-2.0.3.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="bcmail-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
 				<filename name="bcpkix-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="sql2o-1.5.4.jar"/>
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="pdfbox-app-2.0.3.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt/lib">
+				<filename name="bcprov-jdk15on-1.54.jar"/>
 			</fileset>
 		</copy>
 	
 		<mkdir dir="project" />
 		<copy todir="project">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt">
+			<fileset dir="/Users/danielsogl/Documents/Projekte/Fallstudie_Projekt">
 				<include name="src/**" />
 			</fileset>
 		</copy>
@@ -75,8 +76,8 @@
 			<fileset dir="externalLibs">
 				<include name="bcmail-jdk15on-1.54.jar"/>
 				<include name="mysql-connector-java-5.1.39.jar"/>
-				<include name="sql2o-1.5.4.jar"/>
 				<include name="bcprov-jdk15on-1.54.jar"/>
+				<include name="sql2o-1.5.4.jar"/>
 				<include name="pdfbox-app-2.0.3.jar"/>
 				<include name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
 				<include name="bcpkix-jdk15on-1.54.jar"/>
@@ -126,12 +127,14 @@
 		<fx:resources id="appRes">
 			<fx:fileset dir="dist" includes="Fallstudie_Projekt.jar"/>
 			<fx:fileset dir="dist" includes="libs/*"/>
+			<fx:fileset dir="dist" includes="resources/**"/>
 		</fx:resources>
 	
 		<fx:application id="fxApplication"
-			name="FallstudieApp"
+			name="FrozenYogurt"
 			mainClass="UI.Main"
 			toolkit="fx"
+			version="1.0"
 		/>
 	
 		<mkdir dir="build/classes/META-INF" />
@@ -146,8 +149,8 @@
 	
 			<manifest>
 				<attribute name="Implementation-Vendor" value="Soft Ice"/>
-				<attribute name="Implementation-Title" value="FallstudieApp"/>
-				<attribute name="Implementation-Version" value="0.0.1"/>
+				<attribute name="Implementation-Title" value="FrozenYogurt"/>
+				<attribute name="Implementation-Version" value="1.0.0"/>
 				<attribute name="SplashScreen-Image" value=""/>
 			</manifest>
 		</fx:jar>
@@ -161,7 +164,7 @@
 			includeDT="false"
 			offlineAllowed="true"
 			outdir="${basedir}/deploy"
-			outfile="Fallstudie_Projekt" nativeBundles="exe"
+			outfile="Fallstudie_Projekt" nativeBundles="dmg"
 			updatemode="background" >
 	
 			<fx:platform basedir="${java.home}"/>
