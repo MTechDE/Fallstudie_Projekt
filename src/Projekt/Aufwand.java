@@ -5,7 +5,7 @@ package Projekt;
  * @author Daniel Sogl
  */
 
-public class Person {
+public class Aufwand {
 
 	private String name;
 	private String zugehoerigkeit;
@@ -13,21 +13,21 @@ public class Person {
 	private double risiko;
 	private boolean intern;
 	
-	public Person(String name){
+	public Aufwand(String name){
 		this.setName(name);
 		this.setPt(0);
 		this.setIntern(true);
 		this.setRisiko(0);
 	}
 
-	public Person(String name, boolean intern) {
+	public Aufwand(String name, boolean intern) {
 		this.setName(name);
 		this.setPt(0);
 		this.setIntern(intern);
 		this.setRisiko(0);
 	}
 	
-	public Person(String name, String zugehoerigkeit, double pt, boolean intern, double risiko) {
+	public Aufwand(String name, String zugehoerigkeit, double pt, boolean intern, double risiko) {
 		this.setName(name);
 		this.setZugehoerigkeit(zugehoerigkeit);
 		this.setPt(pt);
