@@ -107,7 +107,7 @@ public class Test {
 		phasen.clear();
 		kompetenzen.clear();
 		System.out.println(
-				"Lege zwei Projekte in der Datenbank an und deffiniere 2 Phasen mit unterschidlichen Personen");
+				"Lege zwei Projekte in der Datenbank an und deffiniere 2 Phasen mit unterschiedlichen Personen");
 
 		System.out.println("Projekt 1");
 		projekte.add(new Projekt("Projekt 1", "Daniel", true));

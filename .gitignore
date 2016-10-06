@@ -49,3 +49,5 @@ Temporary Items
 *.class
 /build/
 build/build.xml
+build/build.xml
+build.fxbuild
