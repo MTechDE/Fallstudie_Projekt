@@ -8,7 +8,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
 
 
 /**
@@ -26,12 +25,13 @@ public class Projekt {
 	private StringProperty ersteller;
 	private StringProperty startDate;
 	private StringProperty endDate;
-	
 
 	public Projekt(String name, String ersteller, boolean abgeschickt) {
 		this.setName(name);
 		this.setErsteller(ersteller);
 		this.setAbgeschickt(abgeschickt);
+		this.setStartDate(null);
+		this.setEndDate(null);
 	}
 	
 	public Projekt(String name, String ersteller, boolean abgeschickt, String startDate, String endDate) {

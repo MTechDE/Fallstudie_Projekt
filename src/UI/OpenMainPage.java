@@ -1,5 +1,7 @@
 package UI;
 
+import Datenbank.Datenbank;
+import Projekt.Projekt;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,9 +10,29 @@ import javafx.stage.Stage;
 
 public class OpenMainPage extends Stage{
 
-	Stage stage;
+	private Stage stage;
+	public static Projekt newProjekt;
+	public static Projekt oldProjekt;
+	private Datenbank myDB = new Datenbank();
 	
-	public OpenMainPage(String projektname) throws Exception{
+	public OpenMainPage(String projektname, Projekt projekt, boolean vorlage, boolean newProjekt) throws Exception{
+		
+		if(newProjekt){
+			OpenMainPage.newProjekt = projekt;
+			if(vorlage){
+				/* TODO Vorlage muss noch erstellt werden.
+				 * Bsp: 3 Kompetenzen + 3 Phasen.
+				 */
+			}
+			myDB.speicherProjekt(OpenMainPage.newProjekt);
+		}
+		else{
+			OpenMainPage.oldProjekt = myDB.getProjekt(projekt);
+		}
+			
+		
+		
+		
 		stage = this;
 		Parent root = FXMLLoader.load(getClass().getResource("HauptFenster.fxml"));
 		Scene scene = new Scene(root);
