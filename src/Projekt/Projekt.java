@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Projekt.Aufwand;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 
 /**
@@ -16,11 +20,11 @@ public class Projekt {
 	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	private List<Phase> phasen = new ArrayList<Phase>();
 	private List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
-	private boolean abgeschickt;
-	private String name;
-	private String ersteller;
-	private String startDate;
-	private String endDate;
+	private BooleanProperty abgeschickt;
+	private StringProperty  name;
+	private StringProperty ersteller;
+	private StringProperty startDate;
+	private StringProperty endDate;
 	
 
 	public Projekt(String name, String ersteller, boolean abgeschickt) {
@@ -38,11 +42,15 @@ public class Projekt {
 	}
 
 	public String getName() {
+		return name.get();
+	}
+	
+	public StringProperty nameProperty(){
 		return name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = new SimpleStringProperty(name);
 	}
 
 	public ArrayList<Aufwand> getAufwände() {
@@ -70,35 +78,51 @@ public class Projekt {
 	}
 
 	public String getErsteller() {
+		return ersteller.get();
+	}
+	
+	public StringProperty erstellerProperty(){
 		return ersteller;
 	}
 
 	public void setErsteller(String ersteller) {
-		this.ersteller = ersteller;
+		this.ersteller = new SimpleStringProperty(ersteller);
 	}
 
 	public boolean isAbgeschickt() {
+		return abgeschickt.get();
+	}
+	
+	public BooleanProperty abgeschicktProperty(){
 		return abgeschickt;
 	}
 
 	public void setAbgeschickt(boolean abgeschickt) {
-		this.abgeschickt = abgeschickt;
+		this.abgeschickt = new SimpleBooleanProperty(abgeschickt);
 	}
 
 	public String getStartDate() {
+		return startDate.get();
+	}
+	
+	public StringProperty startDateProperty(){
 		return startDate;
 	}
 
 	public void setStartDate(String startDate) {
-		this.startDate = startDate;
+		this.startDate = new SimpleStringProperty(startDate);
 	}
 
 	public String getEndDate() {
+		return endDate.get();
+	}
+	
+	public StringProperty endDateProperty(){
 		return endDate;
 	}
 
 	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+		this.endDate = new SimpleStringProperty(endDate);
 	}
 
 	public List<Kompetenz> getKompetenzen() {

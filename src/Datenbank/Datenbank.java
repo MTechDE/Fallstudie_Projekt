@@ -7,6 +7,7 @@ import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
+import org.sql2o.logging.SysOutLogger;
 
 import Projekt.Aufwand;
 import Projekt.Kompetenz;
