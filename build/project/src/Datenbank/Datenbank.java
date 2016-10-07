@@ -46,7 +46,7 @@ public class Datenbank {
 	}
 
 	/**
-	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und Personen.
+	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und Aufwände.
 	 * Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * @param projekt
 	 * @return boolean
@@ -89,7 +89,7 @@ public class Datenbank {
 			return false;
 		}
 
-		// Speichere alle beteiligten Personen der jeweiligen Phasen in die DB
+		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
 		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, intern, risiko) " + 
 		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
@@ -99,7 +99,7 @@ public class Datenbank {
 			Query query = con.createQuery(sql);
 
 			for (Phase phase : projekt.getPhasen()) {
-				for (Aufwand aufwand : phase.getPersonen()) {
+				for (Aufwand aufwand : phase.getAufwände()) {
 					query.addParameter("aufwandKey",
 							(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
 							.addParameter("person", aufwand.getName())
@@ -287,7 +287,7 @@ public class Datenbank {
 	}
 
 	/**
-	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Beteiligte),
+	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Aufwände),
 	 * werden anhand des Projektnames aus der Datenbank gelöscht.
 	 * @param projekt
 	 * @return boolean

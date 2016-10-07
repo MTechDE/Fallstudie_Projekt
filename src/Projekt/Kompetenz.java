@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Projekt.Aufwand;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * In einem Kompetenzen Objekt werden die beteiligten Personen abgespeichert.
@@ -11,7 +13,7 @@ import Projekt.Aufwand;
  */
 public class Kompetenz {
 
-	private String name;
+	private StringProperty name;
 	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	
 	public Kompetenz(String name){
@@ -19,11 +21,15 @@ public class Kompetenz {
 	}
 
 	public String getName() {
+		return name.get();
+	}
+	
+	public StringProperty nameProperty(){
 		return name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = new SimpleStringProperty(name);
 	}
 
 	public List<Aufwand> getAufwände() {

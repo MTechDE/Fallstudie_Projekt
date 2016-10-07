@@ -46,7 +46,7 @@ public class Phase {
 		this.name = name;
 	}
 
-	public List<Aufwand> getPersonen() {
+	public List<Aufwand> getAufwände() {
 		return aufwand;
 	}
 
