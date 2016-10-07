@@ -7,7 +7,6 @@ import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
-import org.sql2o.logging.SysOutLogger;
 
 import Projekt.Aufwand;
 import Projekt.Kompetenz;
@@ -73,21 +72,23 @@ public class Datenbank {
 		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate) "+
 		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate";
 
-		try (Connection con = sql2o.beginTransaction()) {
-			Query query = con.createQuery(sql);
+		if(!projekt.getPhasen().isEmpty()){
+			try (Connection con = sql2o.beginTransaction()) {
+				Query query = con.createQuery(sql);
 
-			for (Phase phase : projekt.getPhasen()) {
-				query.addParameter("phasenKey", (phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
-						.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
-						.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
-						.addToBatch();
+				for (Phase phase : projekt.getPhasen()) {
+					query.addParameter("phasenKey", (phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
+							.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
+							.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
+							.addToBatch();
+				}
+				query.executeBatch();
+				con.commit();
+
+			} catch (Sql2oException e) {
+				System.out.println(e.getMessage());
+				return false;
 			}
-			query.executeBatch();
-			con.commit();
-
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-			return false;
 		}
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
@@ -96,54 +97,61 @@ public class Datenbank {
 		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
 		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
 
-		try (Connection con = sql2o.beginTransaction()) {
-			Query query = con.createQuery(sql);
+		if(!projekt.getAufwände().isEmpty()){
+			try (Connection con = sql2o.beginTransaction()) {
+				Query query = con.createQuery(sql);
 
-			for (Phase phase : projekt.getPhasen()) {
-				for (Aufwand aufwand : phase.getAufwände()) {
-					query.addParameter("aufwandKey",
-							(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
-							.addParameter("person", aufwand.getName())
-							.addParameter("phase", phase.getName())
-							.addParameter("projekt", projekt.getName())
-							.addParameter("pt", aufwand.getPt())
-							.addParameter("intern", aufwand.isIntern())
-							.addParameter("risiko", aufwand.getRisiko())
-							.addToBatch();
+				for (Phase phase : projekt.getPhasen()) {
+					for (Aufwand aufwand : phase.getAufwände()) {
+						query.addParameter("aufwandKey",
+								(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
+								.addParameter("person", aufwand.getName())
+								.addParameter("phase", phase.getName())
+								.addParameter("projekt", projekt.getName())
+								.addParameter("pt", aufwand.getPt())
+								.addParameter("intern", aufwand.isIntern())
+								.addParameter("risiko", aufwand.getRisiko())
+								.addToBatch();
+					}
 				}
-			}
 
-			query.executeBatch();
-			con.commit();
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-			return false;
+				query.executeBatch();
+				con.commit();
+			} catch (Sql2oException e) {
+				System.out.println(e.getMessage());
+				return false;
+			}
 		}
+
 		
 		sql = "INSERT INTO kompetenzen (kompetenzKey, name, person, projekt) " + 
 		"VALUES(:kompetenzKey, :name, :person, :projekt) " + 
 		"ON DUPLICATE KEY UPDATE kompetenzKey=:kompetenzKey, name=:name, person=:person, projekt=:projekt";
 				
-		try (Connection con = sql2o.beginTransaction()) {
-			
-			Query query = con.createQuery(sql);
-			
-			for(Kompetenz kompetenz: projekt.getKompetenzen()){
-				for (Aufwand aufwand : kompetenz.getAufwände()) {
-					query
-					.addParameter("kompetenzKey", (kompetenz.getName() + aufwand.getName() + projekt.getName()).replaceAll("\\s+", ""))
-					.addParameter("name", kompetenz.getName())
-					.addParameter("person", aufwand.getName())
-					.addParameter("projekt", projekt.getName())
-					.addToBatch();
+		if(!projekt.getKompetenzen().isEmpty()){
+			try (Connection con = sql2o.beginTransaction()) {
+				
+				Query query = con.createQuery(sql);
+				
+				for(Kompetenz kompetenz: projekt.getKompetenzen()){
+					for (Aufwand aufwand : kompetenz.getAufwände()) {
+						query
+						.addParameter("kompetenzKey", (kompetenz.getName() + aufwand.getName() + projekt.getName()).replaceAll("\\s+", ""))
+						.addParameter("name", kompetenz.getName())
+						.addParameter("person", aufwand.getName())
+						.addParameter("projekt", projekt.getName())
+						.addToBatch();
+					}
 				}
+				query.executeBatch();
+				con.commit();
+				return true;
+			} catch (Sql2oException e) {
+				System.out.println(e.getMessage());
+				return false;
 			}
-			query.executeBatch();
-			con.commit();
+		} else {
 			return true;
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-			return false;
 		}
 	}
 
