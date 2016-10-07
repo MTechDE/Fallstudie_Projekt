@@ -14,12 +14,12 @@
 
 <AnchorPane cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
    <children>
-      <Button focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
+      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
          <font>
             <Font name="Candara Bold" size="20.0" />
          </font>
       </Button>
-      <TableView cache="true" focusTraversable="false" layoutX="24.0" layoutY="122.0" prefHeight="200.0" prefWidth="552.0">
+      <TableView fx:id="tbl_projektTabelle" cache="true" focusTraversable="false" layoutX="24.0" layoutY="122.0" prefHeight="200.0" prefWidth="552.0">
         <columns>
           <TableColumn fx:id="tblCell_projektName" editable="false" prefWidth="150.0" resizable="false" text="Projekt Name" />
           <TableColumn fx:id="tblCell_projektErsteller" editable="false" prefWidth="100.0" resizable="false" text="Ersteller" />
@@ -31,15 +31,15 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </TableView>
-      <TextField focusTraversable="false" layoutX="24.0" layoutY="64.0" prefHeight="39.0" prefWidth="235.0" promptText="Suche" />
+      <TextField fx:id="txt_suche" focusTraversable="false" layoutX="24.0" layoutY="64.0" prefHeight="39.0" prefWidth="235.0" promptText="Suche" />
       <ImageView fitHeight="102.0" fitWidth="152.0" layoutX="424.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/Programm%20Logo.png" />
          </image>
       </ImageView>
-      <TextField focusTraversable="false" layoutX="24.0" layoutY="338.0" prefHeight="39.0" prefWidth="193.0" promptText="Projekt Name" />
-      <TextField focusTraversable="false" layoutX="231.0" layoutY="338.0" prefHeight="39.0" prefWidth="193.0" promptText="Ersteller" />
-      <CheckBox focusTraversable="false" layoutX="435.0" layoutY="348.0" mnemonicParsing="false" text="Vorlage verwenden">
+      <TextField fx:id="txt_newProjekt_name" focusTraversable="false" layoutX="24.0" layoutY="338.0" prefHeight="39.0" prefWidth="193.0" promptText="Projekt Name" />
+      <TextField fx:id="txt_newProjekt_ersteller" focusTraversable="false" layoutX="231.0" layoutY="338.0" prefHeight="39.0" prefWidth="193.0" promptText="Ersteller" />
+      <CheckBox fx:id="check_vorlage" focusTraversable="false" layoutX="435.0" layoutY="348.0" mnemonicParsing="false" text="Vorlage verwenden">
          <font>
             <Font name="Candara" size="14.0" />
          </font>

@@ -25,15 +25,15 @@ public class Test {
 
 	public static void main(String[] args) throws InterruptedException {
 		
-		Test1();
+//		Test1();
 		Test2();
-		Test3();
-		Test4();
-		Test5();
-		Test6();
-		Test7();
-
-		DeleteAllData();
+//		Test3();
+//		Test4();
+//		Test5();
+//		Test6();
+//		Test7();
+//
+//		DeleteAllData();
 		System.out.println("Tests Beendet");
 
 	}
