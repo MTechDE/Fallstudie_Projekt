@@ -30,9 +30,6 @@ public class OpenMainPage extends Stage{
 			OpenMainPage.oldProjekt = myDB.getProjekt(projekt);
 		}
 			
-		
-		
-		
 		stage = this;
 		Parent root = FXMLLoader.load(getClass().getResource("HauptFenster.fxml"));
 		Scene scene = new Scene(root);

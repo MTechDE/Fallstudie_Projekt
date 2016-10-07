@@ -7,15 +7,25 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import java.awt.MenuItem;
+
+import org.sql2o.logging.SysOutLogger;
+
+import com.sun.webkit.ContextMenu;
 
 import Datenbank.Datenbank;
 import Projekt.Projekt;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
+import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 
 import javafx.scene.control.TableView;
@@ -74,18 +84,37 @@ public class StartFensterController {
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 
+		// Lade Projekte in die Tabelle
 		if (!projektData.isEmpty())
 			tbl_projektTabelle.setItems(projektData);
-		else
-			System.out.println("Keine Projekte angelegt");
-		
+
+		// Reagiert auf Klicks auf ein Element in der Tabelle
+		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				// Doppelklick + Linke Maustaste
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
+					// Überprüft ob auf einen Tabelleneintrag mit einem projekt geklickt wurde
+					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
+						try {
+							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem().getName(),
+									tbl_projektTabelle.getSelectionModel().getSelectedItem(), true, false);
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+						}
+					}
+				}
+			}
+		});
+
 	}
 
 	// Event Listener on Button[#btn_newProjekt].onAction
 	@FXML
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
-		System.out.println("Neues projekt!");
-
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
 
