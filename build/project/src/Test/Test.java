@@ -67,17 +67,17 @@ public class Test {
 		projekte.get(0).getPhasen().get(2).setSingleAufwand(new Aufwand("Programmierer 1", true));
 		projekte.get(0).getPhasen().get(2).setSingleAufwand(new Aufwand("Programmierer 2", true));
 
-		projekte.get(0).getPhasen().get(0).getPersonen().get(0).setPt(5);
-		projekte.get(0).getPhasen().get(0).getPersonen().get(1).setPt(10);
+		projekte.get(0).getPhasen().get(0).getAufwände().get(0).setPt(5);
+		projekte.get(0).getPhasen().get(0).getAufwände().get(1).setPt(10);
 
-		projekte.get(0).getPhasen().get(1).getPersonen().get(0).setPt(6);
-		projekte.get(0).getPhasen().get(1).getPersonen().get(1).setPt(9);
+		projekte.get(0).getPhasen().get(1).getAufwände().get(0).setPt(6);
+		projekte.get(0).getPhasen().get(1).getAufwände().get(1).setPt(9);
 
-		projekte.get(0).getPhasen().get(2).getPersonen().get(0).setPt(5);
-		projekte.get(0).getPhasen().get(2).getPersonen().get(1).setPt(40);
+		projekte.get(0).getPhasen().get(2).getAufwände().get(0).setPt(5);
+		projekte.get(0).getPhasen().get(2).getAufwände().get(1).setPt(40);
 
 		for (Phase phase : projekte.get(0).getPhasen()) {
-			for (Aufwand aufwand : phase.getPersonen()) {
+			for (Aufwand aufwand : phase.getAufwände()) {
 				projekte.get(0).setSingleAufwand(aufwand);
 			}
 		}
@@ -120,16 +120,16 @@ public class Test {
 		projekte.get(0).getPhasen().get(1).setSingleAufwand(new Aufwand("Programmierer 1", false));
 		projekte.get(0).getPhasen().get(1).setSingleAufwand(new Aufwand("Programmierer 2", false));
 
-		projekte.get(0).getPhasen().get(0).getPersonen().get(0).setPt(9);
-		projekte.get(0).getPhasen().get(0).getPersonen().get(1).setPt(9);
+		projekte.get(0).getPhasen().get(0).getAufwände().get(0).setPt(9);
+		projekte.get(0).getPhasen().get(0).getAufwände().get(1).setPt(9);
 
-		projekte.get(0).getPhasen().get(1).getPersonen().get(0).setPt(8);
-		projekte.get(0).getPhasen().get(1).getPersonen().get(1).setPt(8);
+		projekte.get(0).getPhasen().get(1).getAufwände().get(0).setPt(8);
+		projekte.get(0).getPhasen().get(1).getAufwände().get(1).setPt(8);
 
 		projekte.get(0).setStartDate(projekte.get(0).getPhasen().get(0).getStartDate());
 		projekte.get(0).setEndDate(projekte.get(0).getPhasen().get(1).getEndDate());
 
-		for (Aufwand aufwand : projekte.get(0).getPhasen().get(0).getPersonen()) {
+		for (Aufwand aufwand : projekte.get(0).getPhasen().get(0).getAufwände()) {
 			projekte.get(0).setSingleAufwand(aufwand);
 		}
 
@@ -157,18 +157,18 @@ public class Test {
 		projekte.get(1).getPhasen().get(1).setSingleAufwand(new Aufwand("Programmierer 2", true));
 		projekte.get(1).getPhasen().get(1).setSingleAufwand(new Aufwand("Programmierer 3", false));
 
-		projekte.get(1).getPhasen().get(0).getPersonen().get(0).setPt(8);
-		projekte.get(1).getPhasen().get(0).getPersonen().get(1).setPt(8);
-		projekte.get(1).getPhasen().get(0).getPersonen().get(2).setPt(8);
+		projekte.get(1).getPhasen().get(0).getAufwände().get(0).setPt(8);
+		projekte.get(1).getPhasen().get(0).getAufwände().get(1).setPt(8);
+		projekte.get(1).getPhasen().get(0).getAufwände().get(2).setPt(8);
 
-		projekte.get(1).getPhasen().get(1).getPersonen().get(0).setPt(7);
-		projekte.get(1).getPhasen().get(1).getPersonen().get(1).setPt(7);
-		projekte.get(1).getPhasen().get(1).getPersonen().get(2).setPt(7);
+		projekte.get(1).getPhasen().get(1).getAufwände().get(0).setPt(7);
+		projekte.get(1).getPhasen().get(1).getAufwände().get(1).setPt(7);
+		projekte.get(1).getPhasen().get(1).getAufwände().get(2).setPt(7);
 
 		projekte.get(1).setStartDate(projekte.get(1).getPhasen().get(0).getStartDate());
 		projekte.get(1).setEndDate(projekte.get(1).getPhasen().get(1).getEndDate());
 
-		for (Aufwand aufwand : projekte.get(1).getPhasen().get(0).getPersonen()) {
+		for (Aufwand aufwand : projekte.get(1).getPhasen().get(0).getAufwände()) {
 			projekte.get(1).setSingleAufwand(aufwand);
 		}
 
@@ -205,7 +205,7 @@ public class Test {
 					+ projekte.get(0).getEndDate());
 			for (Phase phase : projekte.get(0).getPhasen()) {
 				System.out.println(phase.getName());
-				for (Aufwand aufwand : phase.getPersonen()) {
+				for (Aufwand aufwand : phase.getAufwände()) {
 					System.out.println(
 							aufwand.getName() + " PT: " + aufwand.getPt() + " Phase: " + aufwand.getZugehoerigkeit());
 				}
@@ -216,7 +216,7 @@ public class Test {
 					+ projekte.get(1).getEndDate());
 			for (Phase phase : projekte.get(1).getPhasen()) {
 				System.out.println(phase.getName());
-				for (Aufwand aufwand : phase.getPersonen()) {
+				for (Aufwand aufwand : phase.getAufwände()) {
 					System.out.println(
 							aufwand.getName() + " PT: " + aufwand.getPt() + " Phase: " + aufwand.getZugehoerigkeit());
 				}
@@ -237,14 +237,14 @@ public class Test {
 
 			for (Phase phase : projekte.get(0).getPhasen()) {
 				System.out.println(phase.getName());
-				for (Aufwand aufwand : phase.getPersonen()) {
+				for (Aufwand aufwand : phase.getAufwände()) {
 					System.out.println(
 							aufwand.getName() + " PT: " + aufwand.getPt() + " Phase: " + aufwand.getZugehoerigkeit());
 				}
 			}
 
 			phasen = projekte.get(0).getPhasen();
-			aufwände = phasen.get(0).getPersonen();
+			aufwände = phasen.get(0).getAufwände();
 			for (Aufwand aufwand : aufwände) {
 				aufwand.setPt(5555);
 			}
@@ -252,7 +252,7 @@ public class Test {
 			Phase phase3 = new Phase("Phase 3", "2011-01-01", "2015-01-01");
 			phase3.setAufwände(aufwände);
 
-			for (Aufwand aufwand : phase3.getPersonen()) {
+			for (Aufwand aufwand : phase3.getAufwände()) {
 				aufwand.setZugehoerigkeit(phase3.getName());
 				System.out.println(aufwand.getName() + " " + aufwand.getZugehoerigkeit() + " " + aufwand.getPt());
 			}
@@ -298,7 +298,7 @@ public class Test {
 		if (myDB.testConnection()) {
 			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
 			projekte.get(0).getPhasen().remove(1);
-			projekte.get(0).getPhasen().get(0).getPersonen().remove(0);
+			projekte.get(0).getPhasen().get(0).getAufwände().remove(0);
 		}
 
 		if (myDB.updateProjekt(projekte.get(0)))
@@ -327,7 +327,7 @@ public class Test {
 						System.out.println(aufwand.getName());
 						for (Phase phase : projekt.getPhasen()) {
 							System.out.println(phase.getName());
-							for (Aufwand phasePerson : phase.getPersonen()) {
+							for (Aufwand phasePerson : phase.getAufwände()) {
 								if(aufwand.getName().equals(phasePerson.getName()))
 									System.out.println(phasePerson.getName() + " - " + phasePerson.getPt());
 							}
@@ -361,7 +361,7 @@ public class Test {
 			System.out.println("Projekt: " + projekt.getName());
 			for (Phase phase : projekt.getPhasen()) {
 				System.out.println("Phase: " + phase.getName());
-				for (Aufwand aufwand : phase.getPersonen()) {
+				for (Aufwand aufwand : phase.getAufwände()) {
 					aufwand.setZugehoerigkeit(phase.getName());
 					System.out.println("Beteiligte: " + aufwand.getName() + " PT: " + aufwand.getPt() +
 							" Zugehörigkeit: " + aufwand.getZugehoerigkeit());

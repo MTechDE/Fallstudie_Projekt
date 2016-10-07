@@ -25,7 +25,9 @@ public class Main extends Application {
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
+			
 		} catch (Exception e){
 		}
 	}
