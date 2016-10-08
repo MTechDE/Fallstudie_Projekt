@@ -11,17 +11,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.awt.MenuItem;
-
-import org.sql2o.logging.SysOutLogger;
-
-import com.sun.webkit.ContextMenu;
 
 import Datenbank.Datenbank;
 import Projekt.Projekt;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -96,12 +89,11 @@ public class StartFensterController {
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {
-							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem().getName(),
-									tbl_projektTabelle.getSelectionModel().getSelectedItem(), true, false);
+						try {							
 							Node source = (Node) mouseEvent.getSource();
 							Stage stage = (Stage) source.getScene().getWindow();
 							stage.close();
+							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
@@ -127,15 +119,15 @@ public class StartFensterController {
 			if (!doubleName) {
 				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
 						false);
-				if (check_vorlage.isSelected()) {
-					new OpenMainPage(newProjekt.getName(), newProjekt, true, true);
-				} else {
-					new OpenMainPage(newProjekt.getName(), newProjekt, false, true);
-				}
 				// Schließe Fenster
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
+				if (check_vorlage.isSelected()) {
+					new OpenMainPage(newProjekt, true, true);
+				} else {
+					new OpenMainPage(newProjekt, true, false);
+				}
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);

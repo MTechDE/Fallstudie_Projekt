@@ -26,13 +26,13 @@ public class Test {
 	public static void main(String[] args) throws InterruptedException {
 		
 //		Test1();
-		Test2();
+//		Test2();
 //		Test3();
 //		Test4();
 //		Test5();
 //		Test6();
 //		Test7();
-//
+		Test8();
 //		DeleteAllData();
 		System.out.println("Tests Beendet");
 
@@ -76,20 +76,17 @@ public class Test {
 		projekte.get(0).getPhasen().get(2).getAufwände().get(0).setPt(5);
 		projekte.get(0).getPhasen().get(2).getAufwände().get(1).setPt(40);
 
-		for (Phase phase : projekte.get(0).getPhasen()) {
-			for (Aufwand aufwand : phase.getAufwände()) {
-				projekte.get(0).setSingleAufwand(aufwand);
-			}
-		}
-
 		// zeigeAllePersonenInPhasen();
 
 		System.out.println("Weise Personen einzelnen Kompetenzen zu");
 		kompetenzen.add(new Kompetenz("Java Backend"));
 		kompetenzen.add(new Kompetenz("Java Frontend"));
 
-		kompetenzen.get(0).setSingleAufwand(projekte.get(0).getAufwände().get(0));
-		kompetenzen.get(1).setSingleAufwand(projekte.get(0).getAufwände().get(1));
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Extern"));
+		
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Extern"));
 
 		for (Kompetenz kompetenz : kompetenzen) {
 			for (Aufwand aufwand : kompetenz.getAufwände()) {
@@ -129,14 +126,14 @@ public class Test {
 		projekte.get(0).setStartDate(projekte.get(0).getPhasen().get(0).getStartDate());
 		projekte.get(0).setEndDate(projekte.get(0).getPhasen().get(1).getEndDate());
 
-		for (Aufwand aufwand : projekte.get(0).getPhasen().get(0).getAufwände()) {
-			projekte.get(0).setSingleAufwand(aufwand);
-		}
 
 		kompetenzen.add(new Kompetenz("Java Backend"));
 		kompetenzen.add(new Kompetenz("Java Frontend"));
-		kompetenzen.get(0).setSingleAufwand(projekte.get(0).getAufwände().get(0));
-		kompetenzen.get(1).setSingleAufwand(projekte.get(0).getAufwände().get(1));
+		
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Extern"));
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Extern"));
 
 		projekte.get(0).setKompetenzen(kompetenzen);
 
@@ -168,18 +165,17 @@ public class Test {
 		projekte.get(1).setStartDate(projekte.get(1).getPhasen().get(0).getStartDate());
 		projekte.get(1).setEndDate(projekte.get(1).getPhasen().get(1).getEndDate());
 
-		for (Aufwand aufwand : projekte.get(1).getPhasen().get(0).getAufwände()) {
-			projekte.get(1).setSingleAufwand(aufwand);
-		}
 
 		kompetenzen.clear();
 
 		kompetenzen.add(new Kompetenz("Java Backend"));
 		kompetenzen.add(new Kompetenz("Java Frontend"));
 
-		kompetenzen.get(0).setSingleAufwand(projekte.get(1).getAufwände().get(0));
-		kompetenzen.get(1).setSingleAufwand(projekte.get(1).getAufwände().get(1));
-		kompetenzen.get(1).setSingleAufwand(projekte.get(1).getAufwände().get(2));
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(0).setSingleAufwand(new Aufwand("Extern"));
+		
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Intern"));
+		kompetenzen.get(1).setSingleAufwand(new Aufwand("Extern"));
 
 		projekte.get(1).setKompetenzen(kompetenzen);
 
@@ -327,9 +323,9 @@ public class Test {
 						System.out.println(aufwand.getName());
 						for (Phase phase : projekt.getPhasen()) {
 							System.out.println(phase.getName());
-							for (Aufwand phasePerson : phase.getAufwände()) {
-								if(aufwand.getName().equals(phasePerson.getName()))
-									System.out.println(phasePerson.getName() + " - " + phasePerson.getPt());
+							for (Aufwand phaseAufwand : phase.getAufwände()) {
+								if(aufwand.getName().equals(phaseAufwand.getName()))
+									System.out.println(phaseAufwand.getName() + " - " + phaseAufwand.getPt());
 							}
 							System.out.println("");
 						}
@@ -339,6 +335,38 @@ public class Test {
 				}
 			}
 		}
+	}
+	
+	public static void Test8(){
+		Projekt projekt = new Projekt("Test Projekt", "Daniel", false);
+		
+		projekt.setSingleKompetenz(new Kompetenz("Kompetenz 1"));
+		projekt.getKompetenzen().get(0).setSingleAufwand(new Aufwand("Intern"));
+		projekt.getKompetenzen().get(0).setSingleAufwand(new Aufwand("Extern"));
+		
+		projekt.setSingleKompetenz(new Kompetenz("Kompetenz 2"));
+		projekt.getKompetenzen().get(1).setSingleAufwand(new Aufwand("Intern"));
+		projekt.getKompetenzen().get(1).setSingleAufwand(new Aufwand("Extern"));
+		
+		projekt.setSinglePhase(new Phase("Phase 1", "BLA", "BLUB"));
+		
+		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
+			for (Aufwand aufwand : kompetenz.getAufwände()) {
+				projekt.getPhasen().get(0).setSingleAufwand(aufwand);
+			}
+		}
+		
+		for (Phase phase : projekt.getPhasen()) {
+			for (Aufwand aufwand : phase.getAufwände()) {
+				System.out.println(aufwand.getName() + " " + aufwand.getPt());
+			}
+		}
+
+		
+		
+		
+		
+		
 	}
 
 	public static void zeigeAlleProjekte() {

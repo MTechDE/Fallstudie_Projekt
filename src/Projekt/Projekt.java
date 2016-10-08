@@ -3,7 +3,6 @@ package Projekt;
 import java.util.ArrayList;
 import java.util.List;
 
-import Projekt.Aufwand;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,7 +16,6 @@ import javafx.beans.property.StringProperty;
  *
  */
 public class Projekt {
-	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	private List<Phase> phasen = new ArrayList<Phase>();
 	private List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 	private BooleanProperty abgeschickt;
@@ -52,18 +50,6 @@ public class Projekt {
 
 	public void setName(String name) {
 		this.name = new SimpleStringProperty(name);
-	}
-
-	public ArrayList<Aufwand> getAufwände() {
-		return (ArrayList<Aufwand>) aufwände;
-	}
-
-	public void setAufwände(ArrayList<Aufwand> aufwände) {
-		this.aufwände = aufwände;
-	}
-	
-	public void setSingleAufwand(Aufwand aufwand){
-		this.aufwände.add(aufwand);
 	}
 
 	public ArrayList<Phase> getPhasen() {
@@ -132,5 +118,9 @@ public class Projekt {
 
 	public void setKompetenzen(List<Kompetenz> kompetenzen) {
 		this.kompetenzen = kompetenzen;
+	}
+	
+	public void setSingleKompetenz(Kompetenz kompetenz){
+		this.kompetenzen.add(kompetenz);
 	}
 }

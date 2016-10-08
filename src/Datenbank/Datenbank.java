@@ -89,6 +89,8 @@ public class Datenbank {
 				System.out.println(e.getMessage());
 				return false;
 			}
+		} else {
+			projekt.setPhasen(null);
 		}
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
@@ -97,10 +99,8 @@ public class Datenbank {
 		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
 		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
 
-		if(!projekt.getAufwände().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
-
 				for (Phase phase : projekt.getPhasen()) {
 					for (Aufwand aufwand : phase.getAufwände()) {
 						query.addParameter("aufwandKey",
@@ -121,7 +121,7 @@ public class Datenbank {
 				System.out.println(e.getMessage());
 				return false;
 			}
-		}
+
 
 		
 		sql = "INSERT INTO kompetenzen (kompetenzKey, name, person, projekt) " + 
@@ -151,6 +151,7 @@ public class Datenbank {
 				return false;
 			}
 		} else {
+			projekt.setKompetenzen(null);
 			return true;
 		}
 	}
@@ -205,9 +206,6 @@ public class Datenbank {
 		int endPhase = newprojekt.getPhasen().size() - 1;
 		newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
 		newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
-
-		// Weise die Personen dem projekt hinzu
-		newprojekt.setAufwände((ArrayList<Aufwand>) personen);
 		
 		
 		//Hole die Kompetenzen aus der DB

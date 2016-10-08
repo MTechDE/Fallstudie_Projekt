@@ -110,6 +110,7 @@
 			name="Vanilla Sky"
 			mainClass="UI.Main"
 			toolkit="fx"
+			version="0.1.0"
 		/>
 	
 		<mkdir dir="build/classes/META-INF" />
@@ -141,6 +142,8 @@
 			outdir="${basedir}/deploy"
 			outfile="Fallstudie_Projekt" nativeBundles="exe"
 			updatemode="background" >
+			
+			<fx:preferences shortcut="true"/>
 	
 			<fx:platform basedir="${java.home}"/>
 			<fx:info title="Fallstudie_Projekt" vendor="Soft Ice"/>
