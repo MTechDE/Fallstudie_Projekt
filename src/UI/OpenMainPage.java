@@ -11,32 +11,35 @@ import javafx.stage.Stage;
 public class OpenMainPage extends Stage{
 
 	private Stage stage;
-	public static Projekt newProjekt;
-	public static Projekt oldProjekt;
 	private Datenbank myDB = new Datenbank();
+	private static Projekt tmpProjekt;
 	
-	public OpenMainPage(String projektname, Projekt projekt, boolean vorlage, boolean newProjekt) throws Exception{
+	public OpenMainPage(Projekt projekt, boolean newProjekt, boolean vorlage) throws Exception{
 		
-		if(newProjekt){
-			OpenMainPage.newProjekt = projekt;
-			if(vorlage){
-				/* TODO Vorlage muss noch erstellt werden.
-				 * Bsp: 3 Kompetenzen + 3 Phasen.
-				 */
-			}
-			myDB.speicherProjekt(OpenMainPage.newProjekt);
-		}
-		else{
-			OpenMainPage.oldProjekt = myDB.getProjekt(projekt);
-		}
-			
 		stage = this;
 		Parent root = FXMLLoader.load(getClass().getResource("HauptFenster.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
-		stage.setTitle(projektname); // Hier soll der jeweilige Projektname einegtragen werden!
-		stage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
+		stage.setTitle(projekt.getName());
+		stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 		stage.show();
+		
+		if(newProjekt){
+			if(vorlage){
+				// TODO Eine Vorlage muss noch deffiniert werden
+			} else {
+				tmpProjekt = projekt;
+				// Es wir ein JavaFX Bug abgefangen, der das Speichern des Projektes möglicherweise verhindert
+				try{
+					myDB.speicherProjekt(projekt);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		} else {
+			tmpProjekt = myDB.getProjekt(projekt);
+		}
+			
 	}
 	
 }

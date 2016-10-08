@@ -89,6 +89,8 @@ public class Datenbank {
 				System.out.println(e.getMessage());
 				return false;
 			}
+		} else {
+			projekt.setPhasen(null);
 		}
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
@@ -97,31 +99,32 @@ public class Datenbank {
 		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
 		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
 
-		if(!projekt.getAufwände().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
-
-				for (Phase phase : projekt.getPhasen()) {
-					for (Aufwand aufwand : phase.getAufwände()) {
-						query.addParameter("aufwandKey",
-								(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
-								.addParameter("person", aufwand.getName())
-								.addParameter("phase", phase.getName())
-								.addParameter("projekt", projekt.getName())
-								.addParameter("pt", aufwand.getPt())
-								.addParameter("intern", aufwand.isIntern())
-								.addParameter("risiko", aufwand.getRisiko())
-								.addToBatch();
+				if(!projekt.getPhasen().isEmpty()){
+					for (Phase phase : projekt.getPhasen()) {
+						if(!phase.getAufwände().isEmpty()){
+							for (Aufwand aufwand : phase.getAufwände()) {
+								query.addParameter("aufwandKey",
+										(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
+										.addParameter("person", aufwand.getName())
+										.addParameter("phase", phase.getName())
+										.addParameter("projekt", projekt.getName())
+										.addParameter("pt", aufwand.getPt())
+										.addParameter("intern", aufwand.isIntern())
+										.addParameter("risiko", aufwand.getRisiko())
+										.addToBatch();
+							}
+						}
 					}
 				}
-
 				query.executeBatch();
 				con.commit();
 			} catch (Sql2oException e) {
 				System.out.println(e.getMessage());
 				return false;
 			}
-		}
+
 
 		
 		sql = "INSERT INTO kompetenzen (kompetenzKey, name, person, projekt) " + 
@@ -151,6 +154,7 @@ public class Datenbank {
 				return false;
 			}
 		} else {
+			projekt.setKompetenzen(null);
 			return true;
 		}
 	}
@@ -192,22 +196,23 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Schreibe die Phasen in das Projekt
-		newprojekt.setPhasen((ArrayList<Phase>) phasen);
-
-		for (Phase phase : newprojekt.getPhasen()) {
-			for (Aufwand aufwand : personen) {
-				aufwand.setZugehoerigkeit(phase.getName());
+		// Überprüfe ob das Projekt Phasen hat
+		if(!phasen.isEmpty()){
+			// Schreibe die Phasen in das Projekt
+			newprojekt.setPhasen((ArrayList<Phase>) phasen);
+			
+			for (Phase phase : newprojekt.getPhasen()) {
+				for (Aufwand aufwand : personen) {
+					aufwand.setZugehoerigkeit(phase.getName());
+				}
 			}
+			
+			//Setze Projekt Start- und Enddatum
+			int endPhase = newprojekt.getPhasen().size() - 1;
+			newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
+			newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 		}
 		
-		//Setze Projekt Start- und Enddatum
-		int endPhase = newprojekt.getPhasen().size() - 1;
-		newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
-		newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
-
-		// Weise die Personen dem projekt hinzu
-		newprojekt.setAufwände((ArrayList<Aufwand>) personen);
 		
 		
 		//Hole die Kompetenzen aus der DB
@@ -237,8 +242,10 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 		
-		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu
-		newprojekt.setKompetenzen(kompetenzen);
+		
+		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu, falls es Kompetenzen gibt
+		if(!kompetenzen.isEmpty())
+			newprojekt.setKompetenzen(kompetenzen);
 		
 
 		return newprojekt;
