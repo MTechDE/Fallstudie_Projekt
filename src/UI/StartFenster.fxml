@@ -12,20 +12,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" stylesheets="@modena.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
+<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
    <children>
-      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" styleClass="open-button" stylesheets="@modena.css" text="Neues Projekt anlegen">
+      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
          <font>
             <Font name="Candara Bold" size="20.0" />
          </font>
       </Button>
       <TableView fx:id="tbl_projektTabelle" cache="true" focusTraversable="false" layoutX="24.0" layoutY="122.0" prefHeight="200.0" prefWidth="552.0">
         <columns>
-          <TableColumn fx:id="tblCell_projektName" editable="false" prefWidth="150.0" resizable="false" text="Projekt Name" />
-          <TableColumn fx:id="tblCell_projektErsteller" editable="false" prefWidth="100.0" resizable="false" text="Ersteller" />
-            <TableColumn fx:id="tblCell_projektStart" editable="false" prefWidth="105.0" resizable="false" text="Start Datum" />
-            <TableColumn fx:id="tblCell_projektEnd" editable="false" prefWidth="109.0" resizable="false" text="End Datum" />
-            <TableColumn fx:id="tblCell_projektSend" editable="false" prefWidth="88.0" resizable="false" text="Abgeschickt" />
+          <TableColumn fx:id="tblCell_projektName" editable="false" prefWidth="128.0" resizable="false" text="Projekt Name" />
+          <TableColumn fx:id="tblCell_projektErsteller" editable="false" prefWidth="116.0" resizable="false" text="Ersteller" />
+            <TableColumn fx:id="tblCell_projektStart" editable="false" prefWidth="102.0" resizable="false" text="Start Datum" />
+            <TableColumn fx:id="tblCell_projektEnd" editable="false" prefWidth="102.0" resizable="false" text="End Datum" />
+            <TableColumn fx:id="tblCell_projektSend" editable="false" prefWidth="104.0" resizable="false" text="Abgeschickt" />
         </columns>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

@@ -1,7 +1,5 @@
 package UI;
 
-import com.panemu.tiwulfx.dialog.*;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -27,6 +25,11 @@ import javafx.scene.control.TableView;
 
 import javafx.scene.control.TableColumn;
 
+/**
+ * In dieser Klasse wird die Logik des Startfensters behandelt.
+ * @author Daniel Sogl
+ *
+ */
 public class StartFensterController {
 	@FXML
 	private AnchorPane startScreen;
@@ -59,8 +62,8 @@ public class StartFensterController {
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		System.out.println("Initalisiere Startfenster");
 		
+		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
@@ -95,7 +98,6 @@ public class StartFensterController {
 				}
 			}
 		});
-
 	}
 
 	// Event Listener on Button[#btn_newProjekt].onAction
@@ -103,7 +105,6 @@ public class StartFensterController {
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-
 			// Überprüfe ob der gewünschte Name bereits verwendet wurde
 			boolean doubleName = false;
 			for (Projekt projekt : projektData) {

@@ -338,35 +338,6 @@ public class Test {
 	}
 	
 	public static void Test8(){
-		Projekt projekt = new Projekt("Test Projekt", "Daniel", false);
-		
-		projekt.setSingleKompetenz(new Kompetenz("Kompetenz 1"));
-		projekt.getKompetenzen().get(0).setSingleAufwand(new Aufwand("Intern"));
-		projekt.getKompetenzen().get(0).setSingleAufwand(new Aufwand("Extern"));
-		
-		projekt.setSingleKompetenz(new Kompetenz("Kompetenz 2"));
-		projekt.getKompetenzen().get(1).setSingleAufwand(new Aufwand("Intern"));
-		projekt.getKompetenzen().get(1).setSingleAufwand(new Aufwand("Extern"));
-		
-		projekt.setSinglePhase(new Phase("Phase 1", "BLA", "BLUB"));
-		
-		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-			for (Aufwand aufwand : kompetenz.getAufwände()) {
-				projekt.getPhasen().get(0).setSingleAufwand(aufwand);
-			}
-		}
-		
-		for (Phase phase : projekt.getPhasen()) {
-			for (Aufwand aufwand : phase.getAufwände()) {
-				System.out.println(aufwand.getName() + " " + aufwand.getPt());
-			}
-		}
-
-		
-		
-		
-		
-		
 	}
 
 	public static void zeigeAlleProjekte() {
