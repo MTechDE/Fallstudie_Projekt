@@ -8,8 +8,11 @@ import javafx.scene.control.TableColumn;
 import java.util.ArrayList;
 import java.util.List;
 
+import Projekt.Aufwand;
+import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
@@ -20,29 +23,37 @@ public class HauptFensterController {
 	private TableView<ObservableList<String>> ProjektDetailTabelle;
 	@FXML
 	private Button btn_newPhase;
+	@FXML
+	private Button btn_newKompetenz;
 	
 	// Projekt aus der Startseite
 	Projekt projekt;
 	
 	// Erzeuge Phasen Spalten
 	List<String> columns = new ArrayList<String>();
-	String headers[] = null;
-	TableColumn<ObservableList<String>, String> column;
+	List<String> rows = new ArrayList<String>();	
+    ObservableList<Kompetenz> kompetenzData = FXCollections.observableArrayList();
+    ObservableList<Aufwand> aufwandData = FXCollections.observableArrayList();
 	
 	
 	
 	// Erzeuge Spalten und Zeilen anhand der Projekt Phasen und Kompetenzen
 	@FXML
 	private void initialize() {
+		
+		// Die erste Spalte ist für die Kompetenzen "reserviert". Die Länge wird auf 100px festgelegt.
 		projekt = OpenMainPage.tmpProjekt;
-		columns.add("Kompetenzen");
+		ProjektDetailTabelle.getColumns().add(new TableColumn<>("Kompetenzen"));
+		
+		// Spalten Namen (Phasen Namen)
+		
 		for (Phase phase : projekt.getPhasen()) {
-			columns.add(phase.getName());
+			ProjektDetailTabelle.getColumns().add(new TableColumn<>(phase.getName()));
 		}
-		for (String string : columns) {
-			column = new TableColumn<>(string);
-			ProjektDetailTabelle.getColumns().add(column);
-		}
+		
+		
+		kompetenzData = FXCollections.observableArrayList(projekt.getKompetenzen());
+		
         
 	}
 
@@ -51,7 +62,11 @@ public class HauptFensterController {
 	@FXML
 	public void btn_newPhase_click(ActionEvent event) {
 		System.out.println("Neue Zelle hinzufügen");
-		column = new TableColumn<>("Neue Phase");
-		ProjektDetailTabelle.getColumns().add(column);
+		ProjektDetailTabelle.getColumns().add(new TableColumn<>("Neue Phase"));
+	}
+	
+	@FXML
+	public void btn_newKompetenz_click(ActionEvent event) {
+		System.out.println("Neue Kompetenz hinzufügen");
 	}
 }

@@ -98,6 +98,14 @@ public class StartFensterController {
 				}
 			}
 		});
+		
+		// Überprüfe ob die DB online ist
+		if(!myDB.testConnection()){
+			System.out.println("DB offline");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Keine Verbindung zur Datenbank möglich");
+			alert.showAndWait();
+		}
 	}
 
 	// Event Listener on Button[#btn_newProjekt].onAction
