@@ -21,6 +21,7 @@ public class Main extends Application {
 		try{
 			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("modena.css").toExternalForm());
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
 			primaryStage.setScene(scene);

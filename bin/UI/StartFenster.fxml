@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
+<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" stylesheets="@modena.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
    <children>
-      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
+      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" styleClass="open-button" stylesheets="@modena.css" text="Neues Projekt anlegen">
          <font>
             <Font name="Candara Bold" size="20.0" />
          </font>

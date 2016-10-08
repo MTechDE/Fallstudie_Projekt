@@ -26,7 +26,7 @@ public class OpenMainPage extends Stage{
 		
 		if(newProjekt){
 			if(vorlage){
-				// TODO Eine Vorlage muss noch deffiniert werden
+				// TODO Eine Vorlage muss noch  deffiniert werden
 			} else {
 				tmpProjekt = projekt;
 				// Es wir ein JavaFX Bug abgefangen, der das Speichern des Projektes möglicherweise verhindert

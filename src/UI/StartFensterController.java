@@ -1,5 +1,7 @@
 package UI;
 
+import com.panemu.tiwulfx.dialog.*;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -79,10 +81,12 @@ public class StartFensterController {
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {							
-//							Node source = (Node) mouseEvent.getSource();
-//							Stage stage = (Stage) source.getScene().getWindow();
-//							stage.close();
+						try {		
+							// Schließe Fenster
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+							// Öffne Hauptfenster
 							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
@@ -113,6 +117,7 @@ public class StartFensterController {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
+				// Öffne Hauptfenster
 				if (check_vorlage.isSelected()) {
 					new OpenMainPage(newProjekt, true, true);
 				} else {
@@ -129,6 +134,7 @@ public class StartFensterController {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Füllen Sie alle Felder aus");
 			alert.showAndWait();
+			
 		}
 	}
 }
