@@ -80,8 +80,11 @@ public class Projekt {
 		return abgeschickt.get();
 	}
 	
-	public BooleanProperty abgeschicktProperty(){
-		return abgeschickt;
+	public StringProperty abgeschicktProperty(){
+		if(this.isAbgeschickt())
+			return new SimpleStringProperty("Ja");
+		else
+			return new SimpleStringProperty("Nein");
 	}
 
 	public void setAbgeschickt(boolean abgeschickt) {

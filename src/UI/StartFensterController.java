@@ -41,7 +41,7 @@ public class StartFensterController {
 	@FXML
 	private TableColumn<Projekt, String> tblCell_projektEnd;
 	@FXML
-	private TableColumn<Projekt, Boolean> tblCell_projektSend;
+	private TableColumn<Projekt, String> tblCell_projektSend;
 	@FXML
 	private TextField txt_newProjekt_name;
 	@FXML
@@ -58,22 +58,12 @@ public class StartFensterController {
 	@FXML
 	private void initialize() {
 		System.out.println("Initalisiere Startfenster");
-		// tblCell_projektName.setCellValueFactory(new
-		// PropertyValueFactory<Projekt, String>("name"));
-		// tblCell_projektErsteller.setCellValueFactory(new
-		// PropertyValueFactory<Projekt, String>("ersteller"));
-		// tblCell_projektStart.setCellValueFactory(new
-		// PropertyValueFactory<Projekt, String>("startDate"));
-		// tblCell_projektEnd.setCellValueFactory(new
-		// PropertyValueFactory<Projekt, String>("endDate"));
-		// tblCell_projektSend.setCellValueFactory(new
-		// PropertyValueFactory<Projekt, Boolean>("abgeschickt"));
-
+		
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
-		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty().asObject());
+		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 
@@ -87,12 +77,12 @@ public class StartFensterController {
 			public void handle(MouseEvent mouseEvent) {
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem projekt geklickt wurde
+					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {							
-							Node source = (Node) mouseEvent.getSource();
-							Stage stage = (Stage) source.getScene().getWindow();
-							stage.close();
+//							Node source = (Node) mouseEvent.getSource();
+//							Stage stage = (Stage) source.getScene().getWindow();
+//							stage.close();
 							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());

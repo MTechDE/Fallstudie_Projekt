@@ -101,20 +101,23 @@ public class Datenbank {
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
-				for (Phase phase : projekt.getPhasen()) {
-					for (Aufwand aufwand : phase.getAufwände()) {
-						query.addParameter("aufwandKey",
-								(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
-								.addParameter("person", aufwand.getName())
-								.addParameter("phase", phase.getName())
-								.addParameter("projekt", projekt.getName())
-								.addParameter("pt", aufwand.getPt())
-								.addParameter("intern", aufwand.isIntern())
-								.addParameter("risiko", aufwand.getRisiko())
-								.addToBatch();
+				if(!projekt.getPhasen().isEmpty()){
+					for (Phase phase : projekt.getPhasen()) {
+						if(!phase.getAufwände().isEmpty()){
+							for (Aufwand aufwand : phase.getAufwände()) {
+								query.addParameter("aufwandKey",
+										(aufwand.getName() + phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
+										.addParameter("person", aufwand.getName())
+										.addParameter("phase", phase.getName())
+										.addParameter("projekt", projekt.getName())
+										.addParameter("pt", aufwand.getPt())
+										.addParameter("intern", aufwand.isIntern())
+										.addParameter("risiko", aufwand.getRisiko())
+										.addToBatch();
+							}
+						}
 					}
 				}
-
 				query.executeBatch();
 				con.commit();
 			} catch (Sql2oException e) {
@@ -193,19 +196,23 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Schreibe die Phasen in das Projekt
-		newprojekt.setPhasen((ArrayList<Phase>) phasen);
-
-		for (Phase phase : newprojekt.getPhasen()) {
-			for (Aufwand aufwand : personen) {
-				aufwand.setZugehoerigkeit(phase.getName());
+		// Überprüfe ob das Projekt Phasen hat
+		if(!phasen.isEmpty()){
+			// Schreibe die Phasen in das Projekt
+			newprojekt.setPhasen((ArrayList<Phase>) phasen);
+			
+			for (Phase phase : newprojekt.getPhasen()) {
+				for (Aufwand aufwand : personen) {
+					aufwand.setZugehoerigkeit(phase.getName());
+				}
 			}
+			
+			//Setze Projekt Start- und Enddatum
+			int endPhase = newprojekt.getPhasen().size() - 1;
+			newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
+			newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 		}
 		
-		//Setze Projekt Start- und Enddatum
-		int endPhase = newprojekt.getPhasen().size() - 1;
-		newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
-		newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 		
 		
 		//Hole die Kompetenzen aus der DB
@@ -235,8 +242,10 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 		
-		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu
-		newprojekt.setKompetenzen(kompetenzen);
+		
+		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu, falls es Kompetenzen gibt
+		if(!kompetenzen.isEmpty())
+			newprojekt.setKompetenzen(kompetenzen);
 		
 
 		return newprojekt;
