@@ -12,6 +12,7 @@ import Projekt.Aufwand;
 import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,20 +42,23 @@ public class HauptFensterController {
 	@FXML
 	private void initialize() {
 		
-		// Die erste Spalte ist für die Kompetenzen "reserviert". Die Länge wird auf 100px festgelegt.
+		// Die erste Spalte ist für die Kompetenzen "reserviert"
 		projekt = OpenMainPage.tmpProjekt;
-		ProjektDetailTabelle.getColumns().add(new TableColumn<>("Kompetenzen"));
+		columns.add("Kompetenzen");
 		
 		// Spalten Namen (Phasen Namen)
-		
 		for (Phase phase : projekt.getPhasen()) {
-			ProjektDetailTabelle.getColumns().add(new TableColumn<>(phase.getName()));
+			columns.add(phase.getName());
 		}
 		
-		
-		kompetenzData = FXCollections.observableArrayList(projekt.getKompetenzen());
-		
-        
+		for(int i = 0; i < columns.size(); i++){
+			TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+					columns.get(i)
+            );
+			//column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			ProjektDetailTabelle.getColumns().add(column);
+			
+		}    
 	}
 
 	// Event Listener on Button[#btn_newPhase].onAction
