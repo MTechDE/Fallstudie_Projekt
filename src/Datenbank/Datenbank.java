@@ -263,12 +263,11 @@ public class Datenbank {
 		return this.speicherProjekt(projekt);
 	}
 
+	/**
+	 * Es wird eine Liste von Aufwänden zurückgegeben. 
+	 * @return List<Aufwand>
+	 */
 	public List<Aufwand> getPersonen() {
-
-		/*
-		 * Es wird eine Liste von Personen zur�ckgeben. Ist diese leer/null muss
-		 * dies in der Main Klasse abgefragt werden.
-		 */
 
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 		String sql = "SELECT * FROM aufwand";
@@ -286,11 +285,6 @@ public class Datenbank {
 	 * @return List<Projekt>
 	 */
 	public List<Projekt> getProjekte() {
-
-		/*
-		 * Alle Projekte welche bereits in der Datenbank gespeichert sind,
-		 * werden als Liste Zurueckgegeben
-		 */
 		List<Projekt> projekte = new ArrayList<Projekt>();
 
 		String sql = "SELECT * FROM projekte";
@@ -309,7 +303,6 @@ public class Datenbank {
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
-
 		String sql1 = "DELETE FROM aufwand WHERE projekt=:projektName";
 		String sql2 = "DELETE FROM phasen WHERE projekt=:projektName";
 		String sql3 = "DELETE FROM projekte WHERE name=:projektName";

@@ -10,10 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 
 import Datenbank.Datenbank;
+import Export.Excel;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,12 +25,18 @@ import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 
 import javafx.scene.control.TableView;
-
 import javafx.scene.control.TableColumn;
 
+/**
+ * In dieser Klasse wird die Logik des Startfensters behandelt.
+ * @author Daniel Sogl
+ *
+ */
 public class StartFensterController {
 	@FXML
 	private AnchorPane startScreen;
+	@FXML
+	private Button btn_aktualisiereProjekte;
 	@FXML
 	private Button btn_newProjekt;
 	@FXML
@@ -52,13 +61,13 @@ public class StartFensterController {
 	Datenbank myDB = new Datenbank();
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
-	private ObservableList<Projekt> projektData = FXCollections.observableArrayList();
-
+	private ObservableList<Projekt> projektData;
+	
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		System.out.println("Initalisiere Startfenster");
 		
+		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
@@ -79,10 +88,12 @@ public class StartFensterController {
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {							
-//							Node source = (Node) mouseEvent.getSource();
-//							Stage stage = (Stage) source.getScene().getWindow();
-//							stage.close();
+						try {		
+							// Schließe Fenster
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+							// Öffne Hauptfenster
 							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
@@ -91,7 +102,14 @@ public class StartFensterController {
 				}
 			}
 		});
-
+		
+		// Überprüfe ob die DB online ist
+		if(!myDB.testConnection()){
+			System.out.println("DB offline");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Keine Verbindung zur Datenbank möglich");
+			alert.showAndWait();
+		}
 	}
 
 	// Event Listener on Button[#btn_newProjekt].onAction
@@ -99,7 +117,6 @@ public class StartFensterController {
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-
 			// Überprüfe ob der gewünschte Name bereits verwendet wurde
 			boolean doubleName = false;
 			for (Projekt projekt : projektData) {
@@ -113,6 +130,7 @@ public class StartFensterController {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
+				// Öffne Hauptfenster
 				if (check_vorlage.isSelected()) {
 					new OpenMainPage(newProjekt, true, true);
 				} else {
@@ -130,5 +148,46 @@ public class StartFensterController {
 			alert.setContentText("Füllen Sie alle Felder aus");
 			alert.showAndWait();
 		}
+	}
+	
+	/*
+	 * Aktualisiere die Tabelle, falls Bsp. die Verbindung zur DB nicht möglich war,
+	 * oder ein neues Projekt von einem anderen PC aus angelegt wurde
+	 */
+	@FXML
+	public void btn_aktualisiereProjekte_click(ActionEvent event) throws Exception {
+		System.out.println("Aktuallisiere");
+		projektData = FXCollections.observableArrayList(myDB.getProjekte());
+		if (!projektData.isEmpty())
+			tbl_projektTabelle.setItems(projektData);
+	}
+	
+	/*
+	 * Zeige einen Filedialog und übergebe den Pfad an die Export Klasse
+	 */
+	@FXML
+	public void btn_exportExcel_click(ActionEvent event) throws Exception {
+		System.out.println("Excel Export");
+		Stage stage = (Stage) btn_newProjekt.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Speichere Projekte");
+        fileChooser.getExtensionFilters().addAll(
+        		new FileChooser.ExtensionFilter("CSV", "*.csv"),
+                new FileChooser.ExtensionFilter("Text", "*.txt")
+        		);
+        File file = fileChooser.showSaveDialog(stage);
+        if(!Excel.ExportToExcel(projektData, file.getAbsolutePath())){
+			System.out.println("Es wurden nicht alle Felder ausgefüllt");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Füllen Sie alle Felder aus");
+			alert.showAndWait();
+        } else {
+        	Alert alert = new Alert(AlertType.INFORMATION);
+        	alert.setTitle("Export");
+        	alert.setHeaderText(null);
+        	alert.setContentText("Speichern erfolgreich");
+        	alert.showAndWait();
+        }
+		
 	}
 }
