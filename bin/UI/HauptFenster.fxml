@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -17,30 +16,12 @@
           <Button fx:id="btn_Export" mnemonicParsing="false" text="Exportieren" />
         </items>
       </ToolBar>
-      <Label layoutX="10.0" layoutY="40.0" prefHeight="17.0" prefWidth="141.0" text="Projekt Name">
+      <Label layoutX="10.0" layoutY="40.0" prefHeight="27.0" prefWidth="174.0" text="Kompetenz Name">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="10.0" layoutY="92.0" prefHeight="17.0" prefWidth="141.0" text="Projekt Ersteller">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="10.0" layoutY="144.0" prefHeight="17.0" prefWidth="141.0" text="Start Datum">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="10.0" layoutY="196.0" prefHeight="17.0" prefWidth="141.0" text="End Datum">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txt_projektName" layoutX="10.0" layoutY="67.0" prefHeight="25.0" prefWidth="174.0" />
-      <TextField fx:id="txt_projektErsteller" layoutX="10.0" layoutY="119.0" prefHeight="25.0" prefWidth="174.0" />
-      <DatePicker fx:id="datePicker_startDatum" layoutX="10.0" layoutY="171.0" />
-      <DatePicker fx:id="datePicker_endDatum" layoutX="10.0" layoutY="223.0" />
+      <TextField fx:id="txt_kompetenzName" layoutX="10.0" layoutY="67.0" prefHeight="25.0" prefWidth="174.0" />
       <TableView fx:id="tbl_kompetenzen" layoutX="604.0" layoutY="72.0" prefHeight="200.0" prefWidth="231.0">
         <columns>
           <TableColumn fx:id="tbl_kompetenzen_Name" prefWidth="230.0" text="Kompetenz" />
@@ -63,17 +44,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="218.0" layoutY="292.0" text="Interne PT">
-         <font>
-            <Font size="23.0" />
-         </font>
-      </Label>
-      <Label layoutX="218.0" layoutY="326.0" text="Externe PT">
-         <font>
-            <Font size="23.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txt_aufwandIntern" layoutX="331.0" layoutY="297.0" />
-      <TextField fx:id="txt_aufwandExtern" layoutX="331.0" layoutY="331.0" />
+      <Button fx:id="btn_newKompetenz" layoutX="10.0" layoutY="101.0" mnemonicParsing="false" onAction="#btn_newKompetenz_click" prefHeight="25.0" prefWidth="174.0" text="Neue Kompetenz" />
    </children>
 </AnchorPane>

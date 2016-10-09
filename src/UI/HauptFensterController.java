@@ -7,6 +7,7 @@ import Projekt.Phase;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
@@ -22,15 +23,15 @@ import javafx.scene.control.TableColumn;
 
 public class HauptFensterController {
 	@FXML
+	private TextField txt_kompetenzName;
+	@FXML
+	private TextField txt_phasenName;
+	@FXML
 	private Button btn_Export;
 	@FXML
-	private TextField txt_projektName;
+	private Button btn_newPhase;
 	@FXML
-	private TextField txt_projektErsteller;
-	@FXML
-	private static TextField txt_aufwandIntern;
-	@FXML
-	private static TextField txt_aufwandExtern;
+	private Button btn_newKompetenz;
 	@FXML
 	private DatePicker datePicker_startDatum;
 	@FXML
@@ -68,17 +69,6 @@ public class HauptFensterController {
 		projekt = OpenMainPage.tmpProjekt;
 		
 		
-		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-			for (Phase phase : projekt.getPhasen()) {
-				System.out.println(phase.getName());
-				for (Aufwand aufwand : phase.getAufwände()) {
-					if(aufwand.getZugehoerigkeit().equals(kompetenz.getName()))
-						System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
-				}
-			}
-		}
-		
-		
 		// Weise Zellen eine Property zu
 		tbl_kompetenzen_Name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tbl_phasen_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -113,21 +103,43 @@ public class HauptFensterController {
 		});
 	}
 	
+	@FXML
+	public void btn_newKompetenz_click(ActionEvent event) throws Exception {
+		Kompetenz kompetenz = new Kompetenz(txt_kompetenzName.getText());
+		kompetenz.setSingleAufwand(new Aufwand("Intern"));
+		kompetenz.setSingleAufwand(new Aufwand("Extern"));
+		
+		Aufwand intern = new Aufwand("Intern");
+		intern.setZugehoerigkeit(kompetenz.getName());
+		intern.setPt(0);
+		
+		Aufwand extern = new Aufwand("Extern");
+		extern.setZugehoerigkeit(kompetenz.getName());
+		extern.setPt(0);
+		
+		for(int i = 0; i < projekt.getPhasen().size(); i++){
+			projekt.getPhasen().get(i).setSingleAufwand(intern);
+			projekt.getPhasen().get(i).setSingleAufwand(extern);
+		}
+		
+		projekt.setSingleKompetenz(kompetenz);
+		kompetenzenData.add(new Kompetenz(txt_kompetenzName.getText()));
+	}
+	
+	@FXML
+	public void btn_newPhase_click(ActionEvent event) throws Exception {
+	}
+	
 	public static void showPT(int pIndex, int kIndex){
 		System.out.println("Beide Komponenten wurden ausgewählt");
-		
-		// Hole die PT anhand der Phase und des Kompetenznamnes
 		
 		Phase tmpPhase = projekt.getPhasen().get(pIndex);
 		Kompetenz tmpKompetenz = projekt.getKompetenzen().get(kIndex);
 		
-		for (Aufwand aufwand : tmpKompetenz.getAufwände()) {
-			for(Aufwand phasenAufwand: tmpPhase.getAufwände()){
-				if(aufwand.getName().equals(phasenAufwand.getName())){
-					System.out.println(phasenAufwand.getName() + "PT: " + phasenAufwand.getPt());
-				}
-			}
+		System.out.println(tmpPhase.getName());
+		for (Aufwand aufwand : tmpPhase.getAufwände()) {
+			if (aufwand.getZugehoerigkeit().equals(tmpKompetenz.getName()))
+				System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
 		}
 	}
-
 }
