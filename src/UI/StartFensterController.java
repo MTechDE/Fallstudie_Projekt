@@ -10,10 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 
 import Datenbank.Datenbank;
+import Export.Excel;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +25,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 
 import javafx.scene.control.TableView;
-
 import javafx.scene.control.TableColumn;
 
 /**
@@ -33,6 +35,8 @@ import javafx.scene.control.TableColumn;
 public class StartFensterController {
 	@FXML
 	private AnchorPane startScreen;
+	@FXML
+	private Button btn_aktualisiereProjekte;
 	@FXML
 	private Button btn_newProjekt;
 	@FXML
@@ -57,8 +61,8 @@ public class StartFensterController {
 	Datenbank myDB = new Datenbank();
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
-	private ObservableList<Projekt> projektData = FXCollections.observableArrayList();
-
+	private ObservableList<Projekt> projektData;
+	
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
@@ -143,7 +147,47 @@ public class StartFensterController {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Füllen Sie alle Felder aus");
 			alert.showAndWait();
-			
 		}
+	}
+	
+	/*
+	 * Aktualisiere die Tabelle, falls Bsp. die Verbindung zur DB nicht möglich war,
+	 * oder ein neues Projekt von einem anderen PC aus angelegt wurde
+	 */
+	@FXML
+	public void btn_aktualisiereProjekte_click(ActionEvent event) throws Exception {
+		System.out.println("Aktuallisiere");
+		projektData = FXCollections.observableArrayList(myDB.getProjekte());
+		if (!projektData.isEmpty())
+			tbl_projektTabelle.setItems(projektData);
+	}
+	
+	/*
+	 * Zeige einen Filedialog und übergebe den Pfad an die Export Klasse
+	 */
+	@FXML
+	public void btn_exportExcel_click(ActionEvent event) throws Exception {
+		System.out.println("Excel Export");
+		Stage stage = (Stage) btn_newProjekt.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Speichere Projekte");
+        fileChooser.getExtensionFilters().addAll(
+        		new FileChooser.ExtensionFilter("CSV", "*.csv"),
+                new FileChooser.ExtensionFilter("Text", "*.txt")
+        		);
+        File file = fileChooser.showSaveDialog(stage);
+        if(!Excel.ExportToExcel(projektData, file.getAbsolutePath())){
+			System.out.println("Es wurden nicht alle Felder ausgefüllt");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Füllen Sie alle Felder aus");
+			alert.showAndWait();
+        } else {
+        	Alert alert = new Alert(AlertType.INFORMATION);
+        	alert.setTitle("Export");
+        	alert.setHeaderText(null);
+        	alert.setContentText("Speichern erfolgreich");
+        	alert.showAndWait();
+        }
+		
 	}
 }

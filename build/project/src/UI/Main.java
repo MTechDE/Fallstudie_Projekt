@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 
 /**
  * Die Main-Klasse lädt lediglich die MainUI.fxml Datei und stellt diese dar.
- * Jegliche Logik wird in der MainUICtrl Klasse behandelt.
  * @author Daniel Sogl
  *
  */
@@ -28,6 +27,7 @@ public class Main extends Application {
 			primaryStage.show();
 			
 		} catch (Exception e){
+			System.out.println(e.getMessage());
 		}
 	}
 

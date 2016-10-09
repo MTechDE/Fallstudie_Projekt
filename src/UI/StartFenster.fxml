@@ -7,19 +7,20 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
+<AnchorPane fx:id="startScreen" cache="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="463.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.StartFensterController">
    <children>
-      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="385.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
+      <Button fx:id="btn_newProjekt" focusTraversable="false" layoutX="24.0" layoutY="410.0" mnemonicParsing="false" onAction="#btn_newProjekt_click" prefHeight="39.0" prefWidth="552.0" text="Neues Projekt anlegen">
          <font>
             <Font name="Candara Bold" size="20.0" />
          </font>
       </Button>
-      <TableView fx:id="tbl_projektTabelle" cache="true" focusTraversable="false" layoutX="24.0" layoutY="122.0" prefHeight="200.0" prefWidth="552.0">
+      <TableView fx:id="tbl_projektTabelle" cache="true" focusTraversable="false" layoutX="24.0" layoutY="147.0" prefHeight="200.0" prefWidth="552.0">
         <columns>
           <TableColumn fx:id="tblCell_projektName" editable="false" prefWidth="128.0" resizable="false" text="Projekt Name" />
           <TableColumn fx:id="tblCell_projektErsteller" editable="false" prefWidth="116.0" resizable="false" text="Ersteller" />
@@ -31,38 +32,44 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </TableView>
-      <ImageView fitHeight="102.0" fitWidth="152.0" layoutX="424.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="102.0" fitWidth="152.0" layoutX="425.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/Programm%20Logo.png" />
          </image>
       </ImageView>
-      <TextField fx:id="txt_newProjekt_name" focusTraversable="false" layoutX="34.0" layoutY="338.0" prefHeight="39.0" prefWidth="177.0" promptText="Projekt Name">
+      <TextField fx:id="txt_newProjekt_name" focusTraversable="false" layoutX="30.0" layoutY="357.0" prefHeight="39.0" prefWidth="177.0" promptText="Projekt Name">
          <font>
             <Font name="Candara" size="14.0" />
          </font></TextField>
-      <TextField fx:id="txt_newProjekt_ersteller" focusTraversable="false" layoutX="229.0" layoutY="338.0" prefHeight="39.0" prefWidth="177.0" promptText="Ersteller">
+      <TextField fx:id="txt_newProjekt_ersteller" focusTraversable="false" layoutX="229.0" layoutY="358.0" prefHeight="39.0" prefWidth="177.0" promptText="Ersteller">
          <font>
             <Font name="Candara" size="14.0" />
          </font></TextField>
-      <CheckBox fx:id="check_vorlage" focusTraversable="false" layoutX="435.0" layoutY="348.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="141.0" text="Vorlage verwenden">
+      <CheckBox fx:id="check_vorlage" focusTraversable="false" layoutX="430.0" layoutY="368.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="141.0" text="Vorlage verwenden">
          <font>
             <Font name="Candara" size="14.0" />
          </font>
       </CheckBox>
-      <Label layoutX="30.0" layoutY="45.0" prefHeight="39.0" prefWidth="363.0" text="Flavoured with vanilla">
+      <Label layoutX="30.0" layoutY="65.0" prefHeight="39.0" prefWidth="363.0" text="Flavoured with vanilla">
          <font>
             <Font name="Candara" size="28.0" />
          </font>
       </Label>
-      <Label layoutX="24.0" layoutY="349.0" text="*" textFill="RED">
+      <Label layoutX="19.0" layoutY="366.0" text="*" textFill="RED">
          <font>
             <Font name="Candara" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="219.0" layoutY="349.0" text="*" textFill="RED">
+      <Label layoutX="224.0" layoutY="366.0" text="*" textFill="RED">
          <font>
             <Font name="Candara" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="btn_aktualisiereProjekte" layoutX="24.0" layoutY="115.0" mnemonicParsing="false" onAction="#btn_aktualisiereProjekte_click" text="Aktualisieren" />
+      <ToolBar prefHeight="25.0" prefWidth="600.0">
+        <items>
+          <Button mnemonicParsing="false" onAction="#btn_exportExcel_click" text="Exportieren" />
+        </items>
+      </ToolBar>
    </children>
 </AnchorPane>

@@ -12,29 +12,31 @@ import Projekt.Aufwand;
 import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.TableView;
 
+
 public class HauptFensterController {
 	@FXML
-	private TableView<ObservableList<String>> ProjektDetailTabelle;
+	private TableView<ObservableList<String>> ProjektDetailTabelle = new TableView<>();
 	@FXML
 	private Button btn_newPhase;
 	@FXML
 	private Button btn_newKompetenz;
 	
 	// Projekt aus der Startseite
-	Projekt projekt;
+	private Projekt projekt;
 	
 	// Erzeuge Phasen Spalten
 	List<String> columns = new ArrayList<String>();
 	List<String> rows = new ArrayList<String>();	
-    ObservableList<Kompetenz> kompetenzData = FXCollections.observableArrayList();
-    ObservableList<Aufwand> aufwandData = FXCollections.observableArrayList();
+	ObservableList<Kompetenz> kompetenzData;
+	ObservableList<Aufwand> aufwandData;
+	
+    
 	
 	
 	
@@ -42,23 +44,43 @@ public class HauptFensterController {
 	@FXML
 	private void initialize() {
 		
-		// Die erste Spalte ist für die Kompetenzen "reserviert"
 		projekt = OpenMainPage.tmpProjekt;
-		columns.add("Kompetenzen");
 		
-		// Spalten Namen (Phasen Namen)
+		// Die erste Spalte ist für die Kompetenzen "reserviert"
+		columns.add("Kompetenz");
+		
+		// Phasennamen
 		for (Phase phase : projekt.getPhasen()) {
 			columns.add(phase.getName());
 		}
 		
+		// Schreibe Überschriften in neue Spalten
 		for(int i = 0; i < columns.size(); i++){
-			TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-					columns.get(i)
-            );
-			//column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
-			ProjektDetailTabelle.getColumns().add(column);
-			
-		}    
+			   TableColumn<ObservableList<String>, String> column = new TableColumn<>(columns.get(i));
+			   ProjektDetailTabelle.getColumns().add(column);
+		}
+		
+		kompetenzData = FXCollections.observableArrayList(projekt.getKompetenzen());
+		
+		
+		
+		
+		
+//		projekt = OpenMainPage.tmpProjekt;
+//		columns.add("Kompetenzen");
+//		
+//		// Spalten Namen (Phasen Namen)
+//		for (Phase phase : projekt.getPhasen()) {
+//			columns.add(phase.getName());
+//		}
+//		
+//		// Erzeuge die Spalten mit den Phasennamen als Überschrift
+//		for(int i = 0; i < columns.size(); i++){
+//			TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+//					columns.get(i)
+//            );
+//			ProjektDetailTabelle.getColumns().add(column);
+//		}    
 	}
 
 	// Event Listener on Button[#btn_newPhase].onAction
