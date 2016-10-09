@@ -1,98 +1,118 @@
 package UI;
 
-import javafx.fxml.FXML;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import Datenbank.Datenbank;
 import Projekt.Aufwand;
 import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+
+import javafx.scene.control.Button;
+
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.DatePicker;
 
 import javafx.scene.control.TableView;
 
+import javafx.scene.control.TableColumn;
 
 public class HauptFensterController {
 	@FXML
-	private TableView<ObservableList<String>> ProjektDetailTabelle = new TableView<>();
+	private Button btn_Export;
 	@FXML
-	private Button btn_newPhase;
+	private TextField txt_projektName;
 	@FXML
-	private Button btn_newKompetenz;
+	private TextField txt_projektErsteller;
+	@FXML
+	private static TextField txt_aufwandIntern;
+	@FXML
+	private static TextField txt_aufwandExtern;
+	@FXML
+	private DatePicker datePicker_startDatum;
+	@FXML
+	private DatePicker datePicker_endDatum;
+	@FXML
+	private TableView<Kompetenz> tbl_kompetenzen;
+	@FXML
+	private TableColumn<Kompetenz, String> tbl_kompetenzen_Name;
+	@FXML
+	private TableView<Phase> tbl_phasen;
+	@FXML
+	private TableColumn<Phase, String> tbl_phasen_name;
+	@FXML
+	private TableColumn<Phase, String> tbl_phasen_startDatum;
+	@FXML
+	private TableColumn<Phase, String> tbl_phasen_endDatum;
 	
-	// Projekt aus der Startseite
-	private Projekt projekt;
+	static Projekt projekt;
+	Datenbank myDB = new Datenbank();
 	
-	// Erzeuge Phasen Spalten
-	List<String> columns = new ArrayList<String>();
-	List<String> rows = new ArrayList<String>();	
-	ObservableList<Kompetenz> kompetenzData;
-	ObservableList<Aufwand> aufwandData;
+	private ObservableList<Kompetenz> kompetenzenData;
+	private ObservableList<Phase> phasenData;
 	
-    
+	// Indizes der Phasen und Kompetenzen
+	int indexPhase;
+	int indexKompetenz;
 	
+	boolean indexPhaseClicked = false;
+	boolean indexKompetenzClicked = false;
 	
-	
-	// Erzeuge Spalten und Zeilen anhand der Projekt Phasen und Kompetenzen
+	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		
 		projekt = OpenMainPage.tmpProjekt;
 		
-		// Die erste Spalte ist für die Kompetenzen "reserviert"
-		columns.add("Kompetenz");
+		// Weise Zellen eine Property zu
+		tbl_kompetenzen_Name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		tbl_phasen_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		tbl_phasen_startDatum.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
+		tbl_phasen_endDatum.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
+		kompetenzenData = FXCollections.observableArrayList(projekt.getKompetenzen());
+		phasenData = FXCollections.observableArrayList(projekt.getPhasen());
 		
-		// Phasennamen
-		for (Phase phase : projekt.getPhasen()) {
-			columns.add(phase.getName());
-		}
+		if(!kompetenzenData.isEmpty())
+			tbl_kompetenzen.setItems(kompetenzenData);
+		if(!phasenData.isEmpty())
+			tbl_phasen.setItems(phasenData);
 		
-		// Schreibe Überschriften in neue Spalten
-		for(int i = 0; i < columns.size(); i++){
-			   TableColumn<ObservableList<String>, String> column = new TableColumn<>(columns.get(i));
-			   ProjektDetailTabelle.getColumns().add(column);
-		}
+		tbl_kompetenzen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				indexKompetenz = tbl_kompetenzen.getSelectionModel().getFocusedIndex();
+				indexKompetenzClicked = true;
+				if(indexKompetenzClicked && indexPhaseClicked)
+					showPT(indexPhase, indexKompetenz);
+			}
+		});
 		
-		kompetenzData = FXCollections.observableArrayList(projekt.getKompetenzen());
-		
-		
-		
-		
-		
-//		projekt = OpenMainPage.tmpProjekt;
-//		columns.add("Kompetenzen");
-//		
-//		// Spalten Namen (Phasen Namen)
-//		for (Phase phase : projekt.getPhasen()) {
-//			columns.add(phase.getName());
-//		}
-//		
-//		// Erzeuge die Spalten mit den Phasennamen als Überschrift
-//		for(int i = 0; i < columns.size(); i++){
-//			TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-//					columns.get(i)
-//            );
-//			ProjektDetailTabelle.getColumns().add(column);
-//		}    
-	}
-
-	// Event Listener on Button[#btn_newPhase].onAction
-	// Füge eine neue Phase Hinzu
-	@FXML
-	public void btn_newPhase_click(ActionEvent event) {
-		System.out.println("Neue Zelle hinzufügen");
-		ProjektDetailTabelle.getColumns().add(new TableColumn<>("Neue Phase"));
+		tbl_phasen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				indexPhase = tbl_phasen.getSelectionModel().getFocusedIndex();
+				indexPhaseClicked = true;
+				if(indexKompetenzClicked && indexPhaseClicked)
+					showPT(indexPhase, indexKompetenz);
+			}
+		});
 	}
 	
-	@FXML
-	public void btn_newKompetenz_click(ActionEvent event) {
-		System.out.println("Neue Kompetenz hinzufügen");
+	public static void showPT(int pIndex, int kIndex){
+		System.out.println("Beide Komponenten wurden ausgewählt");
+		
+		// Hole die PT anhand der Phase und des Kompetenznamnes
+		
+		Phase tmpPhase = projekt.getPhasen().get(pIndex);
+		Kompetenz tmpKompetenz = projekt.getKompetenzen().get(kIndex);
+		
+		String intern = String.valueOf(tmpPhase.getAufwände().get(0).getPt());
+		String extern = String.valueOf(tmpPhase.getAufwände().get(1).getPt());
+		
+		System.out.println(intern);
+		System.out.println(extern);
 	}
+
 }

@@ -18,6 +18,7 @@ public class OpenMainPage extends Stage{
 	
 	public OpenMainPage(Projekt projekt, boolean newProjekt, boolean vorlage) throws Exception{
 		
+		tmpProjekt = projekt;
 		if(newProjekt){
 			if(vorlage){
 				// TODO Eine Vorlage muss noch  deffiniert werden
@@ -43,7 +44,7 @@ public class OpenMainPage extends Stage{
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.show();
 		} catch (Exception e){
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.out.println("Fehler aufgetreten!");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");
