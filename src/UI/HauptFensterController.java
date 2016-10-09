@@ -64,7 +64,20 @@ public class HauptFensterController {
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
+		
 		projekt = OpenMainPage.tmpProjekt;
+		
+		
+		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
+			for (Phase phase : projekt.getPhasen()) {
+				System.out.println(phase.getName());
+				for (Aufwand aufwand : phase.getAufwände()) {
+					if(aufwand.getZugehoerigkeit().equals(kompetenz.getName()))
+						System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
+				}
+			}
+		}
+		
 		
 		// Weise Zellen eine Property zu
 		tbl_kompetenzen_Name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -108,11 +121,13 @@ public class HauptFensterController {
 		Phase tmpPhase = projekt.getPhasen().get(pIndex);
 		Kompetenz tmpKompetenz = projekt.getKompetenzen().get(kIndex);
 		
-		String intern = String.valueOf(tmpPhase.getAufwände().get(0).getPt());
-		String extern = String.valueOf(tmpPhase.getAufwände().get(1).getPt());
-		
-		System.out.println(intern);
-		System.out.println(extern);
+		for (Aufwand aufwand : tmpKompetenz.getAufwände()) {
+			for(Aufwand phasenAufwand: tmpPhase.getAufwände()){
+				if(aufwand.getName().equals(phasenAufwand.getName())){
+					System.out.println(phasenAufwand.getName() + "PT: " + phasenAufwand.getPt());
+				}
+			}
+		}
 	}
 
 }

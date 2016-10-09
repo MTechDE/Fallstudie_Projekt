@@ -24,12 +24,6 @@ public class OpenMainPage extends Stage{
 				// TODO Eine Vorlage muss noch  deffiniert werden
 			} else {
 				tmpProjekt = projekt;
-				// Es wir ein JavaFX Bug abgefangen, der das Speichern des Projektes möglicherweise verhindert
-				try{
-					myDB.speicherProjekt(projekt);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
 			}
 		} else {
 			tmpProjekt = myDB.getProjekt(projekt);
