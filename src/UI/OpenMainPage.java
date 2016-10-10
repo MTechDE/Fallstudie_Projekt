@@ -19,6 +19,10 @@ public class OpenMainPage extends Stage{
 	public OpenMainPage(Projekt projekt, boolean newProjekt, boolean vorlage) throws Exception{
 		
 		tmpProjekt = projekt;
+		
+		// Ein neues Projekt soll nicht sofort in der Datenbank gespeichert werden
+		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine Kompetenz anzulegen
+		
 		if(newProjekt){
 			if(vorlage){
 				// TODO Eine Vorlage muss noch  deffiniert werden

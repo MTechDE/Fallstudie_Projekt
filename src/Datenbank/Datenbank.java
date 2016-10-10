@@ -54,9 +54,9 @@ public class Datenbank {
 	public boolean speicherProjekt(Projekt projekt) {
 		
 		// Setze das Start und Enddatum
-		int maxPhasen = projekt.getPhasen().size() - 1;
-		projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
-		projekt.setEndDate(projekt.getPhasen().get(maxPhasen).getEndDate());
+		if(!projekt.getPhasen().isEmpty()){
+			
+		}
 
 		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
 		"VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate) " + 

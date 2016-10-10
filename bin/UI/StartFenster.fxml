@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -55,12 +56,12 @@
             <Font name="Candara" size="28.0" />
          </font>
       </Label>
-      <Label layoutX="19.0" layoutY="366.0" text="*" textFill="RED">
+      <Label layoutX="17.0" layoutY="366.0" text="*" textFill="RED">
          <font>
             <Font name="Candara" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="224.0" layoutY="366.0" text="*" textFill="RED">
+      <Label layoutX="216.0" layoutY="367.0" text="*" textFill="RED">
          <font>
             <Font name="Candara" size="18.0" />
          </font>
@@ -71,5 +72,6 @@
           <Button mnemonicParsing="false" onAction="#btn_exportExcel_click" text="Exportieren" />
         </items>
       </ToolBar>
+      <ProgressIndicator fx:id="indikator_refreshTable" layoutX="119.0" layoutY="115.0" prefHeight="25.0" prefWidth="31.0" />
    </children>
 </AnchorPane>

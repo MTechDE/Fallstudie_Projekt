@@ -16,7 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.DatePicker;
-
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 
 import javafx.scene.control.TableColumn;
@@ -48,6 +48,7 @@ public class HauptFensterController {
 	private TableColumn<Phase, String> tbl_phasen_startDatum;
 	@FXML
 	private TableColumn<Phase, String> tbl_phasen_endDatum;
+
 	
 	static Projekt projekt;
 	Datenbank myDB = new Datenbank();
@@ -77,17 +78,15 @@ public class HauptFensterController {
 		kompetenzenData = FXCollections.observableArrayList(projekt.getKompetenzen());
 		phasenData = FXCollections.observableArrayList(projekt.getPhasen());
 		
-		if(!kompetenzenData.isEmpty())
-			tbl_kompetenzen.setItems(kompetenzenData);
-		if(!phasenData.isEmpty())
-			tbl_phasen.setItems(phasenData);
+		tbl_kompetenzen.setItems(kompetenzenData);
+		tbl_phasen.setItems(phasenData);
 		
 		tbl_kompetenzen.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				indexKompetenz = tbl_kompetenzen.getSelectionModel().getFocusedIndex();
 				indexKompetenzClicked = true;
-				if(indexKompetenzClicked && indexPhaseClicked)
+				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty())
 					showPT(indexPhase, indexKompetenz);
 			}
 		});
@@ -97,7 +96,7 @@ public class HauptFensterController {
 			public void handle(MouseEvent mouseEvent) {
 				indexPhase = tbl_phasen.getSelectionModel().getFocusedIndex();
 				indexPhaseClicked = true;
-				if(indexKompetenzClicked && indexPhaseClicked)
+				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty())
 					showPT(indexPhase, indexKompetenz);
 			}
 		});
@@ -105,6 +104,7 @@ public class HauptFensterController {
 	
 	@FXML
 	public void btn_newKompetenz_click(ActionEvent event) throws Exception {
+		
 		Kompetenz kompetenz = new Kompetenz(txt_kompetenzName.getText());
 		kompetenz.setSingleAufwand(new Aufwand("Intern"));
 		kompetenz.setSingleAufwand(new Aufwand("Extern"));
@@ -137,6 +137,8 @@ public class HauptFensterController {
 		Kompetenz tmpKompetenz = projekt.getKompetenzen().get(kIndex);
 		
 		System.out.println(tmpPhase.getName());
+		
+		
 		for (Aufwand aufwand : tmpPhase.getAufwände()) {
 			if (aufwand.getZugehoerigkeit().equals(tmpKompetenz.getName()))
 				System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
