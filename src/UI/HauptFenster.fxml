@@ -14,6 +14,7 @@
       <ToolBar prefHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <Button fx:id="btn_Export" mnemonicParsing="false" text="Exportieren" />
+            <Button mnemonicParsing="false" onAction="#btn_SpeicherProjekt_click" text="Projekt Speichern" />
         </items>
       </ToolBar>
       <Label layoutX="10.0" layoutY="40.0" prefHeight="27.0" prefWidth="174.0" text="Kompetenz Name">
@@ -45,5 +46,18 @@
          </font>
       </Label>
       <Button fx:id="btn_newKompetenz" layoutX="10.0" layoutY="101.0" mnemonicParsing="false" onAction="#btn_newKompetenz_click" prefHeight="25.0" prefWidth="174.0" text="Neue Kompetenz" />
+      <TextField fx:id="txt_ptIntern" layoutX="295.0" layoutY="298.0" />
+      <Label layoutX="218.0" layoutY="297.0" prefHeight="27.0" prefWidth="77.0" text="PT Intern">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txt_ptExtern" layoutX="295.0" layoutY="325.0" />
+      <Label layoutX="218.0" layoutY="324.0" prefHeight="27.0" prefWidth="77.0" text="PT Extern">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_speicherPT" layoutX="218.0" layoutY="359.0" mnemonicParsing="false" onAction="#btn_speicherPT_click" prefHeight="25.0" prefWidth="225.0" text="Speichern" />
    </children>
 </AnchorPane>
