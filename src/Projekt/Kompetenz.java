@@ -43,4 +43,6 @@ public class Kompetenz {
 	public void setSingleAufwand(Aufwand aufwand){
 		this.aufwände.add(aufwand);
 	}
+	
+	
 }

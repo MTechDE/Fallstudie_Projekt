@@ -18,17 +18,16 @@ public class OpenMainPage extends Stage{
 	
 	public OpenMainPage(Projekt projekt, boolean newProjekt, boolean vorlage) throws Exception{
 		
+		tmpProjekt = projekt;
+		
+		// Ein neues Projekt soll nicht sofort in der Datenbank gespeichert werden
+		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine Kompetenz anzulegen
+		
 		if(newProjekt){
 			if(vorlage){
 				// TODO Eine Vorlage muss noch  deffiniert werden
 			} else {
 				tmpProjekt = projekt;
-				// Es wir ein JavaFX Bug abgefangen, der das Speichern des Projektes möglicherweise verhindert
-				try{
-					myDB.speicherProjekt(projekt);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
 			}
 		} else {
 			tmpProjekt = myDB.getProjekt(projekt);
@@ -43,7 +42,7 @@ public class OpenMainPage extends Stage{
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.show();
 		} catch (Exception e){
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			System.out.println("Fehler aufgetreten!");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");

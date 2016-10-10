@@ -1,38 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="878.0" prefWidth="1308.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.HauptFensterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="1084.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.HauptFensterController">
    <children>
-      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1308.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Porjekt">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Projekt Speichern (Strg + S)" />
-                  <MenuItem mnemonicParsing="false" text="Neues Projekt (Strg + N)" />
-                  <MenuItem mnemonicParsing="false" text="Projekt Wechseln (Strg + W)" />
-                  <MenuItem mnemonicParsing="false" text="Projekt Löschen (Strg + D)" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Export">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Excel" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Hilfe">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Über Vanilla Sky" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <TableView fx:id="ProjektDetailTabelle" layoutX="547.0" layoutY="44.0" prefHeight="741.0" prefWidth="747.0" />
-      <Button fx:id="btn_newPhase" layoutX="14.0" layoutY="399.0" mnemonicParsing="false" onAction="#btn_newPhase_click" prefHeight="31.0" prefWidth="223.0" text="Spalte hinzufügen" />
-      <Button fx:id="btn_newKompetenz" layoutX="14.0" layoutY="448.0" mnemonicParsing="false" onAction="#btn_newKompetenz_click" prefHeight="31.0" prefWidth="223.0" text="Zeile hinzufügen" />
+      <ToolBar prefHeight="40.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <Button fx:id="btn_Export" mnemonicParsing="false" text="Exportieren" />
+        </items>
+      </ToolBar>
+      <Label layoutX="10.0" layoutY="40.0" prefHeight="27.0" prefWidth="174.0" text="Kompetenz Name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txt_kompetenzName" layoutX="10.0" layoutY="67.0" prefHeight="25.0" prefWidth="174.0" />
+      <TableView fx:id="tbl_kompetenzen" layoutX="604.0" layoutY="72.0" prefHeight="200.0" prefWidth="231.0">
+        <columns>
+          <TableColumn fx:id="tbl_kompetenzen_Name" prefWidth="230.0" text="Kompetenz" />
+        </columns>
+      </TableView>
+      <Label layoutX="604.0" layoutY="43.0" prefHeight="17.0" prefWidth="141.0" text="Kompetenzen">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tbl_phasen" layoutX="218.0" layoutY="73.0" prefHeight="200.0" prefWidth="375.0">
+         <columns>
+            <TableColumn fx:id="tbl_phasen_name" prefWidth="127.0" text="Phase" />
+            <TableColumn fx:id="tbl_phasen_startDatum" prefWidth="116.0" text="Start Datum" />
+            <TableColumn fx:id="tbl_phasen_endDatum" prefWidth="131.0" text="End Datum" />
+         </columns>
+      </TableView>
+      <Label layoutX="218.0" layoutY="42.0" prefHeight="17.0" prefWidth="141.0" text="Phasen">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_newKompetenz" layoutX="10.0" layoutY="101.0" mnemonicParsing="false" onAction="#btn_newKompetenz_click" prefHeight="25.0" prefWidth="174.0" text="Neue Kompetenz" />
    </children>
 </AnchorPane>

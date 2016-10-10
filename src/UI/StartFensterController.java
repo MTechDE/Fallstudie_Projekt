@@ -23,7 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
-
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -57,6 +57,8 @@ public class StartFensterController {
 	private TextField txt_newProjekt_ersteller;
 	@FXML
 	private CheckBox check_vorlage;
+	@FXML
+	private ProgressIndicator indikator_refreshTable;
 
 	Datenbank myDB = new Datenbank();
 
@@ -66,6 +68,8 @@ public class StartFensterController {
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
+		
+		indikator_refreshTable.setVisible(false);
 		
 		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -156,10 +160,12 @@ public class StartFensterController {
 	 */
 	@FXML
 	public void btn_aktualisiereProjekte_click(ActionEvent event) throws Exception {
+		this.indikator_refreshTable.setVisible(true);
 		System.out.println("Aktuallisiere");
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		if (!projektData.isEmpty())
 			tbl_projektTabelle.setItems(projektData);
+		this.indikator_refreshTable.setVisible(false);
 	}
 	
 	/*

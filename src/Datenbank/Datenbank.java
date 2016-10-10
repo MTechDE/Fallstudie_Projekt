@@ -52,6 +52,11 @@ public class Datenbank {
 	 * @return boolean
 	 */
 	public boolean speicherProjekt(Projekt projekt) {
+		
+		// Setze das Start und Enddatum
+		if(!projekt.getPhasen().isEmpty()){
+			
+		}
 
 		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
 		"VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate) " + 
@@ -95,9 +100,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, intern, risiko) " + 
-		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
-		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
+		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, risiko, zugehoerigkeit) " + 
+		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :risiko, :zugehoerigkeit) " + 
+		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, risiko=:risiko, zugehoerigkeit=:zugehoerigkeit";
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
@@ -111,8 +116,8 @@ public class Datenbank {
 										.addParameter("phase", phase.getName())
 										.addParameter("projekt", projekt.getName())
 										.addParameter("pt", aufwand.getPt())
-										.addParameter("intern", aufwand.isIntern())
 										.addParameter("risiko", aufwand.getRisiko())
+										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit())
 										.addToBatch();
 							}
 						}
@@ -168,7 +173,7 @@ public class Datenbank {
 	 */
 	public Projekt getProjekt(Projekt projekt) {
 
-		Projekt newprojekt = new Projekt(projekt.getName(), projekt.getErsteller(), projekt.isAbgeschickt());
+		Projekt newprojekt = projekt;
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 
@@ -181,7 +186,7 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, intern, risiko from aufwand a " + 
+		sql = "SELECT person AS name, zugehoerigkeit, pt, risiko from aufwand a " + 
 		"WHERE a.phase=:phasenName AND a.projekt=:projektName";
 
 		try (Connection con = sql2o.open()) {
@@ -200,17 +205,6 @@ public class Datenbank {
 		if(!phasen.isEmpty()){
 			// Schreibe die Phasen in das Projekt
 			newprojekt.setPhasen((ArrayList<Phase>) phasen);
-			
-			for (Phase phase : newprojekt.getPhasen()) {
-				for (Aufwand aufwand : personen) {
-					aufwand.setZugehoerigkeit(phase.getName());
-				}
-			}
-			
-			//Setze Projekt Start- und Enddatum
-			int endPhase = newprojekt.getPhasen().size() - 1;
-			newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
-			newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 		}
 		
 		
@@ -243,7 +237,39 @@ public class Datenbank {
 		}
 		
 		
-		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu, falls es Kompetenzen gibt
+		
+//		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
+//			for (Phase phase : projekt.getPhasen()) {
+//				System.out.println(phase.getName());
+//				for (Aufwand aufwand : phase.getAufwände()) {
+//					if(aufwand.getZugehoerigkeit().equals(kompetenz.getName()))
+//						System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
+//				}
+//			}
+//		}
+		
+		
+//		sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName AND phase=:phasenName AND zugehoerigkeit=:kompetenzName";
+//		
+//		for (Kompetenz kompetenz : kompetenzen) {
+//			List<Aufwand> phasenAufwände = null;
+//			int i = 0;
+//			for (Phase phase : projekt.getPhasen()) {
+//				try (Connection con = sql2o.open()){
+//					phasenAufwände = con.createQuery(sql)
+//							.addParameter("projektName", projekt.getName())
+//							.addParameter("phasenName", phase.getName())
+//							.addParameter("kompetenzName", kompetenz.getName())
+//							.executeAndFetch(Aufwand.class);
+//				} catch (Sql2oException e) {
+//					System.out.println(e.getMessage());
+//				}
+//				projekt.getPhasen().get(i).setAufwände(phasenAufwände);
+//			}
+//		}
+		
+		
+		//Weise Projekt die Kompetenzen mit den gespeicherten Personen hinzu, falls es Kompetenzen gibt
 		if(!kompetenzen.isEmpty())
 			newprojekt.setKompetenzen(kompetenzen);
 		

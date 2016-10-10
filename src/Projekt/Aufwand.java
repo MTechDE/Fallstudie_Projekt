@@ -1,8 +1,6 @@
 package Projekt;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -18,27 +16,17 @@ public class Aufwand {
 	private StringProperty zugehoerigkeit;
 	private DoubleProperty pt;
 	private DoubleProperty risiko;
-	private BooleanProperty intern;
 	
 	public Aufwand(String name){
 		this.setName(name);
 		this.setPt(0);
-		this.setIntern(true);
-		this.setRisiko(0);
-	}
-
-	public Aufwand(String name, boolean intern) {
-		this.setName(name);
-		this.setPt(0);
-		this.setIntern(intern);
 		this.setRisiko(0);
 	}
 	
-	public Aufwand(String name, String zugehoerigkeit, double pt, boolean intern, double risiko) {
+	public Aufwand(String name, String zugehoerigkeit, double pt, double risiko) {
 		this.setName(name);
 		this.setZugehoerigkeit(zugehoerigkeit);
 		this.setPt(pt);
-		this.setIntern(intern);
 		this.setRisiko(risiko);
 	}
 
@@ -76,18 +64,6 @@ public class Aufwand {
 
 	public void setPt(double pt) {
 		this.pt = new SimpleDoubleProperty(pt);
-	}
-
-	public boolean isIntern() {
-		return intern.get();
-	}
-	
-	public BooleanProperty isInternProperty(){
-		return intern;
-	}
-
-	public void setIntern(boolean intern) {
-		this.intern = new SimpleBooleanProperty(intern);
 	}
 
 	public double getRisiko() {
