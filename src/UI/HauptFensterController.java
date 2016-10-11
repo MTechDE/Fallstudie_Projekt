@@ -72,6 +72,9 @@ public class HauptFensterController {
 	double ptIntern;
 	double ptExtern;
 	
+	int indexIntern = 0;
+	int indexExtern  = 0;
+	
 	boolean indexPhaseClicked = false;
 	boolean indexKompetenzClicked = false;
 	
@@ -111,7 +114,6 @@ public class HauptFensterController {
 						}
 						i++;
 					}		
-					
 					txt_ptIntern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getPt()));
 					txt_ptExtern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getPt()));
 				}
@@ -127,8 +129,8 @@ public class HauptFensterController {
 					Phase tmpPhase = projekt.getPhasen().get(indexPhase);
 					Kompetenz tmpKompetenz = projekt.getKompetenzen().get(indexKompetenz);
 					
-					int indexIntern = 0;
-					int indexExtern  = 0;
+					indexIntern = 0;
+					indexExtern  = 0;
 					int i = 0;
 					for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
 						if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
@@ -157,28 +159,34 @@ public class HauptFensterController {
 		}
 		
 		if(!nameUsed){
+			
 			Kompetenz kompetenz = new Kompetenz(txt_kompetenzName.getText());
-			kompetenz.setSingleAufwand(new Aufwand("Intern"));
-			kompetenz.setSingleAufwand(new Aufwand("Extern"));
 			
-			Aufwand intern = new Aufwand("Intern");
-			intern.setZugehoerigkeit(kompetenz.getName());
-			intern.setPt(0);
+			// Weise der Kompetenz den internern und externen Aufwand zu
+			Aufwand internerAufwand = new Aufwand("Intern");
+			internerAufwand.setZugehoerigkeit(kompetenz.getName());
+			internerAufwand.setPt(0);
 			
-			Aufwand extern = new Aufwand("Extern");
-			extern.setZugehoerigkeit(kompetenz.getName());
-			extern.setPt(0);
+			Aufwand externerAufwand = new Aufwand("Extern");
+			externerAufwand.setZugehoerigkeit(kompetenz.getName());
+			externerAufwand.setPt(0);
 			
-			for(int i = 0; i < projekt.getPhasen().size(); i++){
-				projekt.getPhasen().get(i).setSingleAufwand(intern);
-				projekt.getPhasen().get(i).setSingleAufwand(extern);
-				System.out.println(projekt.getPhasen().get(i).getName());
-			}
+			kompetenz.setSingleAufwand(internerAufwand);	
+			kompetenz.setSingleAufwand(externerAufwand);
 			
+			//Speichere die Kompetenz im Projekt
 			projekt.setSingleKompetenz(kompetenz);
-			kompetenzenData.add(new Kompetenz(txt_kompetenzName.getText()));
+			
+			// Weise den Phasen die Aufwände zu
+			for(int i = 0; i < projekt.getPhasen().size(); i++){
+				projekt.getPhasen().get(i).setSingleAufwand(internerAufwand);
+				projekt.getPhasen().get(i).setSingleAufwand(externerAufwand);
+			}
+
+			
+			kompetenzenData.add(new Kompetenz(txt_kompetenzName.getText()));	
+		
 		} else{
-			System.out.println("Fehler!");
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Kompetenzname bereits  verwendet");
 			alert.showAndWait();
@@ -191,7 +199,7 @@ public class HauptFensterController {
 	
 	@FXML
 	public void btn_SpeicherProjekt_click (ActionEvent event) throws Exception {
-		myDB.speicherProjekt(projekt);
+		myDB.updateProjekt(projekt);
 	}
 	
 	@FXML
@@ -199,22 +207,17 @@ public class HauptFensterController {
 		double internPT = Double.parseDouble(txt_ptIntern.getText());
 		double externPT = Double.parseDouble(txt_ptExtern.getText());
 		
-		int indexIntern = 0;
-		int indexExtern  = 0;
-		int i = 0;
-		for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
-			if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
-				if(aufwand.getName().equals("Intern"))
-					indexIntern = i;
-				else
-					indexExtern = i;
-			}
-			i++;
-		}		
+		System.out.println("Weise " + projekt.getPhasen().get(indexPhase).getName() + " und dem Aufwand " 
+		+ projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getName() + " die PT zu");
+		
+		System.out.println("Weise " + projekt.getPhasen().get(indexPhase).getName() + " und dem Aufwand " 
+		+ projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getName() + " die PT zu");
+		System.out.println("");
+		System.out.println(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getZugehoerigkeit());
+		System.out.println(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getZugehoerigkeit());
 		
 		projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).setPt(internPT);
-		projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).setPt(externPT);		
-		
+		projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).setPt(externPT);			
 	}
 
 }

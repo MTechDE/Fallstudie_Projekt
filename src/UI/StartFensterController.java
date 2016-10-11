@@ -5,25 +5,22 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-
 import Datenbank.Datenbank;
-import Export.Excel;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -35,8 +32,6 @@ import javafx.scene.control.TableColumn;
 public class StartFensterController {
 	@FXML
 	private AnchorPane startScreen;
-	@FXML
-	private Button btn_aktualisiereProjekte;
 	@FXML
 	private Button btn_newProjekt;
 	@FXML
@@ -56,9 +51,11 @@ public class StartFensterController {
 	@FXML
 	private TextField txt_newProjekt_ersteller;
 	@FXML
-	private CheckBox check_vorlage;
+	private TextField txt_searchProjekt_name;
 	@FXML
-	private ProgressIndicator indikator_refreshTable;
+	private ProgressBar progress_statusBar;
+	@FXML
+	private Label lbl_projekteGefunden;
 
 	Datenbank myDB = new Datenbank();
 
@@ -69,7 +66,6 @@ public class StartFensterController {
 	@FXML
 	private void initialize() {
 		
-		indikator_refreshTable.setVisible(false);
 		
 		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -79,10 +75,33 @@ public class StartFensterController {
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
+		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
+		
+		
+		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
+		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(projekt -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (projekt.getErsteller().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+		
+		SortedList<Projekt> sortedData = new SortedList<>(filteredData);
+		sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
+		
 
 		// Lade Projekte in die Tabelle
 		if (!projektData.isEmpty())
-			tbl_projektTabelle.setItems(projektData);
+			tbl_projektTabelle.setItems(sortedData);
 
 		// Reagiert auf Klicks auf ein Element in der Tabelle
 		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -135,11 +154,8 @@ public class StartFensterController {
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
 				// Öffne Hauptfenster
-				if (check_vorlage.isSelected()) {
-					new OpenMainPage(newProjekt, true, true);
-				} else {
+
 					new OpenMainPage(newProjekt, true, false);
-				}
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);
@@ -152,48 +168,5 @@ public class StartFensterController {
 			alert.setContentText("Füllen Sie alle Felder aus");
 			alert.showAndWait();
 		}
-	}
-	
-	/*
-	 * Aktualisiere die Tabelle, falls Bsp. die Verbindung zur DB nicht möglich war,
-	 * oder ein neues Projekt von einem anderen PC aus angelegt wurde
-	 */
-	@FXML
-	public void btn_aktualisiereProjekte_click(ActionEvent event) throws Exception {
-		this.indikator_refreshTable.setVisible(true);
-		System.out.println("Aktuallisiere");
-		projektData = FXCollections.observableArrayList(myDB.getProjekte());
-		if (!projektData.isEmpty())
-			tbl_projektTabelle.setItems(projektData);
-		this.indikator_refreshTable.setVisible(false);
-	}
-	
-	/*
-	 * Zeige einen Filedialog und übergebe den Pfad an die Export Klasse
-	 */
-	@FXML
-	public void btn_exportExcel_click(ActionEvent event) throws Exception {
-		System.out.println("Excel Export");
-		Stage stage = (Stage) btn_newProjekt.getScene().getWindow();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Speichere Projekte");
-        fileChooser.getExtensionFilters().addAll(
-        		new FileChooser.ExtensionFilter("CSV", "*.csv"),
-                new FileChooser.ExtensionFilter("Text", "*.txt")
-        		);
-        File file = fileChooser.showSaveDialog(stage);
-        if(!Excel.ExportToExcel(projektData, file.getAbsolutePath())){
-			System.out.println("Es wurden nicht alle Felder ausgefüllt");
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setContentText("Füllen Sie alle Felder aus");
-			alert.showAndWait();
-        } else {
-        	Alert alert = new Alert(AlertType.INFORMATION);
-        	alert.setTitle("Export");
-        	alert.setHeaderText(null);
-        	alert.setContentText("Speichern erfolgreich");
-        	alert.showAndWait();
-        }
-		
 	}
 }
