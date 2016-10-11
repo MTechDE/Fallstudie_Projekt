@@ -55,7 +55,8 @@ public class Datenbank {
 		
 		// Setze das Start und Enddatum
 		if(!projekt.getPhasen().isEmpty()){
-			
+			projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
+			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
 		}
 
 		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
@@ -187,7 +188,7 @@ public class Datenbank {
 
 		// Hole Alle Personen anhand des Projektnamnes
 		sql = "SELECT person AS name, zugehoerigkeit, pt, risiko from aufwand a " + 
-		"WHERE a.phase=:phasenName AND a.projekt=:projektName";
+		"WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
 		try (Connection con = sql2o.open()) {
 			for (Phase phase : phasen) {
@@ -320,6 +321,66 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 		return projekte;
+	}
+	
+	public List<Phase> getPhasen(String projektName){
+		List<Phase> phasen = new ArrayList<Phase>();
+		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
+		
+		try (Connection con = sql2o.open()) {
+			phasen = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Phase.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return phasen;
+	}
+	
+	public List<Kompetenz> getKompetenzen(String projektName){
+		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
+		String sql = "SELECT DISTINCT name FROM kompetenzen WHERE projekt=:projektName";
+		
+		try (Connection con = sql2o.open()) {
+			kompetenzen = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Kompetenz.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return kompetenzen;
+	}
+	
+	public List<Aufwand> getAufwände(String projektName, String phasenName, String kompetenzName){
+		List<Aufwand> aufwände = new ArrayList<Aufwand>();
+		String sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName "
+				+ "AND phase=:phasenName AND zugehoerigkeit=:zugehoerigkeit ORDER BY person DESC";
+		try (Connection con = sql2o.open()) {
+			aufwände = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.addParameter("phasenName", phasenName)
+					.addParameter("zugehoerigkeit", kompetenzName)
+					.executeAndFetch(Aufwand.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return aufwände;
+	}
+	
+	public Projekt getProjektBasic(String projektName){
+		List<Projekt> projekt = new ArrayList<Projekt>();
+		String sql = "SELECT * from projekte where name=:projektName";
+		try (Connection con = sql2o.open()) {
+			projekt =  con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Projekt.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		return projekt.get(0);
 	}
 
 	/**
