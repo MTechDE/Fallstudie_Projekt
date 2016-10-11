@@ -126,9 +126,6 @@ public class HauptFensterController {
 				indexPhase = tbl_phasen.getSelectionModel().getFocusedIndex();
 				indexPhaseClicked = true;
 				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty()){
-					Phase tmpPhase = projekt.getPhasen().get(indexPhase);
-					Kompetenz tmpKompetenz = projekt.getKompetenzen().get(indexKompetenz);
-					
 					indexIntern = 0;
 					indexExtern  = 0;
 					int i = 0;
