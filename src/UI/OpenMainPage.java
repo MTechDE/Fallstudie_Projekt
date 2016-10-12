@@ -39,7 +39,7 @@ public class OpenMainPage extends Stage{
 		
 		try{
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("HauptFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
