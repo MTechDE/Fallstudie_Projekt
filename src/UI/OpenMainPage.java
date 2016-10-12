@@ -30,7 +30,11 @@ public class OpenMainPage extends Stage{
 				tmpProjekt = projekt;
 			}
 		} else {
-			tmpProjekt = myDB.getProjekt(projekt);
+			try{
+				tmpProjekt = myDB.getProjekt(projekt);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
 		}
 		
 		try{

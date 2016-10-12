@@ -82,68 +82,68 @@ public class HauptFensterController {
 	@FXML
 	private void initialize() {
 		
-		projekt = OpenMainPage.tmpProjekt;
+//		projekt = OpenMainPage.tmpProjekt;
 		
 		// Weise Zellen eine Property zu
-		tbl_kompetenzen_Name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		tbl_phasen_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		tbl_phasen_startDatum.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
-		tbl_phasen_endDatum.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
-		kompetenzenData = FXCollections.observableArrayList(projekt.getKompetenzen());
-		phasenData = FXCollections.observableArrayList(projekt.getPhasen());
-		
-		tbl_kompetenzen.setItems(kompetenzenData);
-		tbl_phasen.setItems(phasenData);
-		
-		tbl_kompetenzen.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent mouseEvent) {
-				indexKompetenz = tbl_kompetenzen.getSelectionModel().getFocusedIndex();
-				indexKompetenzClicked = true;
-				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty()){
-
-					int indexIntern = 0;
-					int indexExtern  = 0;
-					int i = 0;
-					for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
-						if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
-							if(aufwand.getName().equals("Intern"))
-								indexIntern = i;
-							else
-								indexExtern = i;
-						}
-						i++;
-					}		
-					txt_ptIntern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getPt()));
-					txt_ptExtern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getPt()));
-				}
-			}
-		});
-		
-		tbl_phasen.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent mouseEvent) {
-				indexPhase = tbl_phasen.getSelectionModel().getFocusedIndex();
-				indexPhaseClicked = true;
-				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty()){
-					indexIntern = 0;
-					indexExtern  = 0;
-					int i = 0;
-					for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
-						if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
-							if(aufwand.getName().equals("Intern"))
-								indexIntern = i;
-							else
-								indexExtern = i;
-						}
-						i++;
-					}		
-					
-					txt_ptIntern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getPt()));
-					txt_ptExtern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getPt()));
-				}
-			}
-		});
+//		tbl_kompetenzen_Name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//		tbl_phasen_name.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+//		tbl_phasen_startDatum.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
+//		tbl_phasen_endDatum.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
+//		kompetenzenData = FXCollections.observableArrayList(projekt.getKompetenzen());
+//		phasenData = FXCollections.observableArrayList(projekt.getPhasen());
+//		
+//		tbl_kompetenzen.setItems(kompetenzenData);
+//		tbl_phasen.setItems(phasenData);
+//		
+//		tbl_kompetenzen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent mouseEvent) {
+//				indexKompetenz = tbl_kompetenzen.getSelectionModel().getFocusedIndex();
+//				indexKompetenzClicked = true;
+//				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty()){
+//
+//					int indexIntern = 0;
+//					int indexExtern  = 0;
+//					int i = 0;
+//					for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
+//						if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
+//							if(aufwand.getName().equals("Intern"))
+//								indexIntern = i;
+//							else
+//								indexExtern = i;
+//						}
+//						i++;
+//					}		
+//					txt_ptIntern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getPt()));
+//					txt_ptExtern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getPt()));
+//				}
+//			}
+//		});
+//		
+//		tbl_phasen.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//			@Override
+//			public void handle(MouseEvent mouseEvent) {
+//				indexPhase = tbl_phasen.getSelectionModel().getFocusedIndex();
+//				indexPhaseClicked = true;
+//				if(indexKompetenzClicked && indexPhaseClicked && !kompetenzenData.isEmpty() && !phasenData.isEmpty()){
+//					indexIntern = 0;
+//					indexExtern  = 0;
+//					int i = 0;
+//					for (Aufwand aufwand : projekt.getPhasen().get(indexPhase).getAufwände()) {
+//						if(aufwand.getZugehoerigkeit().equals(projekt.getKompetenzen().get(indexKompetenz).getName())){
+//							if(aufwand.getName().equals("Intern"))
+//								indexIntern = i;
+//							else
+//								indexExtern = i;
+//						}
+//						i++;
+//					}		
+//					
+//					txt_ptIntern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexIntern).getPt()));
+//					txt_ptExtern.setText(String.valueOf(projekt.getPhasen().get(indexPhase).getAufwände().get(indexExtern).getPt()));
+//				}
+//			}
+//		});
 	}
 	
 	@FXML
@@ -196,7 +196,11 @@ public class HauptFensterController {
 	
 	@FXML
 	public void btn_SpeicherProjekt_click (ActionEvent event) throws Exception {
-		myDB.updateProjekt(projekt);
+		try{
+			myDB.updateProjekt(projekt);
+		} catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	@FXML
