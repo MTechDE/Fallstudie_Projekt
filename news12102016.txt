@@ -1,0 +1,6 @@
+jahres, quartal, phasen, intern/extern, risikoaufschlag checkbox
+sql hack check
+pt bei mak berechnen sich aus start-enddatum und werden automatisch eingetragen
+Zeitraum bei Phasen wird evtl. per Tootip angezeigt
+Beim Anlegen: Farblich darstellen für welche Kompetenzen bei einer Phase noch keine PT angegeben wurde
+Meldedatum soll durch mit heutigem Datum vorbelegtes Textfeld angegeben werden können. In Übersicht soll Meldedatum enthalten!!

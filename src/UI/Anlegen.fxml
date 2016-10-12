@@ -13,27 +13,27 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="687.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.AnlegenController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.AnlegenController">
    <children>
-      <ImageView fitHeight="71.0" fitWidth="91.0" layoutX="184.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="71.0" fitWidth="91.0" layoutX="261.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../resources/Programm%20Logo.png" />
          </image>
       </ImageView>
-      <Label layoutX="287.0" layoutY="42.0" text="flavoured with vanilla">
+      <Label layoutX="373.0" layoutY="42.0" text="flavoured with vanilla">
          <font>
             <Font name="SansSerif Regular" size="18.0" />
          </font>
       </Label>
-      <Separator layoutX="180.0" layoutY="101.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />
-      <Button fx:id="btn_phase" layoutX="22.0" layoutY="291.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="150.0" text="Phase hinzufügen">
+      <Separator layoutX="202.0" layoutY="104.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />
+      <Button fx:id="btn_phase" layoutX="21.0" layoutY="254.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Phase hinzufügen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/file.png" />
+                  <Image url="@../../resources/folder.png" />
                </image></ImageView>
          </graphic></Button>
-      <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="436.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="150.0" text="Kompetenz hinzufügen">
+      <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="398.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Kompetenz hinzufügen">
          <font>
             <Font size="10.0" />
          </font>
@@ -44,7 +44,7 @@
                </image></ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tbl_kompetenz" editable="true" layoutX="350.0" layoutY="116.0" prefHeight="452.0" prefWidth="133.0">
+      <TableView fx:id="tbl_kompetenz" editable="true" layoutX="431.0" layoutY="116.0" prefHeight="452.0" prefWidth="196.0">
         <columns>
           <TableColumn fx:id="tblCell_kompetenz" prefWidth="75.0" text="Kompetenz" />
         </columns>
@@ -52,7 +52,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <TableView fx:id="tbl_phase" editable="true" layoutX="203.0" layoutY="116.0" prefHeight="452.0" prefWidth="133.0">
+      <TableView fx:id="tbl_phase" editable="true" layoutX="223.0" layoutY="116.0" prefHeight="452.0" prefWidth="196.0">
         <columns>
           <TableColumn fx:id="tblCell_phase" prefWidth="75.0" text="Phasen" />
         </columns>
@@ -60,20 +60,39 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="391.0" prefHeight="34.0" prefWidth="150.0" promptText="Kompetenz eingeben" />
-      <TextField fx:id="txt_phase" layoutX="21.0" layoutY="155.0" prefHeight="34.0" prefWidth="150.0" promptText="Phase eingeben" />
-      <DatePicker fx:id="dtpkr_start" layoutX="88.0" layoutY="202.0" prefHeight="34.0" prefWidth="83.0" />
-      <DatePicker fx:id="dtpkr_end" layoutX="88.0" layoutY="248.0" prefHeight="34.0" prefWidth="83.0" />
-      <Label layoutX="22.0" layoutY="202.0" prefHeight="34.0" prefWidth="64.0" text="Startdatum:" wrapText="true" />
-      <Label layoutX="22.0" layoutY="248.0" prefHeight="34.0" prefWidth="57.0" text="Enddatum:" />
-      <Separator layoutX="16.0" layoutY="356.0" prefHeight="6.0" prefWidth="167.0" />
-      <Label layoutX="508.0" layoutY="172.0" prefHeight="60.0" prefWidth="149.0" text="Aufwand für ausgewählte Phase und Kompetenz:" wrapText="true">
+      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="352.0" prefHeight="34.0" prefWidth="167.0" promptText="Kompetenz eingeben" />
+      <TextField fx:id="txt_phase" layoutX="21.0" layoutY="116.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben" />
+      <DatePicker fx:id="dtpkr_start" layoutX="21.0" layoutY="163.0" prefHeight="34.0" prefWidth="167.0" promptText="Startdatum" />
+      <DatePicker fx:id="dtpkr_end" layoutX="21.0" layoutY="209.0" onAction="#datepicker_ende_selected" prefHeight="34.0" prefWidth="167.0" promptText="Enddatum" />
+      <Separator layoutX="27.0" layoutY="320.0" prefHeight="3.0" prefWidth="178.0" />
+      <Label layoutX="642.0" layoutY="118.0" prefHeight="38.0" prefWidth="149.0" text="Aufwand für ausgewählte Phase und Kompetenz:" wrapText="true">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="chobx_aufwand" layoutX="508.0" layoutY="232.0" prefHeight="34.0" prefWidth="150.0" />
-      <TextField fx:id="txt_pt" layoutX="509.0" layoutY="284.0" prefHeight="34.0" prefWidth="149.0" promptText="Personentage (intern)" />
-      <TextField layoutX="509.0" layoutY="325.0" prefHeight="34.0" prefWidth="149.0" promptText="Personentage (extern)" />
+      <ChoiceBox fx:id="chobx_aufwand" layoutX="642.0" layoutY="156.0" onAction="#chobx_aufwand_selected" prefHeight="34.0" prefWidth="167.0" />
+      <TextField fx:id="txt_pt_intern" layoutX="643.0" layoutY="208.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (intern)" />
+      <TextField fx:id="txt_pt_extern" layoutX="643.0" layoutY="249.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (extern)" />
+      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="646.0" layoutY="534.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Projekt speichern">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resources/save-file-option.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <TextField fx:id="txt_mak_intern" layoutX="642.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (intern)" />
+      <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)" />
+      <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
+      <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
+      <Button layoutX="646.0" layoutY="298.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resources/file.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </Pane>
