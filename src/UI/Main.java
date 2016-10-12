@@ -20,7 +20,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Uebersicht.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
