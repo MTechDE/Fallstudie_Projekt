@@ -2,6 +2,7 @@ package UI;
 
 import Projekt.Kompetenz;
 import Projekt.Phase;
+import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,13 +68,28 @@ public class AnlegenController {
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
+	
+	// Variablen
+	Projekt projekt;
 
 	@FXML
 	private void initialize() {
 		System.out.println("Fenster wurde geöffnet.");
-
+		
+		// Importiere Projekt
+		projekt = OpenMainPage.tmpProjekt;
+		
+		// Initalisiere Tabelle
+		
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_phase.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		
+		kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
+		phasen = FXCollections.observableArrayList(projekt.getPhasen());
+		
+		tbl_kompetenz.setItems(kompetenzen);
+		tbl_phase.setItems(phasen);
+		
 
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
@@ -174,4 +190,6 @@ public class AnlegenController {
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
 		System.out.println("Projekt gespeichert!");
 	}
+	
+	
 }
