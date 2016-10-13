@@ -43,10 +43,8 @@ public class Test {
 		System.out.println("======");
 		Projekt projekt = new Projekt("Projekt 1", "Daniel", false);
 		Kompetenz k1 = new Kompetenz("Kompetenz 1");
-		k1.setSingleAufwand(new Aufwand("Intern"));
-		k1.setSingleAufwand(new Aufwand("Extern"));
 		
-		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
+		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02" , 0.0);
 		p1.setSingleAufwand(new Aufwand("Intern"));
 		p1.setSingleAufwand(new Aufwand("Extern"));
 		
@@ -56,7 +54,7 @@ public class Test {
 		p1.getAufwände().get(1).setPt(200);
 		
 		
-		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03");
+		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03" , 0.0);
 		p2.setSingleAufwand(new Aufwand("Intern"));
 		p2.setSingleAufwand(new Aufwand("Extern"));
 		
@@ -134,7 +132,7 @@ public class Test {
 				aufwand.setPt(5555);
 			}
 
-			Phase phase3 = new Phase("Phase 3", "2011-01-01", "2015-01-01");
+			Phase phase3 = new Phase("Phase 3", "2011-01-01", "2015-01-01" , 0.0);
 			phase3.setAufwände(aufwände);
 
 			for (Aufwand aufwand : phase3.getAufwände()) {
@@ -204,25 +202,7 @@ public class Test {
 		if (myDB.testConnection()) {
 			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
 			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
-			
-			for (Projekt projekt : projekte) {
-				for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-					System.out.println(kompetenz.getName());
-					for (Aufwand aufwand : kompetenz.getAufwände()) {
-						System.out.println(aufwand.getName());
-						for (Phase phase : projekt.getPhasen()) {
-							System.out.println(phase.getName());
-							for (Aufwand phaseAufwand : phase.getAufwände()) {
-								if(aufwand.getName().equals(phaseAufwand.getName()))
-									System.out.println(phaseAufwand.getName() + " - " + phaseAufwand.getPt());
-							}
-							System.out.println("");
-						}
-						System.out.println("");
-					}
-					System.out.println("");
-				}
-			}
+
 		}
 	}
 	
@@ -239,8 +219,8 @@ public class Test {
 		Aufwand k2Intern = new Aufwand("Intern");
 		Aufwand k2Extern = new Aufwand("Extern");
 		
-		Phase phase1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
-		Phase phase2 = new Phase("Phase 2", "2016-01-02", "2016-01-03");
+		Phase phase1 = new Phase("Phase 1", "2016-01-01", "2016-01-02", 0.0);
+		Phase phase2 = new Phase("Phase 2", "2016-01-02", "2016-01-03", 0.0);
 		
 		k1Intern.setZugehoerigkeit(kompetenz1.getName());
 		k1Extern.setZugehoerigkeit(kompetenz1.getName());

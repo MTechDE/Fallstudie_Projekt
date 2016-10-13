@@ -1,4 +1,4 @@
-package Projekt;
+
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -15,16 +15,19 @@ public class Aufwand {
 	private StringProperty name;
 	private StringProperty zugehoerigkeit;
 	private DoubleProperty pt;
+	private DoubleProperty risiko;
 	
 	public Aufwand(String name){
 		this.setName(name);
 		this.setPt(0);
+		this.setRisiko(0);
 	}
 	
-	public Aufwand(String name, String zugehoerigkeit, double pt) {
+	public Aufwand(String name, String zugehoerigkeit, double pt, double risiko) {
 		this.setName(name);
 		this.setZugehoerigkeit(zugehoerigkeit);
 		this.setPt(pt);
+		this.setRisiko(risiko);
 	}
 
 	public String getName() {
@@ -62,4 +65,17 @@ public class Aufwand {
 	public void setPt(double pt) {
 		this.pt = new SimpleDoubleProperty(pt);
 	}
+
+	public double getRisiko() {
+		return risiko.get();
+	}
+	
+	public DoubleProperty risikoProperty(){
+		return risiko;
+	}
+
+	public void setRisiko(double risiko) {
+		this.risiko = new SimpleDoubleProperty(risiko);
+	}
+
 }
