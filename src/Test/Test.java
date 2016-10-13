@@ -44,7 +44,7 @@ public class Test {
 		Projekt projekt = new Projekt("Projekt 1", "Daniel", false);
 		Kompetenz k1 = new Kompetenz("Kompetenz 1");
 		
-		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
+		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02" , 0.0);
 		p1.setSingleAufwand(new Aufwand("Intern"));
 		p1.setSingleAufwand(new Aufwand("Extern"));
 		
@@ -54,7 +54,7 @@ public class Test {
 		p1.getAufwände().get(1).setPt(200);
 		
 		
-		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03");
+		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03" , 0.0);
 		p2.setSingleAufwand(new Aufwand("Intern"));
 		p2.setSingleAufwand(new Aufwand("Extern"));
 		
@@ -132,7 +132,7 @@ public class Test {
 				aufwand.setPt(5555);
 			}
 
-			Phase phase3 = new Phase("Phase 3", "2011-01-01", "2015-01-01");
+			Phase phase3 = new Phase("Phase 3", "2011-01-01", "2015-01-01" , 0.0);
 			phase3.setAufwände(aufwände);
 
 			for (Aufwand aufwand : phase3.getAufwände()) {
@@ -219,8 +219,8 @@ public class Test {
 		Aufwand k2Intern = new Aufwand("Intern");
 		Aufwand k2Extern = new Aufwand("Extern");
 		
-		Phase phase1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
-		Phase phase2 = new Phase("Phase 2", "2016-01-02", "2016-01-03");
+		Phase phase1 = new Phase("Phase 1", "2016-01-01", "2016-01-02", 0.0);
+		Phase phase2 = new Phase("Phase 2", "2016-01-02", "2016-01-03", 0.0);
 		
 		k1Intern.setZugehoerigkeit(kompetenz1.getName());
 		k1Extern.setZugehoerigkeit(kompetenz1.getName());

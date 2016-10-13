@@ -125,8 +125,9 @@ public class AnlegenController {
 
 		if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
 				&& (dtpkr_end.getValue() != null)) {
-			phasen.add(
-					new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(), dtpkr_end.getValue().toString()));
+			// TODO Risikozuschlag muss noch übergeben werden
+//			phasen.add(
+//					new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(), dtpkr_end.getValue().toString()));
 			tbl_phase.setItems(phasen);
 		} else {
 			String fehlermeldung = "";
