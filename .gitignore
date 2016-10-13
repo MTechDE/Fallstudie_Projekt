@@ -47,11 +47,7 @@ Temporary Items
 .apdisk
 .classpath
 *.class
-/bin/
-/build/
-build/build.xml
-build/build.xml
-build.fxbuild
-build/build.xml
-resources/Fallstudie_Projekt.uml
+bin/
+build/
 *.umlcd
+*.java
