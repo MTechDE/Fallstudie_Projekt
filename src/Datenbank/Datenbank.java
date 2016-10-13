@@ -133,9 +133,9 @@ public class Datenbank {
 
 
 		
-		sql = "INSERT INTO kompetenzen (kompetenzKey, name, person, projekt) " + 
-		"VALUES(:kompetenzKey, :name, :person, :projekt) " + 
-		"ON DUPLICATE KEY UPDATE kompetenzKey=:kompetenzKey, name=:name, person=:person, projekt=:projekt";
+		sql = "INSERT INTO kompetenzen (kompetenzKey, name, projekt) " + 
+		"VALUES(:kompetenzKey, :name, :projekt) " + 
+		"ON DUPLICATE KEY UPDATE kompetenzKey=:kompetenzKey, name=:name, projekt=:projekt";
 				
 		if(!projekt.getKompetenzen().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
@@ -143,14 +143,11 @@ public class Datenbank {
 				Query query = con.createQuery(sql);
 				
 				for(Kompetenz kompetenz: projekt.getKompetenzen()){
-					for (Aufwand aufwand : kompetenz.getAufwände()) {
-						query
-						.addParameter("kompetenzKey", (kompetenz.getName() + aufwand.getName() + projekt.getName()).replaceAll("\\s+", ""))
-						.addParameter("name", kompetenz.getName())
-						.addParameter("person", aufwand.getName())
-						.addParameter("projekt", projekt.getName())
-						.addToBatch();
-					}
+					query
+					.addParameter("kompetenzKey", (kompetenz.getName() + projekt.getName()).replaceAll("\\s+", ""))
+					.addParameter("name", kompetenz.getName())
+					.addParameter("projekt", projekt.getName())
+					.addToBatch();
 				}
 				query.executeBatch();
 				con.commit();
@@ -217,22 +214,6 @@ public class Datenbank {
 			 kompetenzen = con.createQuery(sql)
 					 .addParameter("projektName", newprojekt.getName())
 					 .executeAndFetch(Kompetenz.class);
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-		}
-		
-		
-		// Weise Kompetenzen Peronen zu
-		sql = "SELECT person as name FROM kompetenzen WHERE projekt=:projekt AND name=:name";
-		try (Connection con = sql2o.open()) {
-			for (Kompetenz kompetenz : kompetenzen) {
-				 List<Aufwand> tmpPersonen = con.createQuery(sql)
-							.addParameter("projekt", newprojekt.getName())
-							.addParameter("name", kompetenz.getName())
-							.executeAndFetch(Aufwand.class);
-				kompetenz.setAufwände(tmpPersonen);
-			}
-				
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 		}

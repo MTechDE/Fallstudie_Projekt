@@ -43,8 +43,6 @@ public class Test {
 		System.out.println("======");
 		Projekt projekt = new Projekt("Projekt 1", "Daniel", false);
 		Kompetenz k1 = new Kompetenz("Kompetenz 1");
-		k1.setSingleAufwand(new Aufwand("Intern"));
-		k1.setSingleAufwand(new Aufwand("Extern"));
 		
 		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
 		p1.setSingleAufwand(new Aufwand("Intern"));
@@ -204,25 +202,7 @@ public class Test {
 		if (myDB.testConnection()) {
 			projekte.add(myDB.getProjekt(new Projekt("Projekt 2", "David", false)));
 			projekte.add(myDB.getProjekt(new Projekt("Projekt 1", "Daniel", true)));
-			
-			for (Projekt projekt : projekte) {
-				for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-					System.out.println(kompetenz.getName());
-					for (Aufwand aufwand : kompetenz.getAufwände()) {
-						System.out.println(aufwand.getName());
-						for (Phase phase : projekt.getPhasen()) {
-							System.out.println(phase.getName());
-							for (Aufwand phaseAufwand : phase.getAufwände()) {
-								if(aufwand.getName().equals(phaseAufwand.getName()))
-									System.out.println(phaseAufwand.getName() + " - " + phaseAufwand.getPt());
-							}
-							System.out.println("");
-						}
-						System.out.println("");
-					}
-					System.out.println("");
-				}
-			}
+
 		}
 	}
 	
