@@ -17,7 +17,7 @@
    <children>
       <ImageView fitHeight="71.0" fitWidth="91.0" layoutX="261.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../resources/Programm%20Logo.png" />
+            <Image url="file:@../../resources/Programm%20Logo.png" />
          </image>
       </ImageView>
       <Label layoutX="373.0" layoutY="42.0" text="flavoured with vanilla">
@@ -30,7 +30,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/folder.png" />
+                  <Image url="file:@../../resources/folder.png" />
                </image></ImageView>
          </graphic></Button>
       <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="398.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Kompetenz hinzufügen">
@@ -40,7 +40,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/new-user.png" />
+                  <Image url="file:@../../resources/new-user.png" />
                </image></ImageView>
          </graphic>
       </Button>
@@ -89,7 +89,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/file.png" />
+                  <Image url="file:@../../resources/file.png" />
                </image>
             </ImageView>
          </graphic>

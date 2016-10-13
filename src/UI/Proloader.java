@@ -6,6 +6,6 @@ import javafx.stage.Stage;
 public class Proloader extends Preloader {
 	
 	public void start(Stage primaryStage) throws Exception {
-		
+		System.out.println("Preloader Startet");
 	}
 }
