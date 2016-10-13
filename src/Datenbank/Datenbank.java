@@ -52,6 +52,12 @@ public class Datenbank {
 	 * @return boolean
 	 */
 	public boolean speicherProjekt(Projekt projekt) {
+		
+		// Setze das Start und Enddatum
+		if(!projekt.getPhasen().isEmpty()){
+			projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
+			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
+		}
 
 		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) " + 
 		"VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate) " + 
@@ -95,9 +101,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, intern, risiko) " + 
-		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :intern, :risiko) " + 
-		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, intern=:intern, risiko=:risiko";
+		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, risiko, zugehoerigkeit) " + 
+		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :risiko, :zugehoerigkeit) " + 
+		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, risiko=:risiko, zugehoerigkeit=:zugehoerigkeit";
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
@@ -111,8 +117,8 @@ public class Datenbank {
 										.addParameter("phase", phase.getName())
 										.addParameter("projekt", projekt.getName())
 										.addParameter("pt", aufwand.getPt())
-										.addParameter("intern", aufwand.isIntern())
 										.addParameter("risiko", aufwand.getRisiko())
+										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit())
 										.addToBatch();
 							}
 						}
@@ -168,7 +174,7 @@ public class Datenbank {
 	 */
 	public Projekt getProjekt(Projekt projekt) {
 
-		Projekt newprojekt = new Projekt(projekt.getName(), projekt.getErsteller(), projekt.isAbgeschickt());
+		Projekt newprojekt = projekt;
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 
@@ -181,8 +187,8 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, phase AS zugehoerigkeit, pt, intern, risiko from aufwand a " + 
-		"WHERE a.phase=:phasenName AND a.projekt=:projektName";
+		sql = "SELECT person AS name, zugehoerigkeit, pt, risiko from aufwand a " + 
+		"WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
 		try (Connection con = sql2o.open()) {
 			for (Phase phase : phasen) {
@@ -200,17 +206,6 @@ public class Datenbank {
 		if(!phasen.isEmpty()){
 			// Schreibe die Phasen in das Projekt
 			newprojekt.setPhasen((ArrayList<Phase>) phasen);
-			
-			for (Phase phase : newprojekt.getPhasen()) {
-				for (Aufwand aufwand : personen) {
-					aufwand.setZugehoerigkeit(phase.getName());
-				}
-			}
-			
-			//Setze Projekt Start- und Enddatum
-			int endPhase = newprojekt.getPhasen().size() - 1;
-			newprojekt.setStartDate(newprojekt.getPhasen().get(0).getStartDate());
-			newprojekt.setEndDate(newprojekt.getPhasen().get(endPhase).getEndDate());
 		}
 		
 		
@@ -243,7 +238,39 @@ public class Datenbank {
 		}
 		
 		
-		//Weise Projekt die Kompetenzen mit den gespeicherten personen hinzu, falls es Kompetenzen gibt
+		
+//		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
+//			for (Phase phase : projekt.getPhasen()) {
+//				System.out.println(phase.getName());
+//				for (Aufwand aufwand : phase.getAufwände()) {
+//					if(aufwand.getZugehoerigkeit().equals(kompetenz.getName()))
+//						System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
+//				}
+//			}
+//		}
+		
+		
+//		sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName AND phase=:phasenName AND zugehoerigkeit=:kompetenzName";
+//		
+//		for (Kompetenz kompetenz : kompetenzen) {
+//			List<Aufwand> phasenAufwände = null;
+//			int i = 0;
+//			for (Phase phase : projekt.getPhasen()) {
+//				try (Connection con = sql2o.open()){
+//					phasenAufwände = con.createQuery(sql)
+//							.addParameter("projektName", projekt.getName())
+//							.addParameter("phasenName", phase.getName())
+//							.addParameter("kompetenzName", kompetenz.getName())
+//							.executeAndFetch(Aufwand.class);
+//				} catch (Sql2oException e) {
+//					System.out.println(e.getMessage());
+//				}
+//				projekt.getPhasen().get(i).setAufwände(phasenAufwände);
+//			}
+//		}
+		
+		
+		//Weise Projekt die Kompetenzen mit den gespeicherten Personen hinzu, falls es Kompetenzen gibt
 		if(!kompetenzen.isEmpty())
 			newprojekt.setKompetenzen(kompetenzen);
 		
@@ -263,12 +290,11 @@ public class Datenbank {
 		return this.speicherProjekt(projekt);
 	}
 
+	/**
+	 * Es wird eine Liste von Aufwänden zurückgegeben. 
+	 * @return List<Aufwand>
+	 */
 	public List<Aufwand> getPersonen() {
-
-		/*
-		 * Es wird eine Liste von Personen zur�ckgeben. Ist diese leer/null muss
-		 * dies in der Main Klasse abgefragt werden.
-		 */
 
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 		String sql = "SELECT * FROM aufwand";
@@ -286,11 +312,6 @@ public class Datenbank {
 	 * @return List<Projekt>
 	 */
 	public List<Projekt> getProjekte() {
-
-		/*
-		 * Alle Projekte welche bereits in der Datenbank gespeichert sind,
-		 * werden als Liste Zurueckgegeben
-		 */
 		List<Projekt> projekte = new ArrayList<Projekt>();
 
 		String sql = "SELECT * FROM projekte";
@@ -301,6 +322,66 @@ public class Datenbank {
 		}
 		return projekte;
 	}
+	
+	public List<Phase> getPhasen(String projektName){
+		List<Phase> phasen = new ArrayList<Phase>();
+		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
+		
+		try (Connection con = sql2o.open()) {
+			phasen = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Phase.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return phasen;
+	}
+	
+	public List<Kompetenz> getKompetenzen(String projektName){
+		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
+		String sql = "SELECT DISTINCT name FROM kompetenzen WHERE projekt=:projektName";
+		
+		try (Connection con = sql2o.open()) {
+			kompetenzen = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Kompetenz.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return kompetenzen;
+	}
+	
+	public List<Aufwand> getAufwände(String projektName, String phasenName, String kompetenzName){
+		List<Aufwand> aufwände = new ArrayList<Aufwand>();
+		String sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName "
+				+ "AND phase=:phasenName AND zugehoerigkeit=:zugehoerigkeit ORDER BY person DESC";
+		try (Connection con = sql2o.open()) {
+			aufwände = con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.addParameter("phasenName", phasenName)
+					.addParameter("zugehoerigkeit", kompetenzName)
+					.executeAndFetch(Aufwand.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		return aufwände;
+	}
+	
+	public Projekt getProjektBasic(String projektName){
+		List<Projekt> projekt = new ArrayList<Projekt>();
+		String sql = "SELECT * from projekte where name=:projektName";
+		try (Connection con = sql2o.open()) {
+			projekt =  con.createQuery(sql)
+					.addParameter("projektName", projektName)
+					.executeAndFetch(Projekt.class);
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
+		}
+		return projekt.get(0);
+	}
 
 	/**
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Aufwände),
@@ -309,7 +390,6 @@ public class Datenbank {
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
-
 		String sql1 = "DELETE FROM aufwand WHERE projekt=:projektName";
 		String sql2 = "DELETE FROM phasen WHERE projekt=:projektName";
 		String sql3 = "DELETE FROM projekte WHERE name=:projektName";

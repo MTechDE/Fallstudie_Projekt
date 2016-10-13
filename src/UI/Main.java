@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 /**
  * Die Main-Klasse lädt lediglich die MainUI.fxml Datei und stellt diese dar.
- * Jegliche Logik wird in der MainUICtrl Klasse behandelt.
- * 
  * @author Daniel Sogl
  *
  */
@@ -19,16 +17,16 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
+		try{
+			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
-
-		} catch (Exception e) {
+			
+		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 	}

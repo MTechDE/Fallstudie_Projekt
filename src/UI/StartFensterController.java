@@ -5,26 +5,30 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-
 import Datenbank.Datenbank;
 import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.CheckBox;
-
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableView;
-
 import javafx.scene.control.TableColumn;
 
+/**
+ * In dieser Klasse wird die Logik des Startfensters behandelt.
+ * @author Daniel Sogl
+ *
+ */
 public class StartFensterController {
 	@FXML
 	private AnchorPane startScreen;
@@ -47,18 +51,23 @@ public class StartFensterController {
 	@FXML
 	private TextField txt_newProjekt_ersteller;
 	@FXML
-	private CheckBox check_vorlage;
+	private TextField txt_searchProjekt_name;
+	@FXML
+	private ProgressBar progress_statusBar;
+	@FXML
+	private Label lbl_projekteGefunden;
 
 	Datenbank myDB = new Datenbank();
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
-	private ObservableList<Projekt> projektData = FXCollections.observableArrayList();
-
+	private ObservableList<Projekt> projektData;
+	
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		System.out.println("Initalisiere Startfenster");
 		
+		
+		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
@@ -66,10 +75,33 @@ public class StartFensterController {
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
+		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
+		
+		
+		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
+		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(projekt -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (projekt.getErsteller().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+		
+		SortedList<Projekt> sortedData = new SortedList<>(filteredData);
+		sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
+		
 
 		// Lade Projekte in die Tabelle
 		if (!projektData.isEmpty())
-			tbl_projektTabelle.setItems(projektData);
+			tbl_projektTabelle.setItems(sortedData);
 
 		// Reagiert auf Klicks auf ein Element in der Tabelle
 		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -79,10 +111,12 @@ public class StartFensterController {
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {							
-//							Node source = (Node) mouseEvent.getSource();
-//							Stage stage = (Stage) source.getScene().getWindow();
-//							stage.close();
+						try {		
+							// Schließe Fenster
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+							// Öffne Hauptfenster
 							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
@@ -91,7 +125,14 @@ public class StartFensterController {
 				}
 			}
 		});
-
+		
+		// Überprüfe ob die DB online ist
+		if(!myDB.testConnection()){
+			System.out.println("DB offline");
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("Keine Verbindung zur Datenbank möglich");
+			alert.showAndWait();
+		}
 	}
 
 	// Event Listener on Button[#btn_newProjekt].onAction
@@ -99,7 +140,6 @@ public class StartFensterController {
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-
 			// Überprüfe ob der gewünschte Name bereits verwendet wurde
 			boolean doubleName = false;
 			for (Projekt projekt : projektData) {
@@ -113,11 +153,9 @@ public class StartFensterController {
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
 				stage.close();
-				if (check_vorlage.isSelected()) {
-					new OpenMainPage(newProjekt, true, true);
-				} else {
+				// Öffne Hauptfenster
+
 					new OpenMainPage(newProjekt, true, false);
-				}
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);

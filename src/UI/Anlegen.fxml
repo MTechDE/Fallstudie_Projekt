@@ -22,7 +22,7 @@
       </ImageView>
       <Label layoutX="373.0" layoutY="42.0" text="flavoured with vanilla">
          <font>
-            <Font name="SansSerif Regular" size="18.0" />
+            <Font name="Book Antiqua" size="18.0" />
          </font>
       </Label>
       <Separator layoutX="202.0" layoutY="104.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />

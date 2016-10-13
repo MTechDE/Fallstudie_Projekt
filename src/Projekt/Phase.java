@@ -16,12 +16,13 @@ public class Phase {
 	private StringProperty name;
 	private StringProperty startDate;
 	private StringProperty endDate;
-	private List<Aufwand> aufwand = new ArrayList<Aufwand>();
+	private List<Aufwand> aufwand;
 
 	public Phase(String name, String startDate, String endDate) {
 		this.setName(name);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
+		aufwand = new ArrayList<Aufwand>();
 	}
 
 	public String getStartDate() {
