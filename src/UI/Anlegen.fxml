@@ -17,7 +17,7 @@
    <children>
       <ImageView fitHeight="71.0" fitWidth="91.0" layoutX="261.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../resources/Programm%20Logo.png" />
+            <Image url="file:@../../resources/Programm%20Logo.png" />
          </image>
       </ImageView>
       <Label layoutX="373.0" layoutY="42.0" text="flavoured with vanilla">
@@ -30,7 +30,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/folder.png" />
+                  <Image url="file:@../../resources/folder.png" />
                </image></ImageView>
          </graphic></Button>
       <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="442.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Kompetenz hinzufügen">
@@ -40,7 +40,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/new-user.png" />
+                  <Image url="file:@../../resources/new-user.png" />
                </image></ImageView>
          </graphic>
       </Button>
@@ -77,7 +77,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/save-file-option.png" />
+                  <Image url="file:@../../resources/save-file-option.png" />
                </image>
             </ImageView>
          </graphic></Button>
@@ -85,11 +85,11 @@
       <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)" />
       <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
       <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
-      <Button layoutX="646.0" layoutY="298.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
+      <Button fx:id="btn_aufwand_festlegen" layoutX="646.0" layoutY="298.0" mnemonicParsing="false" onAction="#btn_aufwand_festlegen_click" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/file.png" />
+                  <Image url="file:@../../resources/file.png" />
                </image>
             </ImageView>
          </graphic>

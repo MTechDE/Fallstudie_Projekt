@@ -1,9 +1,12 @@
 package UI;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import Projekt.Aufwand;
 import Projekt.Kompetenz;
 import Projekt.Phase;
 import Projekt.Projekt;
-import UI.OpenMainPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -51,6 +54,8 @@ public class AnlegenController {
 	@FXML
 	private Button btn_kompetenz;
 	@FXML
+	private Button btn_aufwand_festlegen;
+	@FXML
 	private Button btn_projekt_speichern;
 	@FXML
 	private TableColumn<Kompetenz, String> tblCell_kompetenz;
@@ -74,6 +79,7 @@ public class AnlegenController {
 
 	// Variablen
 	Projekt projekt;
+	long arbeitstage = 0;
 
 	@FXML
 	private void initialize() {
@@ -123,28 +129,54 @@ public class AnlegenController {
 
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
-		// TODO Phase darf nicht bereits bestehen
+		boolean vorhanden = false;
+		// Prüfung ob Phase bereits vorhanden
+		for (Phase phase : phasen) {
+			if (phase.getName().equals(txt_phase.getText()))
+				vorhanden = true;
+		}
+		if (!vorhanden) {
+			// Prüfung ob alle Felder ausgefüllt
+			if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
+					&& (dtpkr_end.getValue() != null) && !(txt_risikozuschlag.getText().equals(""))) {
 
-		if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
-				&& (dtpkr_end.getValue() != null)) {
-			// TODO Risikozuschlag muss noch übergeben werden
-			// phasen.add(
-			// new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-			// dtpkr_end.getValue().toString()));
-			tbl_phase.setItems(phasen);
+				// Risikozuschlag von -,% und falschem Dezimalzeichen befreien
+				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
+				risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
+				risikozuschlagString = risikozuschlagString.replaceAll("-", "");
+				Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+
+				Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
+						dtpkr_end.getValue().toString(), risikozuschlag);
+
+				phase.setSingleAufwand(new Aufwand("intern"));
+				phase.setSingleAufwand(new Aufwand("extern"));
+				phasen.add(phase);
+
+				tbl_phase.setItems(phasen);
+				// TODO: Fokus auf ein Element setzen, damit Arbeitstage immer
+				// berechnet werden können
+			} else {
+				String fehlermeldung = "";
+				if (txt_risikozuschlag.getText().equals(""))
+					fehlermeldung = "Risikozuschlag eingeben.";
+
+				if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
+					fehlermeldung = "Zeitraum muss ausgewählt werden.";
+
+				if (txt_phase.getText().equals("") || txt_phase == null)
+					fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
+
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText(fehlermeldung);
+				alert.showAndWait();
+			}
 		} else {
-			String fehlermeldung = "";
-
-			if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null)) {
-				fehlermeldung = "Zeitraum muss ausgewählt werden.";
-			}
-			if (txt_phase.getText().equals("") || txt_phase == null) {
-				fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
-			}
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText(fehlermeldung);
+			alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
 			alert.showAndWait();
 		}
+
 	}
 
 	@FXML
@@ -168,6 +200,26 @@ public class AnlegenController {
 			txt_mak_extern.setVisible(true);
 			txt_mak_pt_intern.setVisible(true);
 			txt_mak_pt_extern.setVisible(true);
+
+			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
+			// Berechnung Arbeitstage aus Phasenzeitraum für
+			// PT-Berechnung bei
+			// MAK
+			String startdatum = phaseSelected.getStartDate();
+			String enddatum = phaseSelected.getEndDate();
+
+			String[] startdatumArray = startdatum.split("-");
+			String[] enddatumArray = enddatum.split("-");
+
+			// Monat -1 da 0-11, Enddatumtag +1 damit inklusive
+			arbeitstage = berechneArbeitstage(
+					new Date(Integer.parseInt(startdatumArray[0]), Integer.parseInt(startdatumArray[1]) - 1,
+							Integer.parseInt(startdatumArray[2])),
+					new Date(Integer.parseInt(enddatumArray[0]), Integer.parseInt(enddatumArray[1]) - 1,
+							Integer.parseInt(enddatumArray[2]) + 1));
+			txt_mak_pt_intern.setText(arbeitstage + " PT");
+			txt_mak_pt_extern.setText(arbeitstage + " PT");
 			break;
 
 		default:
@@ -184,15 +236,104 @@ public class AnlegenController {
 		System.out.println(endDatum);
 		if (endDatum <= startDatum) {
 			dtpkr_end.setValue(dtpkr_start.getValue().plusDays(1));
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
 			alert.showAndWait();
 		}
 	}
 
 	@FXML
-	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
-		System.out.println("Projekt gespeichert!");
+	public void btn_aufwand_festlegen_click(ActionEvent event) throws Exception {
+		double ptIntern = 0;
+		double ptExtern = 0;
+		int auswahl = chobx_aufwand.getSelectionModel().getSelectedIndex();
+
+		if ((auswahl == 0 && (txt_pt_intern.equals("") || txt_pt_extern.equals("")))
+				|| (auswahl == 1 && (txt_mak_intern.equals("") || txt_mak_extern.equals("")))) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte Aufwände für intern und extern eingeben!");
+			alert.showAndWait();
+		} else {
+			try {
+				Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+				Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
+
+				switch (auswahl) {
+				case 0:
+					ptIntern = Double.parseDouble(txt_pt_intern.getText());
+					ptExtern = Double.parseDouble(txt_pt_extern.getText());
+					break;
+				case 1:
+					// Berechnung der PT: MAK * verfügbare Werktage der Phase
+					ptIntern = Double.parseDouble(txt_mak_intern.getText()) * arbeitstage;
+					ptExtern = Double.parseDouble(txt_mak_extern.getText()) * arbeitstage;
+					break;
+				default:
+					break;
+				}
+
+				phaseSelected.getAufwände().get(0).setZugehoerigkeit(kompetenzSelected.getName());
+				phaseSelected.getAufwände().get(0).setPt(ptIntern);
+
+				phaseSelected.getAufwände().get(1).setZugehoerigkeit(kompetenzSelected.getName());
+				phaseSelected.getAufwände().get(1).setPt(ptExtern);
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
 	}
 
+	@FXML
+	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
+
+		Projekt projekt = OpenMainPage.tmpProjekt;
+		if (projekt != null) {
+			for (Phase phase : tbl_phase.getItems()) {
+				projekt.setSinglePhase(phase);
+				System.out.println(phase.getName() + " wurde Projekt hinzugefügt!");
+			}
+			for (Kompetenz kompetenz : tbl_kompetenz.getItems()) {
+				projekt.setSingleKompetenz(kompetenz);
+				System.out.println(kompetenz.getName() + " wurde Projekt hinzugefügt!");
+			}
+			System.out.println("Projekt gespeichert!");
+		}
+
+	}
+
+	// berechne Anzahl der Arbeitstage zwischen zwei Daten (Inklusive Start und
+	// exklusive Enddatum!)
+	public static long berechneArbeitstage(Date start, Date end) {
+		// Ignore argument check
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(start);
+		int w1 = c1.get(Calendar.DAY_OF_WEEK);
+		c1.add(Calendar.DAY_OF_WEEK, -w1);
+
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(end);
+		int w2 = c2.get(Calendar.DAY_OF_WEEK);
+		c2.add(Calendar.DAY_OF_WEEK, -w2);
+
+		// end Saturday to start Saturday
+		long days = (c2.getTimeInMillis() - c1.getTimeInMillis()) / (1000 * 60 * 60 * 24);
+		long daysWithoutWeekendDays = days - (days * 2 / 7);
+
+		// Adjust days to add on (w2) and days to subtract (w1) so that Saturday
+		// and Sunday are not included
+		if (w1 == Calendar.SUNDAY && w2 != Calendar.SATURDAY) {
+			w1 = Calendar.MONDAY;
+		} else if (w1 == Calendar.SATURDAY && w2 != Calendar.SUNDAY) {
+			w1 = Calendar.FRIDAY;
+		}
+
+		if (w2 == Calendar.SUNDAY) {
+			w2 = Calendar.MONDAY;
+		} else if (w2 == Calendar.SATURDAY) {
+			w2 = Calendar.FRIDAY;
+		}
+
+		return daysWithoutWeekendDays - w1 + w2;
+	}
 }
