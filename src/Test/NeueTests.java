@@ -57,36 +57,33 @@ public class NeueTests {
 		
 		
 		
-//		Projekt neuesProjekt;
-//		List<Phase> phasen = new ArrayList<Phase>();
-//		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
-//		List<Aufwand> aufwände = new ArrayList<Aufwand>();
-//		
-//		neuesProjekt = myDB.getProjektBasic("Projekt 1");
-//		phasen = myDB.getPhasen("Projekt 1");
-//		kompetenzen = myDB.getKompetenzen("Projekt 1");
-//		
-//		System.out.println(neuesProjekt.getName());
-//		System.out.println("Phasen: " + phasen.size());
-//		System.out.println("Kompetenzen: " + kompetenzen.size());
-//		System.out.println("\n");		
-//		
-//		for(int i = 0; i < kompetenzen.size(); i++){
-//			System.out.println(kompetenzen.get(i).getName());
-//			for(int k = 0; k < phasen.size(); k++){
-//				System.out.println(phasen.get(k).getName());
-//				aufwände = myDB.getAufwände(projekt.getName(), phasen.get(k).getName(), kompetenzen.get(i).getName());
-//				System.out.println("Anzahl der Aufwände: " + aufwände.size());
-//				System.out.println(aufwände.get(0).getZugehoerigkeit() + " PT: " + aufwände.get(0).getPt() 
-//						+ " Zugehörigkeit: " + aufwände.get(0).getZugehoerigkeit());
-//				System.out.println(aufwände.get(1).getZugehoerigkeit() + " PT: " + aufwände.get(1).getPt() 
-//						+ " Zugehörigkeit: " + aufwände.get(1).getZugehoerigkeit());
-//			}
-//		}	
-//		
-//		
-//		projekt.setKompetenzen(kompetenzen);
-//		projekt.setPhasen(phasen);
+		Projekt neuesProjekt;
+		List<Phase> phasen = new ArrayList<Phase>();
+		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
+		List<Aufwand> aufwände = new ArrayList<Aufwand>();
+		
+		neuesProjekt = myDB.getProjektBasic("Projekt 1");
+		phasen = myDB.getPhasen("Projekt 1");
+		kompetenzen = myDB.getKompetenzen("Projekt 1");
+		
+		System.out.println(neuesProjekt.getName());
+		System.out.println("Phasen: " + phasen.size());
+		System.out.println("Kompetenzen: " + kompetenzen.size());
+		System.out.println("\n");		
+		
+		for(int i = 0; i < kompetenzen.size(); i++){
+			System.out.println(kompetenzen.get(i).getName());
+			for(int k = 0; k < phasen.size(); k++){
+				System.out.println(phasen.get(k).getName());
+				aufwände = myDB.getAufwände(projekt.getName(), phasen.get(k).getName(), kompetenzen.get(i).getName());
+				System.out.println("Anzahl der Aufwände: " + aufwände.size());
+				System.out.println(aufwände.get(0).getZugehoerigkeit() + " PT: " + aufwände.get(0).getPt() 
+						+ " Zugehörigkeit: " + aufwände.get(0).getZugehoerigkeit());
+				System.out.println(aufwände.get(1).getZugehoerigkeit() + " PT: " + aufwände.get(1).getPt() 
+						+ " Zugehörigkeit: " + aufwände.get(1).getZugehoerigkeit());
+			}
+		}	
+		
 	}
 
 }

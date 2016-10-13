@@ -217,40 +217,7 @@ public class Datenbank {
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
-//		for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-//			for (Phase phase : projekt.getPhasen()) {
-//				System.out.println(phase.getName());
-//				for (Aufwand aufwand : phase.getAufwände()) {
-//					if(aufwand.getZugehoerigkeit().equals(kompetenz.getName()))
-//						System.out.println(aufwand.getName() + " PT: " + aufwand.getPt() + " Kompetenz: " + aufwand.getZugehoerigkeit());
-//				}
-//			}
-//		}
-		
-		
-//		sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName AND phase=:phasenName AND zugehoerigkeit=:kompetenzName";
-//		
-//		for (Kompetenz kompetenz : kompetenzen) {
-//			List<Aufwand> phasenAufwände = null;
-//			int i = 0;
-//			for (Phase phase : projekt.getPhasen()) {
-//				try (Connection con = sql2o.open()){
-//					phasenAufwände = con.createQuery(sql)
-//							.addParameter("projektName", projekt.getName())
-//							.addParameter("phasenName", phase.getName())
-//							.addParameter("kompetenzName", kompetenz.getName())
-//							.executeAndFetch(Aufwand.class);
-//				} catch (Sql2oException e) {
-//					System.out.println(e.getMessage());
-//				}
-//				projekt.getPhasen().get(i).setAufwände(phasenAufwände);
-//			}
-//		}
-		
-		
+			
 		//Weise Projekt die Kompetenzen mit den gespeicherten Personen hinzu, falls es Kompetenzen gibt
 		if(!kompetenzen.isEmpty())
 			newprojekt.setKompetenzen(kompetenzen);
