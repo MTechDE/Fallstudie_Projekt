@@ -168,9 +168,6 @@ public class HauptFensterController {
 			externerAufwand.setZugehoerigkeit(kompetenz.getName());
 			externerAufwand.setPt(0);
 			
-			kompetenz.setSingleAufwand(internerAufwand);	
-			kompetenz.setSingleAufwand(externerAufwand);
-			
 			//Speichere die Kompetenz im Projekt
 			projekt.setSingleKompetenz(kompetenz);
 			
