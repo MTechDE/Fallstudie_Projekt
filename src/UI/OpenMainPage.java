@@ -16,7 +16,7 @@ public class OpenMainPage extends Stage{
 	private Datenbank myDB = new Datenbank();
 	public static Projekt tmpProjekt;
 	
-	public OpenMainPage(Projekt projekt, boolean newProjekt, boolean vorlage) throws Exception{
+	public OpenMainPage(Projekt projekt, boolean newProjekt) throws Exception{
 		
 		tmpProjekt = projekt;
 		
@@ -24,11 +24,7 @@ public class OpenMainPage extends Stage{
 		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine Kompetenz anzulegen
 		
 		if(newProjekt){
-			if(vorlage){
-				// TODO Eine Vorlage muss noch  deffiniert werden
-			} else {
-				tmpProjekt = projekt;
-			}
+			tmpProjekt = projekt;
 		} else {
 			try{
 				tmpProjekt = myDB.getProjekt(projekt);
@@ -44,6 +40,7 @@ public class OpenMainPage extends Stage{
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.setResizable(false);
 			stage.show();
 		} catch (Exception e){
 			e.printStackTrace();
