@@ -22,18 +22,18 @@
       </ImageView>
       <Label layoutX="373.0" layoutY="42.0" text="flavoured with vanilla">
          <font>
-            <Font name="SansSerif Regular" size="18.0" />
+            <Font name="Book Antiqua" size="18.0" />
          </font>
       </Label>
       <Separator layoutX="202.0" layoutY="104.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />
-      <Button fx:id="btn_phase" layoutX="21.0" layoutY="254.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Phase hinzufügen">
+      <Button fx:id="btn_phase" layoutX="21.0" layoutY="298.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Phase hinzufügen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="file:@../../resources/folder.png" />
                </image></ImageView>
          </graphic></Button>
-      <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="398.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Kompetenz hinzufügen">
+      <Button fx:id="btn_kompetenz" layoutX="21.0" layoutY="442.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Kompetenz hinzufügen">
          <font>
             <Font size="10.0" />
          </font>
@@ -60,11 +60,11 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="352.0" prefHeight="34.0" prefWidth="167.0" promptText="Kompetenz eingeben" />
+      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="396.0" prefHeight="34.0" prefWidth="167.0" promptText="Kompetenz eingeben" />
       <TextField fx:id="txt_phase" layoutX="21.0" layoutY="116.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben" />
       <DatePicker fx:id="dtpkr_start" layoutX="21.0" layoutY="163.0" prefHeight="34.0" prefWidth="167.0" promptText="Startdatum" />
       <DatePicker fx:id="dtpkr_end" layoutX="21.0" layoutY="209.0" onAction="#datepicker_ende_selected" prefHeight="34.0" prefWidth="167.0" promptText="Enddatum" />
-      <Separator layoutX="27.0" layoutY="320.0" prefHeight="3.0" prefWidth="178.0" />
+      <Separator layoutX="27.0" layoutY="364.0" prefHeight="3.0" prefWidth="178.0" />
       <Label layoutX="642.0" layoutY="118.0" prefHeight="38.0" prefWidth="149.0" text="Aufwand für ausgewählte Phase und Kompetenz:" wrapText="true">
          <font>
             <Font size="13.0" />
@@ -77,7 +77,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/save-file-option.png" />
+                  <Image url="file:@../../resources/save-file-option.png" />
                </image>
             </ImageView>
          </graphic></Button>
@@ -85,7 +85,7 @@
       <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)" />
       <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
       <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
-      <Button layoutX="646.0" layoutY="298.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
+      <Button fx:id="btn_aufwand_festlegen" layoutX="646.0" layoutY="298.0" mnemonicParsing="false" onAction="#btn_aufwand_festlegen_click" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -94,5 +94,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <TextField fx:id="txt_risikozuschlag" layoutX="21.0" layoutY="254.0" prefHeight="34.0" prefWidth="167.0" promptText="Risikozuschlag in %" />
    </children>
 </Pane>
