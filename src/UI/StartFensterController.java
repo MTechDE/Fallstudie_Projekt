@@ -112,12 +112,12 @@ public class StartFensterController {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {		
+							// Öffne Hauptfenster
+							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
 							// Schließe Fenster
 							Node source = (Node) mouseEvent.getSource();
 							Stage stage = (Stage) source.getScene().getWindow();
 							stage.close();
-							// Öffne Hauptfenster
-							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
@@ -149,13 +149,12 @@ public class StartFensterController {
 			if (!doubleName) {
 				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
 						false);
-				// Schließe Fenster
-				Node source = (Node) event.getSource();
-				Stage stage = (Stage) source.getScene().getWindow();
-				stage.close();
 				// Öffne Hauptfenster
-
-					new OpenMainPage(newProjekt, true, false);
+					new OpenMainPage(newProjekt, true);
+					// Schließe Fenster
+					Node source = (Node) event.getSource();
+					Stage stage = (Stage) source.getScene().getWindow();
+					stage.close();
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);
