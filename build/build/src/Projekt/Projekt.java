@@ -38,6 +38,8 @@ public class Projekt {
 		this.setAbgeschickt(abgeschickt);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
+		this.setPhasen(null);
+		this.setKompetenzen(null);
 	}
 
 	public String getName() {
@@ -56,7 +58,7 @@ public class Projekt {
 		return (ArrayList<Phase>) phasen;
 	}
 
-	public void setPhasen(ArrayList<Phase> phasen) {
+	public void setPhasen(List<Phase> phasen) {
 		this.phasen = phasen;
 	}
 	

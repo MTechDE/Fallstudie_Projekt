@@ -17,11 +17,13 @@ public class Phase {
 	private StringProperty startDate;
 	private StringProperty endDate;
 	private List<Aufwand> aufwand;
+	private double risikoZuschlag;
 
-	public Phase(String name, String startDate, String endDate) {
+	public Phase(String name, String startDate, String endDate, double risikoZuschlag) {
 		this.setName(name);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
+		this.setRisikoZuschlag(risikoZuschlag);
 		aufwand = new ArrayList<Aufwand>();
 	}
 
@@ -71,5 +73,13 @@ public class Phase {
 	
 	public void setSingleAufwand(Aufwand aufwand){
 		this.aufwand.add(aufwand);
+	}
+
+	public double getRisikoZuschlag() {
+		return risikoZuschlag;
+	}
+
+	public void setRisikoZuschlag(double risikoZuschlag) {
+		this.risikoZuschlag = risikoZuschlag;
 	}
 }

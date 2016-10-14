@@ -14,7 +14,6 @@ import javafx.beans.property.StringProperty;
 public class Kompetenz {
 
 	private StringProperty name;
-	private List<Aufwand> aufwände = new ArrayList<Aufwand>();
 	
 	public Kompetenz(String name){
 		this.setName(name);
@@ -30,17 +29,5 @@ public class Kompetenz {
 
 	public void setName(String name) {
 		this.name = new SimpleStringProperty(name);
-	}
-
-	public List<Aufwand> getAufwände() {
-		return aufwände;
-	}
-
-	public void setAufwände(List<Aufwand> aufwände) {
-		this.aufwände = aufwände;
-	}
-	
-	public void setSingleAufwand(Aufwand aufwand){
-		this.aufwände.add(aufwand);
 	}
 }

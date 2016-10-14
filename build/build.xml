@@ -5,6 +5,7 @@
 			<filelist>
 				<file name="${java.home}\..\lib\ant-javafx.jar"/>
 				<file name="${java.home}\lib\jfxrt.jar"/>
+				<file name="${basedir}"/>
 			</filelist>
 		</path>
 	
@@ -20,24 +21,19 @@
 		<mkdir dir="externalLibs" />
 	
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
 				<filename name="mysql-connector-java-5.1.39.jar"/>
 			</fileset>
 		</copy>
 		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
-				<filename name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="externalLibs">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt\lib">
+			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt\lib">
 				<filename name="sql2o-1.5.4.jar"/>
 			</fileset>
 		</copy>
 	
 		<mkdir dir="project" />
 		<copy todir="project">
-			<fileset dir="C:\Users\mytec\workspace\Fallstudie_Projekt">
+			<fileset dir="C:\Users\Daniel\workspace\Fallstudie_Projekt">
 				<include name="src/**" />
 			</fileset>
 		</copy>
@@ -55,7 +51,6 @@
 			<fileset dir="externalLibs">
 				<include name="mysql-connector-java-5.1.39.jar"/>
 				<include name="sql2o-1.5.4.jar"/>
-				<include name="tiwulfx-2.0-20160213.121700-19-sources.jar"/>
 			</fileset>
 		</copy>
 	
@@ -102,12 +97,14 @@
 		<fx:resources id="appRes">
 			<fx:fileset dir="dist" includes="Fallstudie_Projekt.jar"/>
 			<fx:fileset dir="dist" includes="libs/*"/>
+			<fx:fileset dir="dist" includes="resources/**"/>
 		</fx:resources>
 	
 		<fx:application id="fxApplication"
 			name="Vanilla Sky"
 			mainClass="UI.Main"
 			toolkit="fx"
+			version="0.2.0"
 		/>
 	
 		<mkdir dir="build/classes/META-INF" />
@@ -123,7 +120,7 @@
 			<manifest>
 				<attribute name="Implementation-Vendor" value="Soft Ice"/>
 				<attribute name="Implementation-Title" value="Vanilla Sky"/>
-				<attribute name="Implementation-Version" value="0.1.1"/>
+				<attribute name="Implementation-Version" value="0.1.2"/>
 				<attribute name="SplashScreen-Image" value=""/>
 			</manifest>
 		</fx:jar>
@@ -141,7 +138,9 @@
 			updatemode="background" >
 	
 			<fx:platform basedir="${java.home}"/>
-			<fx:info title="Fallstudie_Projekt" vendor="Soft Ice"/>
+			<fx:info title="Vanilla Sky" vendor="Soft Ice" copyright="Soft Ice 2016" description="Das smarte Aufwandsmanagement-Programm"/>
+			
+			<fx:preferences shortcut="true" install="false" />
 	
 			<fx:application refId="fxApplication"/>
 			<fx:resources refid="appRes"/>

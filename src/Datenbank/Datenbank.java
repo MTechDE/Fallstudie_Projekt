@@ -75,8 +75,8 @@ public class Datenbank {
 			return false;
 		}
 
-		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate) "+
-		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate";
+		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate, risikoZuschlag) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate, :risikoZuschlag) "+
+		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate, risikoZuschlag=:risikoZuschlag";
 
 		if(!projekt.getPhasen().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
@@ -84,8 +84,11 @@ public class Datenbank {
 
 				for (Phase phase : projekt.getPhasen()) {
 					query.addParameter("phasenKey", (phase.getName() + projekt.getName()).replaceAll("\\s+", ""))
-							.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
-							.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
+							.addParameter("name", phase.getName())
+							.addParameter("projekt", projekt.getName())
+							.addParameter("startDate", phase.getStartDate())
+							.addParameter("endDate", phase.getEndDate())
+							.addParameter("risikoZuschlag", phase.getRisikoZuschlag())
 							.addToBatch();
 				}
 				query.executeBatch();
@@ -101,9 +104,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, risiko, zugehoerigkeit) " + 
-		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :risiko, :zugehoerigkeit) " + 
-		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, risiko=:risiko, zugehoerigkeit=:zugehoerigkeit";
+		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, zugehoerigkeit) " + 
+		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :zugehoerigkeit) " + 
+		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, zugehoerigkeit=:zugehoerigkeit";
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
@@ -117,7 +120,6 @@ public class Datenbank {
 										.addParameter("phase", phase.getName())
 										.addParameter("projekt", projekt.getName())
 										.addParameter("pt", aufwand.getPt())
-										.addParameter("risiko", aufwand.getRisiko())
 										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit())
 										.addToBatch();
 							}
@@ -176,7 +178,7 @@ public class Datenbank {
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 
 		// Hole Phasen anhand des Projektnamens
-		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
+		String sql = "SELECT name, startDate, endDate, risikoZuschlag FROM phasen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName()).executeAndFetch(Phase.class);
 		} catch (Sql2oException e) {
@@ -184,7 +186,7 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, zugehoerigkeit, pt, risiko from aufwand a " + 
+		sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a " + 
 		"WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
 		try (Connection con = sql2o.open()) {
@@ -303,7 +305,7 @@ public class Datenbank {
 	
 	public List<Aufwand> getAufwände(String projektName, String phasenName, String kompetenzName){
 		List<Aufwand> aufwände = new ArrayList<Aufwand>();
-		String sql = "SELECT person as name, zugehoerigkeit, pt, risiko from aufwand where projekt=:projektName "
+		String sql = "SELECT person as name, zugehoerigkeit, pt from aufwand where projekt=:projektName "
 				+ "AND phase=:phasenName AND zugehoerigkeit=:zugehoerigkeit ORDER BY person DESC";
 		try (Connection con = sql2o.open()) {
 			aufwände = con.createQuery(sql)
