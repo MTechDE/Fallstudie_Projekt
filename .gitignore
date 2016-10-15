@@ -46,9 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .classpath
-*.class
-bin/
-build/
+*.class		
+bin/**
+build/**
+.settings/**
 *.umlcd
 *.java
 build/build.xml
