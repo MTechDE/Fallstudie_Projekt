@@ -1,29 +1,26 @@
 package Projekt;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Projekt.Aufwand;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
  * In einem Kompetenzen Objekt werden die beteiligten Personen abgespeichert.
+ * 
  * @author Daniel Sogl
  */
 public class Kompetenz {
 
 	private StringProperty name;
-	
-	public Kompetenz(String name){
+
+	public Kompetenz(String name) {
 		this.setName(name);
 	}
 
 	public String getName() {
 		return name.get();
 	}
-	
-	public StringProperty nameProperty(){
+
+	public StringProperty nameProperty() {
 		return name;
 	}
 
