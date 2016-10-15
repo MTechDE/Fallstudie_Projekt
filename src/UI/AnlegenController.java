@@ -1,7 +1,7 @@
 package UI;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import Projekt.Aufwand;
 import Projekt.Kompetenz;
@@ -10,6 +10,7 @@ import Projekt.Projekt;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +20,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 /**
  * Controller für Anlegen.fxml GUI
@@ -79,7 +81,10 @@ public class AnlegenController {
 
 	// Variablen
 	Projekt projekt;
-	long arbeitstage = 0;
+	int arbeitstage = 0;
+
+	boolean indexPhaseClicked = false;
+	boolean indexKompetenzClicked = false;
 
 	@FXML
 	private void initialize() {
@@ -110,6 +115,45 @@ public class AnlegenController {
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
+
+		// ActionHandler Tabelle Phase
+		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+
+				try {
+					// Anfang Berechnung Arbeitstage
+					Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+					// Berechnung Arbeitstage aus Phasenzeitraum für
+					// PT-Berechnung bei MAK
+					String startdatum = phaseSelected.getStartDate();
+					String enddatum = phaseSelected.getEndDate();
+
+					// Monat -1 da 0-11, Enddatumtag +1 damit inklusive
+					arbeitstage = calculateDate(startdatum, enddatum);
+
+					txt_mak_pt_intern.setText(arbeitstage + " PT");
+					txt_mak_pt_extern.setText(arbeitstage + " PT");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				indexPhaseClicked = true;
+				if (indexKompetenzClicked)
+					btn_aufwand_festlegen.setDisable(false);
+			}
+		});
+
+		// ActionHandler Tabelle Kompetenz
+		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+				indexKompetenzClicked = true;
+				if (indexPhaseClicked)
+					btn_aufwand_festlegen.setDisable(false);
+			}
+		});
 	}
 
 	@FXML
@@ -200,26 +244,6 @@ public class AnlegenController {
 			txt_mak_extern.setVisible(true);
 			txt_mak_pt_intern.setVisible(true);
 			txt_mak_pt_extern.setVisible(true);
-
-			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
-			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
-			// Berechnung Arbeitstage aus Phasenzeitraum für
-			// PT-Berechnung bei
-			// MAK
-			String startdatum = phaseSelected.getStartDate();
-			String enddatum = phaseSelected.getEndDate();
-
-			String[] startdatumArray = startdatum.split("-");
-			String[] enddatumArray = enddatum.split("-");
-
-			// Monat -1 da 0-11, Enddatumtag +1 damit inklusive
-			arbeitstage = berechneArbeitstage(
-					new Date(Integer.parseInt(startdatumArray[0]), Integer.parseInt(startdatumArray[1]) - 1,
-							Integer.parseInt(startdatumArray[2])),
-					new Date(Integer.parseInt(enddatumArray[0]), Integer.parseInt(enddatumArray[1]) - 1,
-							Integer.parseInt(enddatumArray[2]) + 1));
-			txt_mak_pt_intern.setText(arbeitstage + " PT");
-			txt_mak_pt_extern.setText(arbeitstage + " PT");
 			break;
 
 		default:
@@ -282,6 +306,22 @@ public class AnlegenController {
 				System.out.println(e.getMessage());
 			}
 		}
+
+		// Prüfung ob jeder Phase Aufwand zugewiesen wurde
+		boolean vollstaendig = true;
+		for (Phase phase : tbl_phase.getItems()) {
+			try {
+				double internPT = -1;
+				double externPT = -1;
+				internPT = phase.getAufwände().get(0).getPt();
+				externPT = phase.getAufwände().get(1).getPt();
+			} catch (Exception e) {
+				vollstaendig = false;
+			}
+			if (vollstaendig) {
+				btn_projekt_speichern.setDisable(false);
+			}
+		}
 	}
 
 	@FXML
@@ -302,38 +342,35 @@ public class AnlegenController {
 
 	}
 
-	// berechne Anzahl der Arbeitstage zwischen zwei Daten (Inklusive Start und
-	// exklusive Enddatum!)
-	public static long berechneArbeitstage(Date start, Date end) {
-		// Ignore argument check
-		Calendar c1 = Calendar.getInstance();
-		c1.setTime(start);
-		int w1 = c1.get(Calendar.DAY_OF_WEEK);
-		c1.add(Calendar.DAY_OF_WEEK, -w1);
+	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
+	// Enddatum)
+	public int calculateDate(String startDatum, String endDatum) {
+		String[] datum = startDatum.split("-");
+		startDatum = datum[2] + "/" + datum[1] + "/" + datum[0];
+		String startDate = startDatum;
 
-		Calendar c2 = Calendar.getInstance();
-		c2.setTime(end);
-		int w2 = c2.get(Calendar.DAY_OF_WEEK);
-		c2.add(Calendar.DAY_OF_WEEK, -w2);
+		datum = endDatum.split("-");
+		endDatum = datum[2] + "/" + datum[1] + "/" + datum[0];
+		String endDate = endDatum;
 
-		// end Saturday to start Saturday
-		long days = (c2.getTimeInMillis() - c1.getTimeInMillis()) / (1000 * 60 * 60 * 24);
-		long daysWithoutWeekendDays = days - (days * 2 / 7);
-
-		// Adjust days to add on (w2) and days to subtract (w1) so that Saturday
-		// and Sunday are not included
-		if (w1 == Calendar.SUNDAY && w2 != Calendar.SATURDAY) {
-			w1 = Calendar.MONDAY;
-		} else if (w1 == Calendar.SATURDAY && w2 != Calendar.SUNDAY) {
-			w1 = Calendar.FRIDAY;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Calendar start = Calendar.getInstance();
+			start.setTime(sdf.parse(startDate));
+			Calendar end = Calendar.getInstance();
+			end.setTime(sdf.parse(endDate));
+			int workingDays = 0;
+			while (!start.after(end)) {
+				int day = start.get(Calendar.DAY_OF_WEEK);
+				if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY))
+					workingDays++;
+				start.add(Calendar.DATE, 1);
+			}
+			return workingDays;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
 		}
 
-		if (w2 == Calendar.SUNDAY) {
-			w2 = Calendar.MONDAY;
-		} else if (w2 == Calendar.SATURDAY) {
-			w2 = Calendar.FRIDAY;
-		}
-
-		return daysWithoutWeekendDays - w1 + w2;
 	}
 }
