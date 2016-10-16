@@ -85,7 +85,7 @@
       <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)" />
       <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
       <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
-      <Button fx:id="btn_aufwand_festlegen" disable="true" layoutX="646.0" layoutY="298.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
+      <Button fx:id="btn_aufwand_festlegen" disable="true" layoutX="646.0" layoutY="298.0" mnemonicParsing="false" onAction="#btn_aufwand_festlegen_click" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -122,14 +122,12 @@ public class AnlegenController {
 			public void handle(MouseEvent mouseEvent) {
 
 				try {
-					// Anfang Berechnung Arbeitstage
 					Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
 					// Berechnung Arbeitstage aus Phasenzeitraum für
 					// PT-Berechnung bei MAK
 					String startdatum = phaseSelected.getStartDate();
 					String enddatum = phaseSelected.getEndDate();
 
-					// Monat -1 da 0-11, Enddatumtag +1 damit inklusive
 					arbeitstage = calculateDate(startdatum, enddatum);
 
 					txt_mak_pt_intern.setText(arbeitstage + " PT");
@@ -140,8 +138,13 @@ public class AnlegenController {
 				}
 
 				indexPhaseClicked = true;
-				if (indexKompetenzClicked)
+				// was passiert wenn eine phase und eine kompetenz ausgewählt
+				// wurden
+				if (indexKompetenzClicked) {
 					btn_aufwand_festlegen.setDisable(false);
+					fülleFelder();
+				}
+
 			}
 		});
 
@@ -150,22 +153,35 @@ public class AnlegenController {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				indexKompetenzClicked = true;
-				if (indexPhaseClicked)
+				// was passiert wenn eine phase und eine kompetenz ausgewählt
+				// wurden
+				if (indexPhaseClicked) {
 					btn_aufwand_festlegen.setDisable(false);
+					fülleFelder();
+				}
 			}
 		});
 	}
 
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
-		// TODO Kompetenz darf nicht bereits bestehen
-
-		if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)) {
-			kompetenzen.add(new Kompetenz(txt_kompetenz.getText()));
-			tbl_kompetenz.setItems(kompetenzen);
+		boolean vorhanden = false;
+		for (Kompetenz kompetenz : kompetenzen) {
+			if (kompetenz.getName().equals(txt_kompetenz.getText()))
+				vorhanden = true;
+		}
+		if (!vorhanden) {
+			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)) {
+				kompetenzen.add(new Kompetenz(txt_kompetenz.getText()));
+				tbl_kompetenz.setItems(kompetenzen);
+			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
+				alert.showAndWait();
+			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
+			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 			alert.showAndWait();
 		}
 
@@ -193,8 +209,6 @@ public class AnlegenController {
 				Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
 						dtpkr_end.getValue().toString(), risikozuschlag);
 
-				phase.setSingleAufwand(new Aufwand("intern"));
-				phase.setSingleAufwand(new Aufwand("extern"));
 				phasen.add(phase);
 
 				tbl_phase.setItems(phasen);
@@ -296,30 +310,32 @@ public class AnlegenController {
 					break;
 				}
 
-				phaseSelected.getAufwände().get(0).setZugehoerigkeit(kompetenzSelected.getName());
-				phaseSelected.getAufwände().get(0).setPt(ptIntern);
+				// Prüfung ob Aufwand für Kompetenz bereits vorhanden ist
+				boolean aufwandVorhanden = false;
+				for (Aufwand aufwand : phaseSelected.getAufwände()) {
+					if (aufwand.getName().endsWith(kompetenzSelected.getName()))
+						aufwandVorhanden = true;
+				}
+				if (!aufwandVorhanden) {
+					phaseSelected.setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
+					phaseSelected.setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
+				}
 
-				phaseSelected.getAufwände().get(1).setZugehoerigkeit(kompetenzSelected.getName());
-				phaseSelected.getAufwände().get(1).setPt(ptExtern);
+				for (Aufwand aufwand : phaseSelected.getAufwände()) {
+					if (aufwand.getName().startsWith("intern")
+							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
+						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
+						aufwand.setPt(ptIntern);
+					}
+					if (aufwand.getName().startsWith("extern")
+							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
+						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
+						aufwand.setPt(ptExtern);
+					}
+				}
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-			}
-		}
-
-		// Prüfung ob jeder Phase Aufwand zugewiesen wurde
-		boolean vollstaendig = true;
-		for (Phase phase : tbl_phase.getItems()) {
-			try {
-				double internPT = -1;
-				double externPT = -1;
-				internPT = phase.getAufwände().get(0).getPt();
-				externPT = phase.getAufwände().get(1).getPt();
-			} catch (Exception e) {
-				vollstaendig = false;
-			}
-			if (vollstaendig) {
-				btn_projekt_speichern.setDisable(false);
 			}
 		}
 	}
@@ -339,7 +355,6 @@ public class AnlegenController {
 			}
 			System.out.println("Projekt gespeichert!");
 		}
-
 	}
 
 	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
@@ -372,5 +387,27 @@ public class AnlegenController {
 			return 0;
 		}
 
+	}
+
+	public void fülleFelder() {
+		Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+		Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
+
+		txt_pt_intern.setText("");
+		txt_pt_extern.setText("");
+		txt_mak_intern.setText("");
+		txt_mak_extern.setText("");
+
+		for (Aufwand aufwand : phaseSelected.getAufwände()) {
+			if (aufwand.getName().startsWith("intern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
+				txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
+				txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+
+			}
+			if (aufwand.getName().startsWith("extern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
+				txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
+				txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+			}
+		}
 	}
 }
