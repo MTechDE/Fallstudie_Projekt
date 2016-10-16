@@ -49,7 +49,5 @@ Damit der Quellcode nicht durcheinander kommt, sollten ein paar Regeln beachtet 
 	
 ## Verwendete externe Bibliotheken
 - [sql2o](https://sql2o.org/)
-- [PDFBox](https://pdfbox.apache.org/index.html)
 - [e(fx)clipse](http://download.eclipse.org/efxclipse/updates-released/2.4.0/site/)
 - [Gluon Labs Scene Builder](http://gluonhq.com/labs/scene-builder/#download)
-- [TiwulFx2](http://tiwulfx.panemu.com/)

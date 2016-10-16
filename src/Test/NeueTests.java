@@ -17,7 +17,7 @@ public class NeueTests {
 		Projekt projekt = new Projekt("Projekt 1", "Daniel", false);
 		Kompetenz k1 = new Kompetenz("Kompetenz 1");
 		
-		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02", 0.0);
+		Phase p1 = new Phase("Phase 1", "2016-01-01", "2016-01-02");
 		p1.setSingleAufwand(new Aufwand("Intern"));
 		p1.setSingleAufwand(new Aufwand("Extern"));
 		
@@ -27,7 +27,7 @@ public class NeueTests {
 		p1.getAufwände().get(1).setPt(200);
 		
 		
-		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03" , 0.0);
+		Phase p2 = new Phase("Phase 2", "2016-01-02", "2016-01-03");
 		p2.setSingleAufwand(new Aufwand("Intern"));
 		p2.setSingleAufwand(new Aufwand("Extern"));
 		
