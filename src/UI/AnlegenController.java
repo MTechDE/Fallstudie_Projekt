@@ -3,6 +3,7 @@ package UI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import Datenbank.Datenbank;
 import Projekt.Aufwand;
 import Projekt.Kompetenz;
 import Projekt.Phase;
@@ -82,7 +83,7 @@ public class AnlegenController {
 	// Variablen
 	Projekt projekt;
 	int arbeitstage = 0;
-
+	Datenbank myDB = new Datenbank();
 	boolean indexPhaseClicked = false;
 	boolean indexKompetenzClicked = false;
 
@@ -172,7 +173,14 @@ public class AnlegenController {
 		}
 		if (!vorhanden) {
 			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)) {
-				kompetenzen.add(new Kompetenz(txt_kompetenz.getText()));
+
+				// Risikozuschlag von -,% und falschem Dezimalzeichen befreien
+				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
+				risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
+				risikozuschlagString = risikozuschlagString.replaceAll("-", "");
+				Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+
+				kompetenzen.add(new Kompetenz(txt_kompetenz.getText(), risikozuschlag));
 				tbl_kompetenz.setItems(kompetenzen);
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);
@@ -200,14 +208,8 @@ public class AnlegenController {
 			if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
 					&& (dtpkr_end.getValue() != null) && !(txt_risikozuschlag.getText().equals(""))) {
 
-				// Risikozuschlag von -,% und falschem Dezimalzeichen befreien
-				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
-				risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
-				risikozuschlagString = risikozuschlagString.replaceAll("-", "");
-				Double risikozuschlag = Double.parseDouble(risikozuschlagString);
-
 				Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-						dtpkr_end.getValue().toString(), risikozuschlag);
+						dtpkr_end.getValue().toString());
 
 				phasen.add(phase);
 
@@ -353,7 +355,12 @@ public class AnlegenController {
 				projekt.setSingleKompetenz(kompetenz);
 				System.out.println(kompetenz.getName() + " wurde Projekt hinzugefügt!");
 			}
-			System.out.println("Projekt gespeichert!");
+			try {
+				myDB.updateProjekt(projekt);
+				System.out.println("Projekt gespeichert!");
+			} catch (Exception e) {
+				System.out.println("Speichern fehlgeschlagen!");
+			}
 		}
 	}
 

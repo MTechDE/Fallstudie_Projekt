@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package Test;
 
 import java.util.ArrayList;
@@ -173,4 +172,3 @@ public class NeueTests {
 	}
 
 }
->>>>>>> refs/remotes/origin/master
