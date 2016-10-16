@@ -364,6 +364,12 @@ public class AnlegenController {
 		}
 	}
 
+	@FXML
+	public void btn_zurueck_click(ActionEvent event) throws Exception {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setContentText("Vor dem Verlassen speichern?");
+	}
+
 	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
 	// Enddatum)
 	public int calculateDate(String startDatum, String endDatum) {
