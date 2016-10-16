@@ -8,8 +8,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Eine Phase enthält den Namen, sowie das Start- und Enddatum.
- * Sowie eine Liste aller darin eingeteilter Personen.
+ * Eine Phase enthält den Namen, sowie das Start- und Enddatum. Sowie eine Liste
+ * aller darin eingeteilter Personen.
+ * 
  * @author Daniel Sogl
  */
 public class Phase {
@@ -17,21 +18,19 @@ public class Phase {
 	private StringProperty startDate;
 	private StringProperty endDate;
 	private List<Aufwand> aufwand;
-	private double risikoZuschlag;
 
-	public Phase(String name, String startDate, String endDate, double risikoZuschlag) {
+	public Phase(String name, String startDate, String endDate) {
 		this.setName(name);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
-		this.setRisikoZuschlag(risikoZuschlag);
 		aufwand = new ArrayList<Aufwand>();
 	}
 
 	public String getStartDate() {
 		return startDate.get();
 	}
-	
-	public StringProperty startDateProperty(){
+
+	public StringProperty startDateProperty() {
 		return startDate;
 	}
 
@@ -42,8 +41,8 @@ public class Phase {
 	public String getEndDate() {
 		return endDate.get();
 	}
-	
-	public StringProperty endDateProperty(){
+
+	public StringProperty endDateProperty() {
 		return endDate;
 	}
 
@@ -54,8 +53,8 @@ public class Phase {
 	public String getName() {
 		return name.get();
 	}
-	
-	public StringProperty nameProperty(){
+
+	public StringProperty nameProperty() {
 		return name;
 	}
 
@@ -70,16 +69,8 @@ public class Phase {
 	public void setAufwände(List<Aufwand> aufwand) {
 		this.aufwand = aufwand;
 	}
-	
-	public void setSingleAufwand(Aufwand aufwand){
+
+	public void setSingleAufwand(Aufwand aufwand) {
 		this.aufwand.add(aufwand);
-	}
-
-	public double getRisikoZuschlag() {
-		return risikoZuschlag;
-	}
-
-	public void setRisikoZuschlag(double risikoZuschlag) {
-		this.risikoZuschlag = risikoZuschlag;
 	}
 }

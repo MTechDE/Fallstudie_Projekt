@@ -75,8 +75,8 @@ public class Datenbank {
 			return false;
 		}
 
-		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate, risikoZuschlag) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate, :risikoZuschlag) "+
-		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate, risikoZuschlag=:risikoZuschlag";
+		sql = "INSERT INTO phasen(phasenKey, name, projekt, startDate, endDate) VALUES(:phasenKey, :name, :projekt, :startDate, :endDate) "+
+		"ON DUPLICATE KEY UPDATE phasenKey=:phasenKey, name=:name, projekt=:projekt, startDate=:startDate, endDate=:endDate";
 
 		if(!projekt.getPhasen().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
@@ -88,7 +88,6 @@ public class Datenbank {
 							.addParameter("projekt", projekt.getName())
 							.addParameter("startDate", phase.getStartDate())
 							.addParameter("endDate", phase.getEndDate())
-							.addParameter("risikoZuschlag", phase.getRisikoZuschlag())
 							.addToBatch();
 				}
 				query.executeBatch();
@@ -135,9 +134,9 @@ public class Datenbank {
 
 
 		
-		sql = "INSERT INTO kompetenzen (kompetenzKey, name, projekt) " + 
-		"VALUES(:kompetenzKey, :name, :projekt) " + 
-		"ON DUPLICATE KEY UPDATE kompetenzKey=:kompetenzKey, name=:name, projekt=:projekt";
+		sql = "INSERT INTO kompetenzen (kompetenzKey, name, projekt, risikozuschlag) " + 
+		"VALUES(:kompetenzKey, :name, :projekt, :risikozuschlag) " + 
+		"ON DUPLICATE KEY UPDATE kompetenzKey=:kompetenzKey, name=:name, projekt=:projekt, risikozuschlag=:risikozuschlag";
 				
 		if(!projekt.getKompetenzen().isEmpty()){
 			try (Connection con = sql2o.beginTransaction()) {
@@ -149,6 +148,7 @@ public class Datenbank {
 					.addParameter("kompetenzKey", (kompetenz.getName() + projekt.getName()).replaceAll("\\s+", ""))
 					.addParameter("name", kompetenz.getName())
 					.addParameter("projekt", projekt.getName())
+					.addParameter("risikozuschlag", kompetenz.getRisikozuschlag())
 					.addToBatch();
 				}
 				query.executeBatch();
@@ -210,7 +210,7 @@ public class Datenbank {
 		
 		
 		//Hole die Kompetenzen aus der DB
-		sql = "SELECT DISTINCT  name FROM kompetenzen WHERE projekt=:projektName";
+		sql = "SELECT DISTINCT  name, risikozuschlag FROM kompetenzen WHERE projekt=:projektName";
 		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 		try (Connection con = sql2o.open()) {
 			 kompetenzen = con.createQuery(sql)

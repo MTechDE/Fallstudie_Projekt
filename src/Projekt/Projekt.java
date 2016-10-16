@@ -8,10 +8,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 /**
  * Ein Projekt-Objekt enthält neben den Projektdaten, die dazu gehörenden
  * Kompetenzen, Phasen und Beteiligten Personen.
+ * 
  * @author Daniel Sogl
  *
  */
@@ -19,7 +19,7 @@ public class Projekt {
 	private List<Phase> phasen = new ArrayList<Phase>();
 	private List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 	private BooleanProperty abgeschickt;
-	private StringProperty  name;
+	private StringProperty name;
 	private StringProperty ersteller;
 	private StringProperty startDate;
 	private StringProperty endDate;
@@ -31,7 +31,7 @@ public class Projekt {
 		this.setStartDate(null);
 		this.setEndDate(null);
 	}
-	
+
 	public Projekt(String name, String ersteller, boolean abgeschickt, String startDate, String endDate) {
 		this.setName(name);
 		this.setErsteller(ersteller);
@@ -45,8 +45,8 @@ public class Projekt {
 	public String getName() {
 		return name.get();
 	}
-	
-	public StringProperty nameProperty(){
+
+	public StringProperty nameProperty() {
 		return name;
 	}
 
@@ -61,16 +61,16 @@ public class Projekt {
 	public void setPhasen(List<Phase> phasen) {
 		this.phasen = phasen;
 	}
-	
-	public void setSinglePhase(Phase phase){
+
+	public void setSinglePhase(Phase phase) {
 		this.phasen.add(phase);
 	}
 
 	public String getErsteller() {
 		return ersteller.get();
 	}
-	
-	public StringProperty erstellerProperty(){
+
+	public StringProperty erstellerProperty() {
 		return ersteller;
 	}
 
@@ -81,9 +81,9 @@ public class Projekt {
 	public boolean isAbgeschickt() {
 		return abgeschickt.get();
 	}
-	
-	public StringProperty abgeschicktProperty(){
-		if(this.isAbgeschickt())
+
+	public StringProperty abgeschicktProperty() {
+		if (this.isAbgeschickt())
 			return new SimpleStringProperty("Ja");
 		else
 			return new SimpleStringProperty("Nein");
@@ -96,8 +96,8 @@ public class Projekt {
 	public String getStartDate() {
 		return startDate.get();
 	}
-	
-	public StringProperty startDateProperty(){
+
+	public StringProperty startDateProperty() {
 		return startDate;
 	}
 
@@ -108,8 +108,8 @@ public class Projekt {
 	public String getEndDate() {
 		return endDate.get();
 	}
-	
-	public StringProperty endDateProperty(){
+
+	public StringProperty endDateProperty() {
 		return endDate;
 	}
 
@@ -124,8 +124,8 @@ public class Projekt {
 	public void setKompetenzen(List<Kompetenz> kompetenzen) {
 		this.kompetenzen = kompetenzen;
 	}
-	
-	public void setSingleKompetenz(Kompetenz kompetenz){
+
+	public void setSingleKompetenz(Kompetenz kompetenz) {
 		this.kompetenzen.add(kompetenz);
 	}
 }
