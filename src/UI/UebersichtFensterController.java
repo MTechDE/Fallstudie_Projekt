@@ -1,5 +1,6 @@
 package UI;
 
+import Projekt.Projekt;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -42,5 +43,22 @@ public class UebersichtFensterController {
 	private Label lbl_EDate;
 	@FXML
 	private Label lbl_Meldestat;
+
+	static Projekt projekt;
+
+	public void initialize() { // Grundinfos werden im Fenster eingesetzt
+
+		lbl_Name.setText(projekt.getName());
+		lbl_Ersteller.setText(projekt.getErsteller());
+		lbl_SDate.setText(projekt.getStartDate());
+		lbl_EDate.setText(projekt.getEndDate());
+		String A;
+		if (projekt.isAbgeschickt() == true) {
+			A = "Projekt Gemeldet";
+		} else {
+			A = "Projekt nicht Gemeldet";
+		}
+		lbl_Meldestat.setText(A);
+	}
 
 }
