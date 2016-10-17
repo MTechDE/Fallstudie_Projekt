@@ -24,7 +24,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView layoutX="1.0" layoutY="-3.0" prefHeight="174.0" prefWidth="645.0">
+                              <TableView layoutY="-1.0" prefHeight="174.0" prefWidth="645.0">
                                 <columns>
                                   <TableColumn fx:id="table_p1" prefWidth="75.0" text="C1" />
                                   <TableColumn fx:id="table_P2" prefWidth="75.0" text="C2" />
@@ -37,7 +37,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView layoutX="1.0" layoutY="-5.0" prefHeight="176.0" prefWidth="644.0">
+                              <TableView layoutY="-2.0" prefHeight="176.0" prefWidth="644.0">
                                 <columns>
                                   <TableColumn fx:id="table_Q1" prefWidth="75.0" text="C1" />
                                   <TableColumn fx:id="table_Q2" prefWidth="75.0" text="C2" />
@@ -50,7 +50,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView prefHeight="172.0" prefWidth="643.0">
+                              <TableView layoutX="1.0" prefHeight="172.0" prefWidth="643.0">
                                 <columns>
                                   <TableColumn fx:id="table_J1" prefWidth="75.0" text="C1" />
                                   <TableColumn fx:id="table_J2" prefWidth="75.0" text="C2" />
@@ -63,7 +63,7 @@
             </TabPane>
             <CheckBox fx:id="ckb_risiko" layoutX="16.0" layoutY="400.0" mnemonicParsing="false" text="Risikozuschlag" />
             <Button fx:id="btn_Export" layoutX="605.0" layoutY="396.0" mnemonicParsing="false" onAction="#btn_Export_click" text="Export" />
-            <Button fx:id="btn_zurueck" layoutX="543.0" layoutY="396.0" mnemonicParsing="false" text="Zurück" />
+            <Button fx:id="btn_zurueck" layoutX="543.0" layoutY="396.0" mnemonicParsing="false" onAction="#btn_zurueck_click" text="Zurück" />
             <Label layoutX="14.0" layoutY="113.0" prefHeight="30.0" prefWidth="70.0" text="Projektname:" />
             <Label layoutX="14.0" layoutY="143.0" prefHeight="30.0" prefWidth="51.0" text="Ersteller:" />
             <Label layoutX="187.0" layoutY="113.0" prefHeight="30.0" prefWidth="64.0" text="Startdatum:" />
