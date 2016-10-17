@@ -178,7 +178,7 @@ public class Datenbank {
 		List<Aufwand> personen = new ArrayList<Aufwand>();
 
 		// Hole Phasen anhand des Projektnamens
-		String sql = "SELECT name, startDate, endDate, risikoZuschlag FROM phasen WHERE projekt=:projektName";
+		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName()).executeAndFetch(Phase.class);
 		} catch (Sql2oException e) {

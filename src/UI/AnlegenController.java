@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * Controller für Anlegen.fxml GUI
@@ -141,8 +143,7 @@ public class AnlegenController {
 					txt_mak_pt_intern.setText(arbeitstage + " PT");
 					txt_mak_pt_extern.setText(arbeitstage + " PT");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				indexPhaseClicked = true;
@@ -361,6 +362,7 @@ public class AnlegenController {
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
 
 		Projekt projekt = OpenMainPage.tmpProjekt;
+		
 		if (projekt != null) {
 			for (Phase phase : tbl_phase.getItems()) {
 				projekt.setSinglePhase(phase);
@@ -390,18 +392,22 @@ public class AnlegenController {
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
+		
+		Node source = (Node) event.getSource();
+		Stage stage = (Stage) source.getScene().getWindow();
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeOne) {
 			btn_projekt_speichern_click(event);
-			// TODO Fenster wechseln
+			new OpenStartPage();
+			stage.close();
 		} else if (result.get() == buttonTypeTwo) {
-			// TODO Fenster wechseln
+			new OpenStartPage();
+			stage.close();
 		} else if (result.get() == buttonTypeThree) {
 			myDB.deleteProjekt(projekt);
-			// TODO Fenster wechseln
-		} else {
-
+			new OpenStartPage();
+			stage.close();
 		}
 	}
 
@@ -439,7 +445,11 @@ public class AnlegenController {
 
 	@FXML
 	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
-		// TODO zu Patricks Fenster weiterleiten
+		Node source = (Node) event.getSource();
+		Stage stage = (Stage) source.getScene().getWindow();
+		new OpenUebersichtPage(projekt);
+		stage.close();
+		
 	}
 
 	public void fülleFelder() {
