@@ -170,41 +170,57 @@ public class AnlegenController {
 				}
 			}
 		});
+
+		// Stage stage = (Stage) btn_aufwand_festlegen.getScene().getWindow();
+		// stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		// @Override
+		// public void handle(WindowEvent e) {
+		// System.out.println("Anwendung wird geschlossesen");
+		// }
+		// });
 	}
 
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
-		boolean vorhanden = false;
-		for (Kompetenz kompetenz : kompetenzen) {
-			if (kompetenz.getName().equals(txt_kompetenz.getText()))
-				vorhanden = true;
-		}
-		if (!vorhanden) {
-			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
-					&& !(txt_risikozuschlag.getText().equals(""))) {
 
-				// Risikozuschlag von -,% und falschem Dezimalzeichen befreien
-				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
-				risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
-				risikozuschlagString = risikozuschlagString.replaceAll("-", "");
-				Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+		if (txt_kompetenz.getText().length() <= 120) {
+			boolean vorhanden = false;
+			for (Kompetenz kompetenz : kompetenzen) {
+				if (kompetenz.getName().equals(txt_kompetenz.getText()))
+					vorhanden = true;
+			}
+			if (!vorhanden) {
+				if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
+						&& !(txt_risikozuschlag.getText().equals(""))) {
 
-				kompetenzen.add(new Kompetenz(txt_kompetenz.getText(), risikozuschlag));
-				tbl_kompetenz.setItems(kompetenzen);
+					// Risikozuschlag von -,% und falschem Dezimalzeichen
+					// befreien
+					String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
+					risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
+					risikozuschlagString = risikozuschlagString.replaceAll("-", "");
+					Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+
+					kompetenzen.add(new Kompetenz(txt_kompetenz.getText(), risikozuschlag));
+					tbl_kompetenz.setItems(kompetenzen);
+				} else {
+					String fehlermeldung = "";
+
+					if (txt_risikozuschlag.getText().equals(""))
+						fehlermeldung = "Risikozuschlag eingeben.";
+					if (txt_kompetenz.getText().equals(""))
+						fehlermeldung = "Kompetenzbezeichnung darf nicht leer sein.";
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText(fehlermeldung);
+					alert.showAndWait();
+				}
 			} else {
-				String fehlermeldung = "";
-
-				if (txt_risikozuschlag.getText().equals(""))
-					fehlermeldung = "Risikozuschlag eingeben.";
-				if (txt_kompetenz.getText().equals(""))
-					fehlermeldung = "Kompetenzbezeichnung darf nicht leer sein.";
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText(fehlermeldung);
+				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 				alert.showAndWait();
 			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
+			alert.setContentText("Kompetenzname zu lang");
 			alert.showAndWait();
 		}
 
@@ -212,46 +228,55 @@ public class AnlegenController {
 
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
-		boolean vorhanden = false;
-		// Prüfung ob Phase bereits vorhanden
-		for (Phase phase : phasen) {
-			if (phase.getName().equals(txt_phase.getText()))
-				vorhanden = true;
-		}
-		if (!datepicker_ende_selected(event)) {
-			if (!vorhanden) {
-				// Prüfung ob alle Felder ausgefüllt
-				if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
-						&& (dtpkr_end.getValue() != null)) {
 
-					Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-							dtpkr_end.getValue().toString());
+		if (txt_phase.getText().length() <= 60) {
 
-					phasen.add(phase);
+			boolean vorhanden = false;
+			// Prüfung ob Phase bereits vorhanden
+			for (Phase phase : phasen) {
+				if (phase.getName().equals(txt_phase.getText()))
+					vorhanden = true;
+			}
+			if (!datepicker_ende_selected(event)) {
+				if (!vorhanden) {
+					// Prüfung ob alle Felder ausgefüllt
+					if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
+							&& (dtpkr_end.getValue() != null)) {
 
-					tbl_phase.setItems(phasen);
-					// TODO: Fokus auf ein Element setzen, damit Arbeitstage
-					// immer
-					// berechnet werden können
+						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
+								dtpkr_end.getValue().toString());
+
+						phasen.add(phase);
+
+						tbl_phase.setItems(phasen);
+						// TODO: Fokus auf ein Element setzen, damit Arbeitstage
+						// immer
+						// berechnet werden können
+					} else {
+						String fehlermeldung = "";
+
+						if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
+							fehlermeldung = "Zeitraum muss ausgewählt werden.";
+
+						if (txt_phase.getText().equals("") || txt_phase == null)
+							fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
+
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setContentText(fehlermeldung);
+						alert.showAndWait();
+					}
 				} else {
-					String fehlermeldung = "";
-
-					if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
-						fehlermeldung = "Zeitraum muss ausgewählt werden.";
-
-					if (txt_phase.getText().equals("") || txt_phase == null)
-						fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
-
 					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText(fehlermeldung);
+					alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
 					alert.showAndWait();
 				}
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
-				alert.showAndWait();
 			}
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Phasenname zu lang");
+			alert.showAndWait();
 		}
+
 	}
 
 	@FXML
@@ -311,7 +336,7 @@ public class AnlegenController {
 			alert.showAndWait();
 		} else {
 			try {
-				
+
 				int phasenIndex = tbl_phase.getSelectionModel().getSelectedIndex();
 				Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
@@ -336,8 +361,10 @@ public class AnlegenController {
 						aufwandVorhanden = true;
 				}
 				if (!aufwandVorhanden) {
-					projekt.getPhasen().get(phasenIndex).setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
-					projekt.getPhasen().get(phasenIndex).setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
+					projekt.getPhasen().get(phasenIndex)
+							.setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
+					projekt.getPhasen().get(phasenIndex)
+							.setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
 				}
 
 				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
@@ -352,6 +379,12 @@ public class AnlegenController {
 						aufwand.setPt(ptExtern);
 					}
 				}
+				
+				kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
+				phasen = FXCollections.observableArrayList(projekt.getPhasen());
+
+				tbl_kompetenz.setItems(kompetenzen);
+				tbl_phase.setItems(phasen);
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -363,7 +396,7 @@ public class AnlegenController {
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
 
 		Projekt projekt = OpenMainPage.tmpProjekt;
-		
+
 		if (projekt != null) {
 			for (Phase phase : tbl_phase.getItems()) {
 				projekt.setSinglePhase(phase);
@@ -393,7 +426,7 @@ public class AnlegenController {
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
-		
+
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
 
@@ -450,7 +483,7 @@ public class AnlegenController {
 		Stage stage = (Stage) source.getScene().getWindow();
 		new OpenUebersichtPage(projekt);
 		stage.close();
-		
+
 	}
 
 	public void fülleFelder() {

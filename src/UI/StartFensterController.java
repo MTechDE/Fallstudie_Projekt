@@ -136,22 +136,31 @@ public class StartFensterController {
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-			// Überprüfe ob der gewünschte Name bereits verwendet wurde
-			boolean doubleName = false;
-			for (Projekt projekt : projektData) {
-				if (projekt.getName().equals(txt_newProjekt_name.getText()))
-					doubleName = true;
-			}
-			if (!doubleName) {
-				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
-						false);
-				// Öffne Hauptfenster
-				Node source = (Node) event.getSource();
-				Stage stage = (Stage) source.getScene().getWindow();
 
-				new OpenMainPage(newProjekt, true);
-				// Schließe Fenster
-				stage.close();
+			if (txt_newProjekt_name.getText().length() <= 120 && txt_newProjekt_ersteller.getText().length() <= 60) {
+				// Überprüfe ob der gewünschte Name bereits verwendet wurde
+				boolean doubleName = false;
+				for (Projekt projekt : projektData) {
+					if (projekt.getName().equals(txt_newProjekt_name.getText()))
+						doubleName = true;
+				}
+				if (!doubleName) {
+					Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
+							false);
+					// Öffne Hauptfenster
+					Node source = (Node) event.getSource();
+					Stage stage = (Stage) source.getScene().getWindow();
+
+					new OpenMainPage(newProjekt, true);
+					// Schließe Fenster
+					stage.close();
+				} else {
+					System.out.println("Textlänge beachten");
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Projektname oder Projektersteller zu lang");
+					alert.showAndWait();
+				}
+
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);
