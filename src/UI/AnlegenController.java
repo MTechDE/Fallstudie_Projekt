@@ -2,6 +2,7 @@ package UI;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Optional;
 
 import Datenbank.Datenbank;
 import Projekt.Aufwand;
@@ -16,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -60,6 +63,10 @@ public class AnlegenController {
 	private Button btn_aufwand_festlegen;
 	@FXML
 	private Button btn_projekt_speichern;
+	@FXML
+	private Button btn_projektuebersicht;
+	@FXML
+	private Button btn_zurueck;
 	@FXML
 	private TableColumn<Kompetenz, String> tblCell_kompetenz;
 	@FXML
@@ -172,7 +179,8 @@ public class AnlegenController {
 				vorhanden = true;
 		}
 		if (!vorhanden) {
-			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)) {
+			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
+					&& !(txt_risikozuschlag.getText().equals(""))) {
 
 				// Risikozuschlag von -,% und falschem Dezimalzeichen befreien
 				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
@@ -183,8 +191,14 @@ public class AnlegenController {
 				kompetenzen.add(new Kompetenz(txt_kompetenz.getText(), risikozuschlag));
 				tbl_kompetenz.setItems(kompetenzen);
 			} else {
+				String fehlermeldung = "";
+
+				if (txt_risikozuschlag.getText().equals(""))
+					fehlermeldung = "Risikozuschlag eingeben.";
+				if (txt_kompetenz.getText().equals(""))
+					fehlermeldung = "Kompetenzbezeichnung darf nicht leer sein.";
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
+				alert.setContentText(fehlermeldung);
 				alert.showAndWait();
 			}
 		} else {
@@ -203,40 +217,40 @@ public class AnlegenController {
 			if (phase.getName().equals(txt_phase.getText()))
 				vorhanden = true;
 		}
-		if (!vorhanden) {
-			// Prüfung ob alle Felder ausgefüllt
-			if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
-					&& (dtpkr_end.getValue() != null) && !(txt_risikozuschlag.getText().equals(""))) {
+		if (!datepicker_ende_selected(event)) {
+			if (!vorhanden) {
+				// Prüfung ob alle Felder ausgefüllt
+				if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
+						&& (dtpkr_end.getValue() != null)) {
 
-				Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-						dtpkr_end.getValue().toString());
+					Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
+							dtpkr_end.getValue().toString());
 
-				phasen.add(phase);
+					phasen.add(phase);
 
-				tbl_phase.setItems(phasen);
-				// TODO: Fokus auf ein Element setzen, damit Arbeitstage immer
-				// berechnet werden können
+					tbl_phase.setItems(phasen);
+					// TODO: Fokus auf ein Element setzen, damit Arbeitstage
+					// immer
+					// berechnet werden können
+				} else {
+					String fehlermeldung = "";
+
+					if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
+						fehlermeldung = "Zeitraum muss ausgewählt werden.";
+
+					if (txt_phase.getText().equals("") || txt_phase == null)
+						fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
+
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText(fehlermeldung);
+					alert.showAndWait();
+				}
 			} else {
-				String fehlermeldung = "";
-				if (txt_risikozuschlag.getText().equals(""))
-					fehlermeldung = "Risikozuschlag eingeben.";
-
-				if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
-					fehlermeldung = "Zeitraum muss ausgewählt werden.";
-
-				if (txt_phase.getText().equals("") || txt_phase == null)
-					fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
-
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText(fehlermeldung);
+				alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
 				alert.showAndWait();
 			}
-		} else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
-			alert.showAndWait();
 		}
-
 	}
 
 	@FXML
@@ -268,18 +282,19 @@ public class AnlegenController {
 	}
 
 	@FXML
-	public void datepicker_ende_selected(ActionEvent event) throws Exception {
+	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
 
+		boolean fehler = false;
 		int startDatum = Integer.parseInt(dtpkr_start.getValue().toString().replaceAll("-", ""));
 		int endDatum = Integer.parseInt(dtpkr_end.getValue().toString().replaceAll("-", ""));
-		System.out.println(startDatum);
-		System.out.println(endDatum);
 		if (endDatum <= startDatum) {
 			dtpkr_end.setValue(dtpkr_start.getValue().plusDays(1));
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
 			alert.showAndWait();
+			fehler = true;
 		}
+		return fehler;
 	}
 
 	@FXML
@@ -367,7 +382,27 @@ public class AnlegenController {
 	@FXML
 	public void btn_zurueck_click(ActionEvent event) throws Exception {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setContentText("Vor dem Verlassen speichern?");
+		alert.setContentText("Bitte wählen Sie eine der folgenden Auswahlmöglichkeiten!");
+
+		ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
+		ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
+		ButtonType buttonTypeThree = new ButtonType("Projekt verwerfen");
+		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			btn_projekt_speichern_click(event);
+			// TODO Fenster wechseln
+		} else if (result.get() == buttonTypeTwo) {
+			// TODO Fenster wechseln
+		} else if (result.get() == buttonTypeThree) {
+			myDB.deleteProjekt(projekt);
+			// TODO Fenster wechseln
+		} else {
+
+		}
 	}
 
 	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
@@ -400,6 +435,11 @@ public class AnlegenController {
 			return 0;
 		}
 
+	}
+
+	@FXML
+	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
+		// TODO zu Patricks Fenster weiterleiten
 	}
 
 	public void fülleFelder() {

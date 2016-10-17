@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -15,7 +16,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.AnlegenController">
    <children>
-      <ImageView fitHeight="71.0" fitWidth="91.0" layoutX="261.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="76.0" fitWidth="83.0" layoutX="261.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="file:@../../resources/Programm%20Logo.png" />
          </image>
@@ -60,10 +61,22 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="344.0" prefHeight="34.0" prefWidth="167.0" promptText="Kompetenz eingeben" />
-      <TextField fx:id="txt_phase" layoutX="21.0" layoutY="116.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben" />
-      <DatePicker fx:id="dtpkr_start" layoutX="21.0" layoutY="163.0" prefHeight="34.0" prefWidth="167.0" promptText="Startdatum" />
-      <DatePicker fx:id="dtpkr_end" layoutX="21.0" layoutY="209.0" onAction="#datepicker_ende_selected" prefHeight="34.0" prefWidth="167.0" promptText="Enddatum" />
+      <TextField fx:id="txt_kompetenz" layoutX="21.0" layoutY="344.0" prefHeight="34.0" prefWidth="167.0" promptText="Kompetenz eingeben">
+         <tooltip>
+            <Tooltip text="Kompetenz eingeben" />
+         </tooltip></TextField>
+      <TextField fx:id="txt_phase" layoutX="21.0" layoutY="116.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben">
+         <tooltip>
+            <Tooltip text="Phase eingeben" />
+         </tooltip></TextField>
+      <DatePicker fx:id="dtpkr_start" layoutX="21.0" layoutY="163.0" prefHeight="34.0" prefWidth="167.0" promptText="Startdatum">
+         <tooltip>
+            <Tooltip text="Startdatum" />
+         </tooltip></DatePicker>
+      <DatePicker fx:id="dtpkr_end" layoutX="21.0" layoutY="209.0" onAction="#datepicker_ende_selected" prefHeight="34.0" prefWidth="167.0" promptText="Enddatum">
+         <tooltip>
+            <Tooltip text="Enddatum" />
+         </tooltip></DatePicker>
       <Separator layoutX="27.0" layoutY="317.0" prefHeight="3.0" prefWidth="178.0" />
       <Label layoutX="642.0" layoutY="118.0" prefHeight="38.0" prefWidth="149.0" text="Aufwand für ausgewählte Phase und Kompetenz:" wrapText="true">
          <font>
@@ -71,9 +84,15 @@
          </font>
       </Label>
       <ChoiceBox fx:id="chobx_aufwand" layoutX="642.0" layoutY="156.0" onAction="#chobx_aufwand_selected" prefHeight="34.0" prefWidth="167.0" />
-      <TextField fx:id="txt_pt_intern" layoutX="643.0" layoutY="208.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (intern)" />
-      <TextField fx:id="txt_pt_extern" layoutX="643.0" layoutY="249.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (extern)" />
-      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="646.0" layoutY="494.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Projekt speichern">
+      <TextField fx:id="txt_pt_intern" layoutX="643.0" layoutY="208.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (intern)">
+         <tooltip>
+            <Tooltip text="Personentage (intern)" />
+         </tooltip></TextField>
+      <TextField fx:id="txt_pt_extern" layoutX="643.0" layoutY="249.0" prefHeight="34.0" prefWidth="167.0" promptText="Personentage (extern)">
+         <tooltip>
+            <Tooltip text="Personentage (extern)" />
+         </tooltip></TextField>
+      <Button fx:id="btn_projekt_speichern" layoutX="646.0" layoutY="445.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Projekt speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -81,10 +100,22 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <TextField fx:id="txt_mak_intern" layoutX="642.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (intern)" />
-      <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)" />
-      <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
-      <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT" />
+      <TextField fx:id="txt_mak_intern" layoutX="642.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (intern)">
+         <tooltip>
+            <Tooltip text="MAK (intern)" />
+         </tooltip></TextField>
+      <TextField fx:id="txt_mak_extern" layoutX="642.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="MAK (extern)">
+         <tooltip>
+            <Tooltip text="MAK (extern)" />
+         </tooltip></TextField>
+      <TextField fx:id="txt_mak_pt_intern" editable="false" layoutX="729.0" layoutY="208.0" prefHeight="34.0" prefWidth="83.0" promptText="PT">
+         <tooltip>
+            <Tooltip text="PT" />
+         </tooltip></TextField>
+      <TextField fx:id="txt_mak_pt_extern" editable="false" layoutX="729.0" layoutY="249.0" prefHeight="34.0" prefWidth="83.0" promptText="PT">
+         <tooltip>
+            <Tooltip text="PT" />
+         </tooltip></TextField>
       <Button fx:id="btn_aufwand_festlegen" disable="true" layoutX="646.0" layoutY="298.0" mnemonicParsing="false" onAction="#btn_aufwand_festlegen_click" prefHeight="34.0" prefWidth="167.0" text="Aufwand festlegen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -94,12 +125,26 @@
             </ImageView>
          </graphic>
       </Button>
-      <TextField fx:id="txt_risikozuschlag" layoutX="21.0" layoutY="390.0" prefHeight="34.0" prefWidth="167.0" promptText="Risikozuschlag in %" />
-      <Button fx:id="btn_zurueck" layoutX="646.0" layoutY="536.0" mnemonicParsing="false" onAction="#btn_zurueck_click" prefHeight="34.0" prefWidth="167.0" text="Zurück" />
-      <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="684.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="file:@../../resources/back-arrow.png" />
-         </image>
-      </ImageView>
+      <TextField fx:id="txt_risikozuschlag" layoutX="21.0" layoutY="390.0" prefHeight="34.0" prefWidth="167.0" promptText="Risikozuschlag in %">
+         <tooltip>
+            <Tooltip text="Risikozuschlag in %" />
+         </tooltip></TextField>
+      <Button fx:id="btn_zurueck" layoutX="646.0" layoutY="536.0" mnemonicParsing="false" onAction="#btn_zurueck_click" prefHeight="34.0" prefWidth="167.0" text="Zurück">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="file:@../../resources/back-arrow.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button fx:id="btn_projektuebersicht" layoutX="646.0" layoutY="490.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Projektübersicht">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="file:@../../resources/search-engine-result.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </Pane>
