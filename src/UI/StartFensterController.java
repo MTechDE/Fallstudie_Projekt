@@ -87,8 +87,6 @@ public class StartFensterController {
 
 				if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
 					return true;
-				} else if (projekt.getErsteller().toLowerCase().contains(lowerCaseFilter)) {
-					return true;
 				}
 				return false;
 			});
