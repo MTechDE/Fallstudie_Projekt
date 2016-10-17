@@ -27,7 +27,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * Controller für Anlegen.fxml GUI
@@ -380,6 +379,12 @@ public class AnlegenController {
 						aufwand.setPt(ptExtern);
 					}
 				}
+				
+				kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
+				phasen = FXCollections.observableArrayList(projekt.getPhasen());
+
+				tbl_kompetenz.setItems(kompetenzen);
+				tbl_phase.setItems(phasen);
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
