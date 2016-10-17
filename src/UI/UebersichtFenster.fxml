@@ -14,46 +14,46 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="676.0" text="Projektübersicht" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="676.0" text="Projektübersicht" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UebersichtFensterController">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
             <TabPane layoutX="14.0" layoutY="191.0" prefHeight="200.0" prefWidth="644.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id= "tab_Projekt" text="Projektübersicht">
+                <Tab fx:id="tab_Projekt" text="Projektübersicht">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView layoutX="1.0" layoutY="-3.0" prefHeight="174.0" prefWidth="645.0">
                                 <columns>
-                                  <TableColumn  fx:id= "table_p1" prefWidth="75.0" text="C1" />
-                                  <TableColumn  fx:id= "table_P2" prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="table_p1" prefWidth="75.0" text="C1" />
+                                  <TableColumn fx:id="table_P2" prefWidth="75.0" text="C2" />
                                 </columns>
                               </TableView>
                            </children></AnchorPane>
                   </content>
                 </Tab>
-                <Tab fx:id= "tab_Quartal" text="Quartalsübersicht">
+                <Tab fx:id="tab_Quartal" text="Quartalsübersicht">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView layoutX="1.0" layoutY="-5.0" prefHeight="176.0" prefWidth="644.0">
                                 <columns>
-                                  <TableColumn fx:id= "table_Q1" prefWidth="75.0" text="C1" />
-                                  <TableColumn fx:id= "table_Q2" prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="table_Q1" prefWidth="75.0" text="C1" />
+                                  <TableColumn fx:id="table_Q2" prefWidth="75.0" text="C2" />
                                 </columns>
                               </TableView>
                            </children></AnchorPane>
                   </content>
                 </Tab>
-                   <Tab fx:id= "tab_Jahr" text="Jahresübersicht">
+                   <Tab fx:id="tab_Jahr" text="Jahresübersicht">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView prefHeight="172.0" prefWidth="643.0">
                                 <columns>
-                                  <TableColumn fx:id= "table_J1" prefWidth="75.0" text="C1" />
-                                  <TableColumn fx:id= "table_J2" prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="table_J1" prefWidth="75.0" text="C1" />
+                                  <TableColumn fx:id="table_J2" prefWidth="75.0" text="C2" />
                                 </columns>
                               </TableView>
                            </children></AnchorPane>
@@ -61,9 +61,9 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <CheckBox fx:id= "ckb_risiko" layoutX="16.0" layoutY="400.0" mnemonicParsing="false" text="Risikozuschlag" />
-            <Button fx:id= "btn_Export" layoutX="605.0" layoutY="396.0" mnemonicParsing="false" text="Export" />
-            <Button fx:id= "btn_zurueck" layoutX="543.0" layoutY="396.0" mnemonicParsing="false" text="Zurück" />
+            <CheckBox fx:id="ckb_risiko" layoutX="16.0" layoutY="400.0" mnemonicParsing="false" text="Risikozuschlag" />
+            <Button fx:id="btn_Export" layoutX="605.0" layoutY="396.0" mnemonicParsing="false" onAction="#btn_Export_click" text="Export" />
+            <Button fx:id="btn_zurueck" layoutX="543.0" layoutY="396.0" mnemonicParsing="false" text="Zurück" />
             <Label layoutX="14.0" layoutY="113.0" prefHeight="30.0" prefWidth="70.0" text="Projektname:" />
             <Label layoutX="14.0" layoutY="143.0" prefHeight="30.0" prefWidth="51.0" text="Ersteller:" />
             <Label layoutX="187.0" layoutY="113.0" prefHeight="30.0" prefWidth="64.0" text="Startdatum:" />
@@ -81,11 +81,11 @@
                </font>
             </Label>
             <DatePicker layoutX="456.0" layoutY="116.0" />
-            <Label fx:id= "lbl_Name" layoutX="100.0" layoutY="114.0" prefHeight="30.0" prefWidth="72.0" text="Platz-name" />
-            <Label fx:id= "lbl_Ersteller" layoutX="100.0" layoutY="143.0" prefHeight="30.0" prefWidth="72.0" text="Platz-Ersteller" />
-            <Label fx:id= "lbl_SDate" layoutX="265.0" layoutY="114.0" prefHeight="30.0" prefWidth="72.0" text="Platz-SDate" />
-            <Label fx:id= "lbl_EDate" layoutX="265.0" layoutY="143.0" prefHeight="30.0" prefWidth="72.0" text="Platz-EDate" />
-            <Label fx:id= "lbl_Meldestat" layoutX="456.0" layoutY="143.0" prefHeight="30.0" prefWidth="104.0" text="Platz-Meldestat" />
+            <Label fx:id="lbl_Name" layoutX="100.0" layoutY="114.0" prefHeight="30.0" prefWidth="72.0" text="Platz-name" />
+            <Label fx:id="lbl_Ersteller" layoutX="100.0" layoutY="143.0" prefHeight="30.0" prefWidth="72.0" text="Platz-Ersteller" />
+            <Label fx:id="lbl_SDate" layoutX="265.0" layoutY="114.0" prefHeight="30.0" prefWidth="72.0" text="Platz-SDate" />
+            <Label fx:id="lbl_EDate" layoutX="265.0" layoutY="143.0" prefHeight="30.0" prefWidth="72.0" text="Platz-EDate" />
+            <Label fx:id="lbl_Meldestat" layoutX="456.0" layoutY="143.0" prefHeight="30.0" prefWidth="104.0" text="Platz-Meldestat" />
          </children></AnchorPane>
   </content>
 </TitledPane>
