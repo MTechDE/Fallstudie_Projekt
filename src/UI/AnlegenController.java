@@ -117,7 +117,6 @@ public class AnlegenController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
-		// chobx_aufwand.getSelectionModel().selectFirst();
 
 		txt_pt_intern.setVisible(false);
 		txt_pt_extern.setVisible(false);
@@ -497,10 +496,10 @@ public class AnlegenController {
 		Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
 		Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
-		txt_pt_intern.setText("");
-		txt_pt_extern.setText("");
-		txt_mak_intern.setText("");
-		txt_mak_extern.setText("");
+		txt_pt_intern.setText("0");
+		txt_pt_extern.setText("0");
+		txt_mak_intern.setText("0");
+		txt_mak_extern.setText("0");
 
 		for (Aufwand aufwand : phaseSelected.getAufwände()) {
 			if (aufwand.getName().startsWith("intern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
