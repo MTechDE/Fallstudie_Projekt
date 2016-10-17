@@ -16,7 +16,7 @@ public class OpenUebersichtPage extends Stage{
 	
 	public OpenUebersichtPage(Projekt projekt){
 		
-		this.tmpProjekt = projekt;
+		OpenUebersichtPage.tmpProjekt = projekt;
 		
 		try{
 			stage = this;
