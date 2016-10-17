@@ -51,4 +51,21 @@ public class OpenMainPage extends Stage{
 			
 	}
 	
+	public OpenMainPage(){
+		try{
+			stage = this;
+			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.setTitle(tmpProjekt.getName());
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.setResizable(false);
+			stage.show();
+		} catch (Exception e){
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte straten Sie die Anwendung neu.");
+			alert.showAndWait();
+		}
+	}
 }
