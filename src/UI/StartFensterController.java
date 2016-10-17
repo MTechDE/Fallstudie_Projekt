@@ -26,6 +26,7 @@ import javafx.scene.control.TableColumn;
 
 /**
  * In dieser Klasse wird die Logik des Startfensters behandelt.
+ * 
  * @author Daniel Sogl
  *
  */
@@ -61,12 +62,11 @@ public class StartFensterController {
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Projekt> projektData;
-	
+
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		
-		
+
 		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
@@ -76,28 +76,24 @@ public class StartFensterController {
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
-		
-		
+
 		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
 		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(projekt -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
+			filteredData.setPredicate(projekt -> {
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+				String lowerCaseFilter = newValue.toLowerCase();
 
-                if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (projekt.getErsteller().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-		
+				if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
+					return true;
+				}
+				return false;
+			});
+		});
+
 		SortedList<Projekt> sortedData = new SortedList<>(filteredData);
 		sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
-		
 
 		// Lade Projekte in die Tabelle
 		if (!projektData.isEmpty())
@@ -109,15 +105,16 @@ public class StartFensterController {
 			public void handle(MouseEvent mouseEvent) {
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt geklickt wurde
+					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt
+					// geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {		
+						try {
+							// Öffne Hauptfenster
+							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
 							// Schließe Fenster
 							Node source = (Node) mouseEvent.getSource();
 							Stage stage = (Stage) source.getScene().getWindow();
 							stage.close();
-							// Öffne Hauptfenster
-							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false, false);
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
@@ -125,10 +122,9 @@ public class StartFensterController {
 				}
 			}
 		});
-		
+
 		// Überprüfe ob die DB online ist
-		if(!myDB.testConnection()){
-			System.out.println("DB offline");
+		if (!myDB.testConnection()) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Keine Verbindung zur Datenbank möglich");
 			alert.showAndWait();
@@ -149,13 +145,13 @@ public class StartFensterController {
 			if (!doubleName) {
 				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
 						false);
-				// Schließe Fenster
+				// Öffne Hauptfenster
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
-				stage.close();
-				// Öffne Hauptfenster
 
-					new OpenMainPage(newProjekt, true, false);
+				new OpenMainPage(newProjekt, true);
+				// Schließe Fenster
+				stage.close();
 			} else {
 				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);

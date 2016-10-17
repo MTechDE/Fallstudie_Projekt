@@ -46,10 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .classpath
-*.class
-/build/
+*.class		
+bin/**
+build/**
+.settings/**
+*.umlcd
 build/build.xml
-build/build.xml
-build.fxbuild
-build/build.xml
-/bin/
+bin/UI/Anlegen.fxml
