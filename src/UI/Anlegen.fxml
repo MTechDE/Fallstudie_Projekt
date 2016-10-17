@@ -146,5 +146,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <Separator layoutX="246.0" layoutY="96.0" prefHeight="3.0" prefWidth="311.0" />
    </children>
 </Pane>

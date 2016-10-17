@@ -311,7 +311,8 @@ public class AnlegenController {
 			alert.showAndWait();
 		} else {
 			try {
-				Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+				
+				int phasenIndex = tbl_phase.getSelectionModel().getSelectedIndex();
 				Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
 				switch (auswahl) {
@@ -330,16 +331,16 @@ public class AnlegenController {
 
 				// Prüfung ob Aufwand für Kompetenz bereits vorhanden ist
 				boolean aufwandVorhanden = false;
-				for (Aufwand aufwand : phaseSelected.getAufwände()) {
+				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
 					if (aufwand.getName().endsWith(kompetenzSelected.getName()))
 						aufwandVorhanden = true;
 				}
 				if (!aufwandVorhanden) {
-					phaseSelected.setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
-					phaseSelected.setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
+					projekt.getPhasen().get(phasenIndex).setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
+					projekt.getPhasen().get(phasenIndex).setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
 				}
 
-				for (Aufwand aufwand : phaseSelected.getAufwände()) {
+				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
 					if (aufwand.getName().startsWith("intern")
 							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
 						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
