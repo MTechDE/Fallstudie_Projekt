@@ -44,7 +44,6 @@ public class OpenMainPage extends Stage{
 			stage.show();
 		} catch (Exception e){
 			e.printStackTrace();
-			System.out.println("Fehler aufgetreten!");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");
 			alert.showAndWait();
