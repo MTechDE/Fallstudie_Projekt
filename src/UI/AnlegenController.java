@@ -170,14 +170,6 @@ public class AnlegenController {
 				}
 			}
 		});
-
-		// Stage stage = (Stage) btn_aufwand_festlegen.getScene().getWindow();
-		// stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		// @Override
-		// public void handle(WindowEvent e) {
-		// System.out.println("Anwendung wird geschlossesen");
-		// }
-		// });
 	}
 
 	@FXML
@@ -199,8 +191,19 @@ public class AnlegenController {
 					risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
 					risikozuschlagString = risikozuschlagString.replaceAll("-", "");
 					Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+					
+					Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
+					
+					// Weise den Phasen neue Auwfände zu
+					for(int i = 0; i < projekt.getPhasen().size(); i++){
+						Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
+						Aufwand extern = new Aufwand("Extern", kompetenz.getName(), 0.0);
+						projekt.getPhasen().get(i).setSingleAufwand(intern);
+						projekt.getPhasen().get(i).setSingleAufwand(extern);
+					}
 
-					kompetenzen.add(new Kompetenz(txt_kompetenz.getText(), risikozuschlag));
+					projekt.setSingleKompetenz(kompetenz);
+					kompetenzen.add(kompetenz);
 					tbl_kompetenz.setItems(kompetenzen);
 				} else {
 					String fehlermeldung = "";
@@ -245,7 +248,14 @@ public class AnlegenController {
 
 						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
 								dtpkr_end.getValue().toString());
-
+						for (Kompetenz kompetenz : projekt.getKompetenzen()) {
+							Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
+							Aufwand extern = new Aufwand("Intern", kompetenz.getName(), 0.0);
+							phase.setSingleAufwand(intern);
+							phase.setSingleAufwand(extern);
+						}
+						
+						projekt.setSinglePhase(phase);
 						phasen.add(phase);
 
 						tbl_phase.setItems(phasen);
@@ -382,9 +392,6 @@ public class AnlegenController {
 				
 				kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
 				phasen = FXCollections.observableArrayList(projekt.getPhasen());
-
-				tbl_kompetenz.setItems(kompetenzen);
-				tbl_phase.setItems(phasen);
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
