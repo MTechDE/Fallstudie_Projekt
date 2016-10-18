@@ -36,7 +36,7 @@
          		<TableColumn fx:id="tblCell_projektErsteller" prefWidth="75.0" text="Ersteller" />
             	<TableColumn fx:id="tblCell_projektStart" prefWidth="75.0" text="Startdatum" />
             	<TableColumn fx:id="tblCell_projektEnd" prefWidth="75.0" text="Enddatum" />
-            	<TableColumn fx:id="tblCell_projektSend" prefWidth="75.0" text="Bestätigt" />
+            	<TableColumn fx:id="tblCell_projektSend" prefWidth="75.0" text="Abgeschickt" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

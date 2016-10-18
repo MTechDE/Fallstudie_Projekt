@@ -111,7 +111,9 @@ public class StartFensterController {
 		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				btn_deleteProjekt.setDisable(false);
+
+				if (tbl_projektTabelle.getFocusModel().getFocusedIndex() != 0)
+					btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt
