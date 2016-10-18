@@ -96,11 +96,11 @@ public class AnlegenController {
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
 
 	// Variablen
-	Projekt projekt;
-	int arbeitstage = 0;
-	Datenbank myDB = new Datenbank();
-	boolean indexPhaseClicked = false;
-	boolean indexKompetenzClicked = false;
+	private static Projekt projekt;
+	private int arbeitstage = 0;
+	private static Datenbank myDB = new Datenbank();
+	private boolean indexPhaseClicked = false;
+	private boolean indexKompetenzClicked = false;
 
 	@FXML
 	private void initialize() {
@@ -184,7 +184,7 @@ public class AnlegenController {
 	}
 
 	@FXML
-	public void btn_kompetenz_click(ActionEvent event) throws Exception {
+	public void btn_kompetenz_click(ActionEvent event) throws Exception {	
 
 		if (txt_kompetenz.getText().length() <= 120) {
 			boolean vorhanden = false;
@@ -403,6 +403,11 @@ public class AnlegenController {
 			}
 		}
 	}
+	
+	public static void saveProjektRemote(){
+		Datenbank db = new Datenbank();
+		db.updateProjekt(projekt); 
+	}
 
 	@FXML
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
@@ -432,24 +437,22 @@ public class AnlegenController {
 
 		ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
 		ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
-		ButtonType buttonTypeThree = new ButtonType("Projekt verwerfen");
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 
-		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree, buttonTypeCancel);
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
 
 		Optional<ButtonType> result = alert.showAndWait();
+		
+		
+		
 		if (result.get() == buttonTypeOne) {
 			btn_projekt_speichern_click(event);
 			new OpenStartPage();
 			stage.close();
 		} else if (result.get() == buttonTypeTwo) {
-			new OpenStartPage();
-			stage.close();
-		} else if (result.get() == buttonTypeThree) {
-			myDB.deleteProjekt(projekt);
 			new OpenStartPage();
 			stage.close();
 		}
@@ -518,10 +521,8 @@ public class AnlegenController {
 				}
 			}
 			
-			
 			projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 			kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
-			
 			
 		} catch (Exception e){
 			System.out.println(e.getMessage());
