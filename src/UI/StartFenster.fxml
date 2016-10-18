@@ -51,17 +51,17 @@
       <Label layoutX="471.0" layoutY="415.0" text="Status:" />
       <Label layoutX="300.0" layoutY="415.0" text="Gefundene Projekte:" />
       <Label fx:id="lbl_projekteGefunden" layoutX="412.0" layoutY="416.0" prefHeight="17.0" prefWidth="35.0" text="0" textAlignment="RIGHT" />
-      <Label layoutX="416.0" layoutY="306.0" prefHeight="33.0" prefWidth="157.0" text="Suche">
+      <Label layoutX="447.0" layoutY="309.0" prefHeight="33.0" prefWidth="157.0" text="Suche">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="23.0" fitWidth="27.0" layoutX="479.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="23.0" fitWidth="27.0" layoutX="420.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="file:@../../resources/magnifier-tool.png" />
          </image>
       </ImageView>
-      <Button layoutX="24.0" layoutY="369.0" mnemonicParsing="false" onAction="#btn_deleteProjekt_click" prefHeight="36.0" prefWidth="322.0" text="Projekt löschen">
+      <Button fx:id="btn_deleteProjekt" disable="true" layoutX="24.0" layoutY="369.0" mnemonicParsing="false" onAction="#btn_deleteProjekt_click" prefHeight="36.0" prefWidth="322.0" text="Projekt löschen">
          <graphic>
             <ImageView fitHeight="28.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>

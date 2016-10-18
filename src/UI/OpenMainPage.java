@@ -16,31 +16,33 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class OpenMainPage extends Stage{
+public class OpenMainPage extends Stage {
 
 	private Stage stage;
 	private Datenbank myDB = new Datenbank();
 	public static Projekt tmpProjekt;
-	
-	public OpenMainPage(Projekt projekt, boolean newProjekt) throws Exception{
-		
+
+	public OpenMainPage(Projekt projekt, boolean newProjekt) throws Exception {
+
 		tmpProjekt = projekt;
-		
-		// Ein neues Projekt soll nicht sofort in der Datenbank gespeichert werden
-		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine Kompetenz anzulegen
-		
-		if(newProjekt){
+
+		// Ein neues Projekt soll nicht sofort in der Datenbank gespeichert
+		// werden
+		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine
+		// Kompetenz anzulegen
+
+		if (newProjekt) {
 			tmpProjekt = projekt;
-			
+
 		} else {
-			try{
+			try {
 				tmpProjekt = myDB.getProjekt(projekt);
-			}catch(Exception e){
+			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 		}
-		
-		try{
+
+		try {
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
@@ -49,40 +51,39 @@ public class OpenMainPage extends Stage{
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
-			
+
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		        @Override
-		        public void handle(final WindowEvent event) {
-		        	Alert alert = new Alert(AlertType.CONFIRMATION);
-		    		alert.setContentText("Möchten Sie Änderungen speichern?");
+				@Override
+				public void handle(final WindowEvent event) {
 
-		    		ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
-		    		ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
-		    		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+					if (AnlegenController.somethingChanged) {
+						Alert alert = new Alert(AlertType.CONFIRMATION);
+						alert.setContentText("Möchten Sie Änderungen speichern?");
 
-		    		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+						ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
+						ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
+						ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 
-		    		Optional<ButtonType> result = alert.showAndWait();
-		    		
-		    		if(result.get() == buttonTypeOne)
-		    			AnlegenController.saveProjektRemote();
-		    		
-					
-		        }
+						alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+						Optional<ButtonType> result = alert.showAndWait();
+
+						if (result.get() == buttonTypeOne)
+							AnlegenController.saveProjektRemote();
+					}
+				}
 			});
-			
-			
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");
 			alert.showAndWait();
 		}
-			
+
 	}
-	
-	public OpenMainPage(){
-		try{
+
+	public OpenMainPage() {
+		try {
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
@@ -91,7 +92,7 @@ public class OpenMainPage extends Stage{
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");

@@ -111,6 +111,7 @@ public class StartFensterController {
 		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
+				btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
 					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt
@@ -133,35 +134,37 @@ public class StartFensterController {
 
 		// Überprüfe ob die DB online ist
 		if (!myDB.testConnection()) {
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Keine Verbindung zur Datenbank möglich");
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	public void btn_deleteProjekt_click(ActionEvent event) throws Exception {
-		
-		if(!tbl_projektTabelle.getItems().isEmpty()){
-			try{
+
+		if (!tbl_projektTabelle.getItems().isEmpty()) {
+			try {
 				int index = tbl_projektTabelle.getSelectionModel().getSelectedIndex();
 				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setContentText("Möchten Sie das Projekt: " + tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+				alert.setContentText("Möchten Sie das Projekt: "
+						+ tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
 				ButtonType buttonTypeOne = new ButtonType("Löschen");
 				ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 				alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 				Optional<ButtonType> result = alert.showAndWait();
-				
-				if(result.get() == buttonTypeOne){
+
+				if (result.get() == buttonTypeOne) {
 					Node source = (Node) event.getSource();
 					Scene scene = source.getScene();
 					scene.setCursor(Cursor.WAIT);
 					myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
 					projektData.remove(index);
+					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 					scene.setCursor(Cursor.DEFAULT);
 				}
-				
-			} catch (Exception e){
+
+			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 		}
@@ -172,7 +175,6 @@ public class StartFensterController {
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-
 			if (txt_newProjekt_name.getText().length() <= 120 && txt_newProjekt_ersteller.getText().length() <= 60) {
 				// Überprüfe ob der gewünschte Name bereits verwendet wurde
 				boolean doubleName = false;
@@ -186,26 +188,23 @@ public class StartFensterController {
 					// Öffne Hauptfenster
 					Node source = (Node) event.getSource();
 					Stage stage = (Stage) source.getScene().getWindow();
-
 					new OpenMainPage(newProjekt, true);
+
 					// Schließe Fenster
 					stage.close();
 				} else {
-					System.out.println("Textlänge beachten");
 					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Projektname oder Projektersteller zu lang");
+					alert.setContentText("Projektname wurde bereits verwendet!");
 					alert.showAndWait();
 				}
 
 			} else {
-				System.out.println("Doppelter Projektname");
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setContentText("Ihr gewählter Projektname wurde bereits verwendet!");
 				alert.showAndWait();
 			}
 		} else {
-			System.out.println("Es wurden nicht alle Felder ausgefüllt");
-			Alert alert = new Alert(AlertType.WARNING);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Füllen Sie alle Felder aus");
 			alert.showAndWait();
 		}
