@@ -83,7 +83,7 @@ public class AnlegenController {
 	private ChoiceBox<String> chobx_aufwand;
 	@FXML
 	private DatePicker dtpkr_start;
-	@FXML	
+	@FXML
 	private DatePicker dtpkr_end;
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
@@ -136,7 +136,7 @@ public class AnlegenController {
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if(!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()){
+				if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()) {
 					try {
 						btn_deletePhase.setDisable(false);
 						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
@@ -154,7 +154,8 @@ public class AnlegenController {
 					}
 
 					indexPhaseClicked = true;
-					// was passiert wenn eine phase und eine kompetenz ausgewählt
+					// was passiert wenn eine phase und eine kompetenz
+					// ausgewählt
 					// wurden
 					if (indexKompetenzClicked) {
 						btn_aufwand_festlegen.setDisable(false);
@@ -168,10 +169,11 @@ public class AnlegenController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if(!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()){
+				if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()) {
 					btn_deleteKompetenz.setDisable(false);
 					indexKompetenzClicked = true;
-					// was passiert wenn eine phase und eine kompetenz ausgewählt
+					// was passiert wenn eine phase und eine kompetenz
+					// ausgewählt
 					// wurden
 					if (indexPhaseClicked) {
 						btn_aufwand_festlegen.setDisable(false);
@@ -183,7 +185,7 @@ public class AnlegenController {
 	}
 
 	@FXML
-	public void btn_kompetenz_click(ActionEvent event) throws Exception {	
+	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
 		if (txt_kompetenz.getText().length() <= 120) {
 			boolean vorhanden = false;
@@ -197,17 +199,17 @@ public class AnlegenController {
 
 					// Risikozuschlag von -,% und falschem Dezimalzeichen
 					// befreien
-					
-					try{
+
+					try {
 						String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
 						risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
 						risikozuschlagString = risikozuschlagString.replaceAll("-", "");
 						Double risikozuschlag = Double.parseDouble(risikozuschlagString);
-						
+
 						Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
-						
+
 						// Weise den Phasen neue Auwfände zu
-						for(int i = 0; i < projekt.getPhasen().size(); i++){
+						for (int i = 0; i < projekt.getPhasen().size(); i++) {
 							Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
 							Aufwand extern = new Aufwand("Extern", kompetenz.getName(), 0.0);
 							projekt.getPhasen().get(i).setSingleAufwand(intern);
@@ -217,10 +219,10 @@ public class AnlegenController {
 						projekt.setSingleKompetenz(kompetenz);
 						kompetenzen.add(kompetenz);
 						tbl_kompetenz.setItems(kompetenzen);
-					} catch (Exception e){
+					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
-					
+
 				} else {
 					String fehlermeldung = "";
 
@@ -237,9 +239,9 @@ public class AnlegenController {
 				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 				alert.showAndWait();
 			}
-			
+
 			checkChanges();
-			
+
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Kompetenzname zu lang");
@@ -265,18 +267,19 @@ public class AnlegenController {
 					if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
 							&& (dtpkr_end.getValue() != null)) {
 
-						try{
+						try {
 							Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
 									dtpkr_end.getValue().toString());
-							
+
 							projekt.setSinglePhase(phase);
 							phasen.add(phase);
 
 							tbl_phase.setItems(phasen);
-							// TODO: Fokus auf ein Element setzen, damit Arbeitstage
+							// TODO: Fokus auf ein Element setzen, damit
+							// Arbeitstage
 							// immer
 							// berechnet werden können
-						}catch(Exception e){
+						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
 					} else {
@@ -407,10 +410,10 @@ public class AnlegenController {
 						aufwand.setPt(ptExtern);
 					}
 				}
-				
+
 				kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
 				phasen = FXCollections.observableArrayList(projekt.getPhasen());
-				
+
 				checkChanges();
 
 			} catch (Exception e) {
@@ -418,42 +421,41 @@ public class AnlegenController {
 			}
 		}
 	}
-	
-	public static void saveProjektRemote(){
+
+	public static void saveProjektRemote() {
 		Datenbank db = new Datenbank();
-		db.updateProjekt(projekt); 
+		db.updateProjekt(projekt);
 	}
 
 	@FXML
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
-		
+
 		Node source = (Node) event.getSource();
 		Scene scene = source.getScene();
 		scene.setCursor(Cursor.WAIT);
-		
+
 		if (projekt != null) {
 			try {
 				myDB.updateProjekt(projekt);
 				System.out.println("Projekt gespeichert!");
 				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
+				Stage stage = (Stage) scene.getWindow();
+				stage.setTitle(projekt.getName());
 			} catch (Exception e) {
 				System.out.println("Speichern fehlgeschlagen!");
 			}
 		}
-		
 		scene.setCursor(Cursor.DEFAULT);
-		
-		
 	}
 
 	@FXML
 	public void btn_zurueck_click(ActionEvent event) throws Exception {
-		
+
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
-		
-		if(somethingChanged){
+
+		if (somethingChanged) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setContentText("Bitte wählen Sie eine der folgenden Auswahlmöglichkeiten!");
 
@@ -463,12 +465,8 @@ public class AnlegenController {
 
 			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
-
-
 			Optional<ButtonType> result = alert.showAndWait();
-			
-			
-			
+
 			if (result.get() == buttonTypeOne) {
 				btn_projekt_speichern_click(event);
 				new OpenStartPage();
@@ -481,7 +479,6 @@ public class AnlegenController {
 			new OpenStartPage();
 			stage.close();
 		}
-		
 
 	}
 
@@ -525,35 +522,37 @@ public class AnlegenController {
 		stage.close();
 
 	}
-	
+
 	@FXML
 	public void btn_deletePhase_click(ActionEvent event) throws Exception {
-		try{
+		try {
 			projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
 			phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
 			checkChanges();
-		} catch (Exception e){
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
 	}
-	
+
 	@FXML
 	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
-		try{
-			// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur Kompetenz
-			for(int i = 0; i < projekt.getPhasen().size(); i++){
-				for(int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++){
-					if(projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
+		try {
+			// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
+			// Kompetenz
+			for (int i = 0; i < projekt.getPhasen().size(); i++) {
+				for (int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++) {
+					if (projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt
+							.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
 						projekt.getPhasen().get(i).getAufwände().remove(k);
 				}
 			}
-			
+
 			projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 			kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 			checkChanges();
-			
-		} catch (Exception e){
+
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
@@ -579,9 +578,12 @@ public class AnlegenController {
 			}
 		}
 	}
-	
-	public void checkChanges(){
+
+	public void checkChanges() {
 		somethingChanged = true;
+		Scene scene = (Scene) txt_pt_extern.getScene();
+		Stage stage = (Stage) scene.getWindow();
+		stage.setTitle("* " + projekt.getName());
 		btn_projekt_speichern.setDisable(false);
 	}
 }

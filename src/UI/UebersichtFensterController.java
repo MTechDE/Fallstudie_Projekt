@@ -78,7 +78,7 @@ public class UebersichtFensterController {
 	
 	@FXML
 	public void btn_zurueck_click(ActionEvent event) {
-		new OpenMainPage();
+		new OpenMainPage(projekt);
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
 		stage.close();

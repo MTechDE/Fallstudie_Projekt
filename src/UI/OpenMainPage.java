@@ -82,8 +82,9 @@ public class OpenMainPage extends Stage {
 
 	}
 
-	public OpenMainPage() {
+	public OpenMainPage(Projekt projekt) {
 		try {
+			this.tmpProjekt = projekt;
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
