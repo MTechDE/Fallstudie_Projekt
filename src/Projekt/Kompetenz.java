@@ -19,7 +19,7 @@ public class Kompetenz {
 		this.setName(name);
 		this.setRisikozuschlag(0.0);
 	}
-	
+
 	public Kompetenz(String name, Double risikozuschlag) {
 		this.setName(name);
 		this.setRisikozuschlag(risikozuschlag);
@@ -40,8 +40,8 @@ public class Kompetenz {
 	public Double getRisikozuschlag() {
 		return risikozuschlag.get();
 	}
-	
-	public DoubleProperty risikozuschlagPropert(){
+
+	public DoubleProperty risikozuschlagPropert() {
 		return risikozuschlag;
 	}
 
