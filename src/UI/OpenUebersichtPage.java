@@ -1,13 +1,19 @@
 package UI;
 
+import java.util.Optional;
+
 import Projekt.Projekt;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class OpenUebersichtPage extends Stage{
 	
@@ -17,6 +23,7 @@ public class OpenUebersichtPage extends Stage{
 	public OpenUebersichtPage(Projekt projekt){
 		
 		OpenUebersichtPage.tmpProjekt = projekt;
+		Main.projekt = projekt;
 		
 		try{
 			stage = this;
@@ -27,6 +34,29 @@ public class OpenUebersichtPage extends Stage{
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		        @Override
+		        public void handle(final WindowEvent event) {
+		        	Alert alert = new Alert(AlertType.CONFIRMATION);
+		    		alert.setContentText("Möchten Sie Änderungen speichern?");
+
+		    		ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
+		    		ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
+		    		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+
+		    		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+		    		Optional<ButtonType> result = alert.showAndWait();
+		    		
+		    		if(result.get() == buttonTypeOne)
+		    			System.out.println("Speichere Projekt in der Übersicht");
+		    		
+					
+		        }
+			});
+			
+			
+			
 		} catch (Exception e){
 			e.printStackTrace();
 			System.out.println("Fehler aufgetreten!");
