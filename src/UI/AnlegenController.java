@@ -14,7 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -70,6 +72,10 @@ public class AnlegenController {
 	@FXML
 	private Button btn_zurueck;
 	@FXML
+	private Button btn_deletePhase;
+	@FXML
+	private Button btn_deleteKompetenz;
+	@FXML
 	private TableColumn<Kompetenz, String> tblCell_kompetenz;
 	@FXML
 	private TableColumn<Phase, String> tblCell_phase;
@@ -77,7 +83,7 @@ public class AnlegenController {
 	private ChoiceBox<String> chobx_aufwand;
 	@FXML
 	private DatePicker dtpkr_start;
-	@FXML
+	@FXML	
 	private DatePicker dtpkr_end;
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
@@ -124,35 +130,38 @@ public class AnlegenController {
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
+		btn_deleteKompetenz.setVisible(false);
+		btn_deletePhase.setVisible(false);
 
 		// ActionHandler Tabelle Phase
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
+				if(!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()){
+					try {
+						btn_deletePhase.setVisible(true);
+						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+						// Berechnung Arbeitstage aus Phasenzeitraum für
+						// PT-Berechnung bei MAK
+						String startdatum = phaseSelected.getStartDate();
+						String enddatum = phaseSelected.getEndDate();
 
-				try {
-					Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
-					// Berechnung Arbeitstage aus Phasenzeitraum für
-					// PT-Berechnung bei MAK
-					String startdatum = phaseSelected.getStartDate();
-					String enddatum = phaseSelected.getEndDate();
+						arbeitstage = calculateDate(startdatum, enddatum);
 
-					arbeitstage = calculateDate(startdatum, enddatum);
+						txt_mak_pt_intern.setText(arbeitstage + " PT");
+						txt_mak_pt_extern.setText(arbeitstage + " PT");
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
 
-					txt_mak_pt_intern.setText(arbeitstage + " PT");
-					txt_mak_pt_extern.setText(arbeitstage + " PT");
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					indexPhaseClicked = true;
+					// was passiert wenn eine phase und eine kompetenz ausgewählt
+					// wurden
+					if (indexKompetenzClicked) {
+						btn_aufwand_festlegen.setDisable(false);
+						fülleFelder();
+					}
 				}
-
-				indexPhaseClicked = true;
-				// was passiert wenn eine phase und eine kompetenz ausgewählt
-				// wurden
-				if (indexKompetenzClicked) {
-					btn_aufwand_festlegen.setDisable(false);
-					fülleFelder();
-				}
-
 			}
 		});
 
@@ -160,12 +169,15 @@ public class AnlegenController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				indexKompetenzClicked = true;
-				// was passiert wenn eine phase und eine kompetenz ausgewählt
-				// wurden
-				if (indexPhaseClicked) {
-					btn_aufwand_festlegen.setDisable(false);
-					fülleFelder();
+				if(!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()){
+					btn_deleteKompetenz.setVisible(true);
+					indexKompetenzClicked = true;
+					// was passiert wenn eine phase und eine kompetenz ausgewählt
+					// wurden
+					if (indexPhaseClicked) {
+						btn_aufwand_festlegen.setDisable(false);
+						fülleFelder();
+					}
 				}
 			}
 		});
@@ -247,12 +259,6 @@ public class AnlegenController {
 
 						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
 								dtpkr_end.getValue().toString());
-						for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-							Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
-							Aufwand extern = new Aufwand("Intern", kompetenz.getName(), 0.0);
-							phase.setSingleAufwand(intern);
-							phase.setSingleAufwand(extern);
-						}
 						
 						projekt.setSinglePhase(phase);
 						phasen.add(phase);
@@ -400,18 +406,12 @@ public class AnlegenController {
 
 	@FXML
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
-
-		Projekt projekt = OpenMainPage.tmpProjekt;
-
+		
+		Node source = (Node) event.getSource();
+		Scene scene = source.getScene();
+		scene.setCursor(Cursor.WAIT);
+		
 		if (projekt != null) {
-			for (Phase phase : tbl_phase.getItems()) {
-				projekt.setSinglePhase(phase);
-				System.out.println(phase.getName() + " wurde Projekt hinzugefügt!");
-			}
-			for (Kompetenz kompetenz : tbl_kompetenz.getItems()) {
-				projekt.setSingleKompetenz(kompetenz);
-				System.out.println(kompetenz.getName() + " wurde Projekt hinzugefügt!");
-			}
 			try {
 				myDB.updateProjekt(projekt);
 				System.out.println("Projekt gespeichert!");
@@ -419,6 +419,10 @@ public class AnlegenController {
 				System.out.println("Speichern fehlgeschlagen!");
 			}
 		}
+		
+		scene.setCursor(Cursor.DEFAULT);
+		
+		
 	}
 
 	@FXML
@@ -490,6 +494,38 @@ public class AnlegenController {
 		new OpenUebersichtPage(projekt);
 		stage.close();
 
+	}
+	
+	@FXML
+	public void btn_deletePhase_click(ActionEvent event) throws Exception {
+		try{
+			projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
+			phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+
+	}
+	
+	@FXML
+	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
+		try{
+			// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur Kompetenz
+			for(int i = 0; i < projekt.getPhasen().size(); i++){
+				for(int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++){
+					if(projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
+						projekt.getPhasen().get(i).getAufwände().remove(k);
+				}
+			}
+			
+			
+			projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
+			kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
+			
+			
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public void fülleFelder() {

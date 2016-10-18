@@ -1,16 +1,22 @@
 package UI;
 
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 import Datenbank.Datenbank;
 import Projekt.Projekt;
@@ -35,6 +41,8 @@ public class StartFensterController {
 	private AnchorPane startScreen;
 	@FXML
 	private Button btn_newProjekt;
+	@FXML
+	private Button btn_deleteProjekt;
 	@FXML
 	private TableView<Projekt> tbl_projektTabelle;
 	@FXML
@@ -128,6 +136,34 @@ public class StartFensterController {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("Keine Verbindung zur Datenbank möglich");
 			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	public void btn_deleteProjekt_click(ActionEvent event) throws Exception {
+		
+		if(!tbl_projektTabelle.getItems().isEmpty()){
+			try{
+				int index = tbl_projektTabelle.getSelectionModel().getSelectedIndex();
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setContentText("Möchten Sie das Projekt: " + tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+				ButtonType buttonTypeOne = new ButtonType("Löschen");
+				ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+				alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
+				Optional<ButtonType> result = alert.showAndWait();
+				
+				if(result.get() == buttonTypeOne){
+					Node source = (Node) event.getSource();
+					Scene scene = source.getScene();
+					scene.setCursor(Cursor.WAIT);
+					myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
+					projektData.remove(index);
+					scene.setCursor(Cursor.DEFAULT);
+				}
+				
+			} catch (Exception e){
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 
