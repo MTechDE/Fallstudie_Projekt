@@ -50,6 +50,8 @@ public class OpenUebersichtPage extends Stage{
 		    		
 		    		if(result.get() == buttonTypeOne)
 		    			System.out.println("Speichere Projekt in der Übersicht");
+					if(result.get() == buttonTypeCancel)
+						event.consume();
 		    		
 					
 		        }

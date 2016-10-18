@@ -26,11 +26,6 @@ public class OpenMainPage extends Stage {
 
 		tmpProjekt = projekt;
 
-		// Ein neues Projekt soll nicht sofort in der Datenbank gespeichert
-		// werden
-		// Der Nutzer soll dazu gezwungen werden, mindestens eine Phase und eine
-		// Kompetenz anzulegen
-
 		if (newProjekt) {
 			tmpProjekt = projekt;
 
@@ -70,6 +65,8 @@ public class OpenMainPage extends Stage {
 
 						if (result.get() == buttonTypeOne)
 							AnlegenController.saveProjektRemote();
+						if(result.get() == buttonTypeCancel)
+							event.consume();
 					}
 				}
 			});
@@ -84,7 +81,7 @@ public class OpenMainPage extends Stage {
 
 	public OpenMainPage(Projekt projekt) {
 		try {
-			this.tmpProjekt = projekt;
+			OpenMainPage.tmpProjekt = projekt;
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
