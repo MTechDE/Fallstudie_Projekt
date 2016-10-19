@@ -103,9 +103,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, zugehoerigkeit) " + 
-		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :zugehoerigkeit) " + 
-		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, zugehoerigkeit=:zugehoerigkeit";
+		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, zugehoerigkeit, anwesenheit) " + 
+		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :zugehoerigkeit, :anwesenheit) " + 
+		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, zugehoerigkeit=:zugehoerigkeit, anwesenheit=:anwesenheit";
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
@@ -120,6 +120,7 @@ public class Datenbank {
 										.addParameter("projekt", projekt.getName())
 										.addParameter("pt", aufwand.getPt())
 										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit())
+										.addParameter("anwesenheit", aufwand.getAnwesenheit())
 										.addToBatch();
 							}
 						}
@@ -188,7 +189,7 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a " + 
+		sql = "SELECT person AS name, zugehoerigkeit, pt, anwesenheit from aufwand a " + 
 		"WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
 		try (Connection con = sql2o.open()) {
