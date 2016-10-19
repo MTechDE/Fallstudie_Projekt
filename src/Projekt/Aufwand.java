@@ -23,10 +23,11 @@ public class Aufwand {
 		this.setPt(0);
 	}
 
-	public Aufwand(String name, String zugehoerigkeit, double pt) {
+	public Aufwand(String name, String zugehoerigkeit, double pt, Double anwesenheit) {
 		this.setName(name);
 		this.setZugehoerigkeit(zugehoerigkeit);
 		this.setPt(pt);
+		this.setAnwesenheit(anwesenheit);
 	}
 
 	public String getName() {
