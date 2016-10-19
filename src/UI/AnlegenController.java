@@ -525,35 +525,53 @@ public class AnlegenController {
 
 	@FXML
 	public void btn_deletePhase_click(ActionEvent event) throws Exception {
-		try {
-			projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
-			phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
-			checkChanges();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setContentText("Möchten Sie die Phase: " + tbl_phase.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		ButtonType buttonTypeOne = new ButtonType("Löschen");
+		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if(result.get() == buttonTypeOne){
+			try {
+				projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
+				phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
+				checkChanges();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
-
 	}
 
 	@FXML
 	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
-		try {
-			// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
-			// Kompetenz
-			for (int i = 0; i < projekt.getPhasen().size(); i++) {
-				for (int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++) {
-					if (projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt
-							.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
-						projekt.getPhasen().get(i).getAufwände().remove(k);
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setContentText("Möchten Sie die Kompetenz: " + tbl_kompetenz.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		ButtonType buttonTypeOne = new ButtonType("Löschen");
+		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if(result.get() == buttonTypeOne){
+			try {
+				// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
+				// Kompetenz
+				for (int i = 0; i < projekt.getPhasen().size(); i++) {
+					for (int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++) {
+						if (projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt
+								.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
+							projekt.getPhasen().get(i).getAufwände().remove(k);
+					}
 				}
+				projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
+				kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
+				checkChanges();
+
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
-
-			projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
-			kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
-			checkChanges();
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
 		}
 	}
 
