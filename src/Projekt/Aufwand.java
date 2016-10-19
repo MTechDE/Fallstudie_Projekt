@@ -16,6 +16,7 @@ public class Aufwand {
 	private StringProperty name;
 	private StringProperty zugehoerigkeit;
 	private DoubleProperty pt;
+	private DoubleProperty anwesenheit;
 
 	public Aufwand(String name) {
 		this.setName(name);
@@ -62,5 +63,17 @@ public class Aufwand {
 
 	public void setPt(double pt) {
 		this.pt = new SimpleDoubleProperty(pt);
+	}
+	
+	public Double getAnwesenheit() {
+		return anwesenheit.get();
+	}
+
+	public DoubleProperty getAnwesenheitProperty() {
+		return anwesenheit;
+	}
+
+	public void setAnwesenheit(Double anwesenheit) {
+		this.anwesenheit = new SimpleDoubleProperty(anwesenheit);
 	}
 }
