@@ -48,7 +48,7 @@ public class Datenbank {
 	/**
 	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und Aufwände.
 	 * Bereits vorhandene Daten werden überschrieben (UPDATE).
-	 * @param projekt
+	 * @param projekt das zu speichernde Projekt
 	 * @return boolean
 	 */
 	public boolean speicherProjekt(Projekt projekt) {
@@ -168,7 +168,7 @@ public class Datenbank {
 	 * Ein Projekt wird anhand des übergebenen Projekt Objektes aus der
 	 * Datenbank geholt und als komplettes Projekt zurückgegeben.
 	 * 
-	 * @param projekt
+	 * @param projekt das aus der Datenbank zu holende Projekt
 	 * @return Projekt
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -233,7 +233,7 @@ public class Datenbank {
 	 * Ein Projekt wird komplett neu in die Datenbank geschrieben.
 	 * Dazu wird es zunächst komplett gelöscht und anschließend
 	 * neu in die Datenbank geschrieben.
-	 * @param projekt
+	 * @param projekt das zu updatenede Projekt
 	 * @return boolean
 	 */
 	public boolean updateProjekt(Projekt projekt) {
@@ -243,7 +243,7 @@ public class Datenbank {
 
 	/**
 	 * Es wird eine Liste von Aufwänden zurückgegeben. 
-	 * @return List<Aufwand>
+	 * @return Eine Liste aller Aufwände
 	 */
 	public List<Aufwand> getPersonen() {
 
@@ -260,7 +260,7 @@ public class Datenbank {
 	/**
 	 * Alle Projekte die in der Datenbank gefunden wurden, werden in einer 
 	 * Liste zurückgegeben.
-	 * @return List<Projekt>
+	 * @return eine Liste der Projekte in der Datenbank
 	 */
 	public List<Projekt> getProjekte() {
 		List<Projekt> projekte = new ArrayList<Projekt>();
@@ -277,7 +277,7 @@ public class Datenbank {
 	/**
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Aufwände),
 	 * werden anhand des Projektnames aus der Datenbank gelöscht.
-	 * @param projekt
+	 * @param projekt das zu löschende Projekt
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
