@@ -20,7 +20,7 @@ public class Aufwand {
 	private DoubleProperty anwesenheit;
 
 	/**
-	 * Standard Konstruktor
+	 * Standardkonstruktor
 	 * 
 	 * @param name Der Name des Auwandes
 	 */
