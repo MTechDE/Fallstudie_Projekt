@@ -107,9 +107,9 @@ public class Datenbank {
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
 
-		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, zugehoerigkeit, anwesenheit) " + 
-		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :zugehoerigkeit, :anwesenheit) " + 
-		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, zugehoerigkeit=:zugehoerigkeit, anwesenheit=:anwesenheit";
+		sql = "INSERT INTO aufwand(aufwandKey, person, phase, projekt, pt, zugehoerigkeit) " + 
+		"VALUES(:aufwandKey, :person, :phase, :projekt, :pt, :zugehoerigkeit) " + 
+		"ON DUPLICATE KEY UPDATE aufwandKey=:aufwandKey, person=:person, phase=:phase,  projekt=:projekt, pt=:pt, zugehoerigkeit=:zugehoerigkeit";
 
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
@@ -124,7 +124,6 @@ public class Datenbank {
 										.addParameter("projekt", projekt.getName())
 										.addParameter("pt", aufwand.getPt())
 										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit())
-										.addParameter("anwesenheit", aufwand.getAnwesenheit())
 										.addToBatch();
 							}
 						}
@@ -173,8 +172,7 @@ public class Datenbank {
 	 * Ein Projekt wird anhand des übergebenen Projekt Objektes aus der
 	 * Datenbank geholt und als komplettes Projekt zurückgegeben.
 	 * 
-	 * @param projekt
-	 *            das aus der Datenbank zu holende Projekt
+	 * @param projekt das aus der Datenbank zu holende Projekt
 	 * @return Projekt
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -194,7 +192,7 @@ public class Datenbank {
 		}
 
 		// Hole Alle Personen anhand des Projektnamnes
-		sql = "SELECT person AS name, zugehoerigkeit, pt, anwesenheit from aufwand a " + 
+		sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a " + 
 		"WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
 		try (Connection con = sql2o.open()) {
@@ -240,8 +238,7 @@ public class Datenbank {
 	 * zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt
-	 *            das zu updatenede Projekt
+	 * @param projekt das zu updatenede Projekt
 	 * @return boolean
 	 */
 	public boolean updateProjekt(Projekt projekt) {
@@ -253,8 +250,7 @@ public class Datenbank {
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen,
 	 * Aufwände), werden anhand des Projektnames aus der Datenbank gelöscht.
 	 * 
-	 * @param projekt
-	 *            das zu löschende Projekt
+	 * @param projekt das zu löschende Projekt
 	 * @return boolean
 	 */
 	public List<Aufwand> getPersonen() {
@@ -289,7 +285,8 @@ public class Datenbank {
 	/**
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Aufwände),
 	 * werden anhand des Projektnames aus der Datenbank gelöscht.
-	 * @param projekt das zu löschende Projekt
+	 * 
+	 * @param projekt Das zu löschende Projekt
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
