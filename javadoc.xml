@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="javadoc">
     <target name="javadoc">
-        <javadoc access="public" additionalparam=" -encoding UTF-8 -charset UTF-8 -docencoding UTF-8" author="true" classpath="C:\Users\Daniel\.p2\pool\plugins\org.eclipse.fx.ide.css.jfx8_2.4.0.201605112122.jar;lib/sql2o-1.5.4.jar;lib/mysql-connector-java-5.1.40-bin.jar" destdir="doc" doctitle="Vanilla Sky" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="Datenbank" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
+        <javadoc access="package" additionalparam=" -encoding UTF-8 -charset UTF-8 -docencoding UTF-8" author="true" classpath="C:\Users\Daniel\.p2\pool\plugins\org.eclipse.fx.ide.css.jfx8_2.4.0.201605112122.jar;lib/sql2o-1.5.4.jar;lib/mysql-connector-java-5.1.40-bin.jar" destdir="doc" doctitle="Vanilla Sky" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="Datenbank,Projekt" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
     </target>
 </project>
