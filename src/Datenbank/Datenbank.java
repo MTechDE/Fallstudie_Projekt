@@ -14,11 +14,13 @@ import Projekt.Phase;
 import Projekt.Projekt;
 
 /**
- * Alle Opperationen welche mit der Datenbank zu tun haben (speichern und laden von Projekten),
- * werden mit dieser Klasse realisiert.
+ * Alle Operationen welche mit der Datenbank zu tun haben (speichern und laden
+ * von Projekten), werden mit dieser Klasse realisiert.
+ * 
  * @author Daniel Sogl
  * @version 1.2.1
  */
+
 
 public class Datenbank {
 
@@ -33,6 +35,7 @@ public class Datenbank {
 
 	/**
 	 * Testet die Verbindung zur Datenbank
+	 * 
 	 * @return boolean
 	 */
 	public boolean testConnection() {
@@ -46,8 +49,9 @@ public class Datenbank {
 	}
 
 	/**
-	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und Aufwände.
-	 * Bereits vorhandene Daten werden überschrieben (UPDATE).
+	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und
+	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
+	 * 
 	 * @param projekt das zu speichernde Projekt
 	 * @return boolean
 	 */
@@ -169,7 +173,8 @@ public class Datenbank {
 	 * Ein Projekt wird anhand des übergebenen Projekt Objektes aus der
 	 * Datenbank geholt und als komplettes Projekt zurückgegeben.
 	 * 
-	 * @param projekt das aus der Datenbank zu holende Projekt
+	 * @param projekt
+	 *            das aus der Datenbank zu holende Projekt
 	 * @return Projekt
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -231,10 +236,12 @@ public class Datenbank {
 	}
 
 	/**
-	 * Ein Projekt wird komplett neu in die Datenbank geschrieben.
-	 * Dazu wird es zunächst komplett gelöscht und anschließend
-	 * neu in die Datenbank geschrieben.
-	 * @param projekt das zu updatenede Projekt
+	 * Ein Projekt wird komplett neu in die Datenbank geschrieben. Dazu wird es
+	 * zunächst komplett gelöscht und anschließend neu in die Datenbank
+	 * geschrieben.
+	 * 
+	 * @param projekt
+	 *            das zu updatenede Projekt
 	 * @return boolean
 	 */
 	public boolean updateProjekt(Projekt projekt) {
@@ -243,8 +250,12 @@ public class Datenbank {
 	}
 
 	/**
-	 * Es wird eine Liste von Aufwänden zurückgegeben. 
-	 * @return Eine Liste aller Aufwände
+	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen,
+	 * Aufwände), werden anhand des Projektnames aus der Datenbank gelöscht.
+	 * 
+	 * @param projekt
+	 *            das zu löschende Projekt
+	 * @return boolean
 	 */
 	public List<Aufwand> getPersonen() {
 
