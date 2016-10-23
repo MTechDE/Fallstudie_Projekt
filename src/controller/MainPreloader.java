@@ -1,10 +1,9 @@
+package controller;
 
-import controller.SplashViewController;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -14,13 +13,10 @@ public class MainPreloader extends Preloader {
 	
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
-		Parent root = FXMLLoader.load(getClass().getResource("view/SplashView.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("../view/SplashView.fxml"));
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("view/style.css").toExternalForm());
 		primaryStage.setTitle("Vanilla Sky");
-		primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("img/VanillaSky.png")));
 		primaryStage.setScene(scene);
-		primaryStage.setResizable(false);
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.show();
 	} 

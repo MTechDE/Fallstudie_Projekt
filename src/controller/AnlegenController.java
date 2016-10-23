@@ -275,10 +275,6 @@ public class AnlegenController {
 							phasen.add(phase);
 
 							tbl_phase.setItems(phasen);
-							// TODO: Fokus auf ein Element setzen, damit
-							// Arbeitstage
-							// immer
-							// berechnet werden können
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}

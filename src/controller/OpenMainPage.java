@@ -27,23 +27,17 @@ public class OpenMainPage extends Stage {
 
 		if (newProjekt) {
 			tmpProjekt = projekt;
-
 		} else {
-			try {
-				tmpProjekt = myDB.getProjekt(projekt);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
+			tmpProjekt = myDB.getProjekt(projekt);
 		}
 
 		try {
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("../view/Anlegen.fxml"));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("../view/style.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("../img/VanillaSky.png")));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 
@@ -73,7 +67,7 @@ public class OpenMainPage extends Stage {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte straten Sie die Anwendung neu.");
+			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
 
