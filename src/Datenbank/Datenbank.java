@@ -250,7 +250,8 @@ public class Datenbank {
 	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen,
 	 * Aufwände), werden anhand des Projektnames aus der Datenbank gelöscht.
 	 * 
-	 * @return List
+	 * @param projekt das zu löschende Projekt
+	 * @return boolean
 	 */
 	public List<Aufwand> getPersonen() {
 
@@ -267,7 +268,7 @@ public class Datenbank {
 	/**
 	 * Alle Projekte die in der Datenbank gefunden wurden, werden in einer 
 	 * Liste zurückgegeben.
-	 * @return List eine Liste der Projekte in der Datenbank
+	 * @return eine Liste der Projekte in der Datenbank
 	 */
 	public List<Projekt> getProjekte() {
 		List<Projekt> projekte = new ArrayList<Projekt>();

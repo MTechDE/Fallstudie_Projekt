@@ -1,6 +1,7 @@
-package controller;
+package UI;
 
 import java.util.Optional;
+
 import Datenbank.Datenbank;
 import Projekt.Projekt;
 import javafx.event.EventHandler;
@@ -27,17 +28,22 @@ public class OpenMainPage extends Stage {
 
 		if (newProjekt) {
 			tmpProjekt = projekt;
+
 		} else {
-			tmpProjekt = myDB.getProjekt(projekt);
+			try {
+				tmpProjekt = myDB.getProjekt(projekt);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
 		try {
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("../view/Anlegen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
-			stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/VanillaSky.png")));
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 
@@ -59,7 +65,7 @@ public class OpenMainPage extends Stage {
 
 						if (result.get() == buttonTypeOne)
 							AnlegenController.saveProjektRemote();
-						if (result.get() == buttonTypeCancel)
+						if(result.get() == buttonTypeCancel)
 							event.consume();
 					}
 				}
@@ -67,7 +73,7 @@ public class OpenMainPage extends Stage {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText(e.getMessage());
+			alert.setContentText("Bitte straten Sie die Anwendung neu.");
 			alert.showAndWait();
 		}
 

@@ -14,21 +14,21 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="819.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AnlegenController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.AnlegenController">
    <children>
       <Separator layoutX="198.0" layoutY="14.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />
       <Button fx:id="btn_phase" layoutX="17.0" layoutY="167.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Neue Phase">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/folder.png" />
+                  <Image url="file:@../../resources/folder.png" />
                </image></ImageView>
          </graphic></Button>
       <Button fx:id="btn_kompetenz" layoutX="17.0" layoutY="365.0" mnemonicParsing="false" onAction="#btn_kompetenz_click" prefHeight="34.0" prefWidth="167.0" text="Neue Kompetenz">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/new-user.png" />
+                  <Image url="file:@../../resources/new-user.png" />
                </image></ImageView>
          </graphic>
       </Button>
@@ -79,11 +79,11 @@
          <tooltip>
             <Tooltip text="Personentage (extern)" />
          </tooltip></TextField>
-      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Speichern">
+      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Projekt speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/save-file-option.png" />
+                  <Image url="file:@../../resources/save-file-option.png" />
                </image>
             </ImageView>
          </graphic></Button>
@@ -107,7 +107,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/file.png" />
+                  <Image url="file:@../../resources/file.png" />
                </image>
             </ImageView>
          </graphic>
@@ -120,15 +120,15 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/back-arrow.png" />
+                  <Image url="file:@../../resources/back-arrow.png" />
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Übersicht">
+      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Projektübersicht">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/search-engine-result.png" />
+                  <Image url="file:@../../resources/search-engine-result.png" />
                </image>
             </ImageView>
          </graphic>
@@ -137,7 +137,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/delete.png" />
+                  <Image url="file:@../../resources/delete.png" />
                </image>
             </ImageView>
          </graphic>
@@ -146,7 +146,7 @@
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/delete.png" />
+                  <Image url="file:@../../resources/delete.png" />
                </image>
             </ImageView>
          </graphic>

@@ -1,4 +1,4 @@
-package controller;
+package UI;
 
 import java.util.Optional;
 
@@ -23,14 +23,15 @@ public class OpenUebersichtPage extends Stage {
 	public OpenUebersichtPage(Projekt projekt) {
 
 		OpenUebersichtPage.tmpProjekt = projekt;
+		Main.projekt = projekt;
 
 		try {
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("../view/UebersichtFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("UebersichtFenster.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName() + " - Übersicht");
-			stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/VanillaSky.png")));
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

@@ -1,4 +1,4 @@
-package controller;
+package UI;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -82,7 +82,6 @@ public class StartFensterController {
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
-//		projektData = FXCollections.observableArrayList(SplashViewController.projekte);
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
@@ -117,8 +116,7 @@ public class StartFensterController {
 					btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem
-					// Projekt
+					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt
 					// geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {
@@ -135,6 +133,13 @@ public class StartFensterController {
 				}
 			}
 		});
+
+		// Überprüfe ob die DB online ist
+		if (!myDB.testConnection()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Keine Verbindung zur Datenbank möglich");
+			alert.showAndWait();
+		}
 	}
 
 	@FXML

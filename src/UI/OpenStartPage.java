@@ -1,6 +1,4 @@
-package controller;
-
-
+package UI;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,11 +15,11 @@ public class OpenStartPage extends Stage{
 	public OpenStartPage(){
 		try{
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("../view/StartFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle("Vanilla Sky");
-			stage.getIcons().add(new Image(getClass().getResourceAsStream("../img/VanillaSky.png")));
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 		} catch (Exception e){
