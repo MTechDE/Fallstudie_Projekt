@@ -22,10 +22,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/StartFenster.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
-			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
+			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("../img/VanillaSky.png")));
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();

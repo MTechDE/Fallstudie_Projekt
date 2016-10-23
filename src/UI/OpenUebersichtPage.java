@@ -27,11 +27,11 @@ public class OpenUebersichtPage extends Stage {
 
 		try {
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("UebersichtFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("../fxml/UebersichtFenster.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName() + " - Übersicht");
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("../img/VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
