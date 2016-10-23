@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author mytec
- *
- */
-package fxml;

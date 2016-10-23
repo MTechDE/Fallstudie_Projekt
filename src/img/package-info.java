@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author mytec
+ * @author Daniel
  *
  */
 package img;

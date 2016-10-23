@@ -39,11 +39,11 @@ public class OpenMainPage extends Stage {
 
 		try {
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("../fxml/Anlegen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("../img/VanillaSky.png")));
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 
