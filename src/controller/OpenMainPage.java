@@ -40,6 +40,7 @@ public class OpenMainPage extends Stage {
 			stage = this;
 			Parent root = FXMLLoader.load(getClass().getResource("../view/Anlegen.fxml"));
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("../view/style.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("../img/VanillaSky.png")));

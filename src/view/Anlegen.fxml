@@ -79,7 +79,7 @@
          <tooltip>
             <Tooltip text="Personentage (extern)" />
          </tooltip></TextField>
-      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Projekt speichern">
+      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -124,7 +124,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Projektübersicht">
+      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Übersicht">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
