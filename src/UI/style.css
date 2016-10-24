@@ -34,15 +34,13 @@
 
     -fx-background-radius: 0.0;
 
-    -fx-background-color: #2b579a;
 
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 11.0pt;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .button:hover{
-    -fx-background-color: #5a9afc;
 }
 
 .button:pressed, .button:default:hover:pressed
