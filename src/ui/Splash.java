@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * 
+ * Startet den Preloader beim Start der fertigen (*.exe) Anwendung.
+ * Anschließend wird dieser nach 2,5 Sekunden geschlßen, sobald die
+ * Initialisierungs Methode des Startfenstern abgeschlossen wurde.
  * @author Daniel Sogl
  *
  */
@@ -24,19 +26,12 @@ public class Splash extends Preloader {
 		stage.initStyle(StageStyle.UNDECORATED);
 		stage.show();
 	}
-
-	@Override
-	public void handleProgressNotification(ProgressNotification pn) {
-	}
-
+	
 	@Override
 	public void handleStateChangeNotification(StateChangeNotification evt) {
 		if (evt.getType() == StateChangeNotification.Type.BEFORE_START) {
-			// Zeige den Preloader nach erfolgreichem Start der Anwendung für
-			// weitere 2,5 Sekunden
 			long startTime = System.currentTimeMillis();
-			while (false || (System.currentTimeMillis() - startTime) < 2500)
-				;
+			while (false || (System.currentTimeMillis() - startTime) < 2500);
 			stage.hide();
 		}
 	}

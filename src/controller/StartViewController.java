@@ -16,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import projektDaten.Projekt;
-import ui.Main;
 import ui.OpenMainPage;
 
 import java.util.Optional;
@@ -77,6 +76,10 @@ public class StartViewController {
 	@FXML
 	private void initialize() {
 
+		// Falls keine Projekte gefunden wurden, wird dieser Text in der Tabelle
+		// angezeigt
+		tbl_projektTabelle.setPlaceholder(new Label("Keine Projekte gefunden"));
+
 		// Zellen werden automatisch gefüllt, anhand der projektDaten-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
@@ -84,7 +87,7 @@ public class StartViewController {
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
-		projektData = FXCollections.observableArrayList(Main.projekte);
+		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
 		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
@@ -114,11 +117,12 @@ public class StartViewController {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 
-				if (tbl_projektTabelle.getFocusModel().getFocusedIndex() != 0)
+				if (tbl_projektTabelle.getFocusModel().getFocusedIndex() >= 0)
 					btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem projektDaten
+					// Überprüft ob auf einen Tabelleneintrag mit einem
+					// projektDaten
 					// geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {
@@ -155,7 +159,16 @@ public class StartViewController {
 					Node source = (Node) event.getSource();
 					Scene scene = source.getScene();
 					scene.setCursor(Cursor.WAIT);
-					myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
+
+					// Starte einen Thread im Hintergrund, damit der Nutzer die
+					// Anwendung schneller weiterhin benutzen kann.
+					// Der Eintrag in der DB wird im Hintergrund gelöscht
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
+						}
+					}).start();
 					projektData.remove(index);
 					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 					scene.setCursor(Cursor.DEFAULT);

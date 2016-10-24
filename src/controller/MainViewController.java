@@ -426,8 +426,15 @@ public class MainViewController {
 	}
 
 	public static void saveProjektRemote() {
-		Datenbank db = new Datenbank();
-		db.updateProjekt(projekt);
+		// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Datenbank db = new Datenbank();
+				db.updateProjekt(projekt);
+				System.out.println("Daten in der DB gespeichert!");
+			}
+		}).start();
 	}
 
 	@FXML
@@ -439,14 +446,22 @@ public class MainViewController {
 
 		if (projekt != null) {
 			try {
-				myDB.updateProjekt(projekt);
-				System.out.println("projektDaten gespeichert!");
+				// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						myDB.updateProjekt(projekt);
+						System.out.println("Daten in der DB gespeichert!");
+					}
+				}).start();
 				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
 				Stage stage = (Stage) scene.getWindow();
 				stage.setTitle(projekt.getName());
 			} catch (Exception e) {
-				System.out.println("Speichern fehlgeschlagen!");
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Speichern fehlgeschlagen!");
+				alert.showAndWait();
 			}
 		}
 		scene.setCursor(Cursor.DEFAULT);
@@ -528,15 +543,16 @@ public class MainViewController {
 
 	@FXML
 	public void btn_deletePhase_click(ActionEvent event) throws Exception {
-		
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setContentText("Möchten Sie die Phase: " + tbl_phase.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		alert.setContentText("Möchten Sie die Phase: " + tbl_phase.getSelectionModel().getSelectedItem().getName()
+				+ " wirklich löschen?");
 		ButtonType buttonTypeOne = new ButtonType("Löschen");
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 		Optional<ButtonType> result = alert.showAndWait();
-		
-		if(result.get() == buttonTypeOne){
+
+		if (result.get() == buttonTypeOne) {
 			try {
 				projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
 				phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
@@ -549,15 +565,16 @@ public class MainViewController {
 
 	@FXML
 	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
-		
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setContentText("Möchten Sie die Kompetenz: " + tbl_kompetenz.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		alert.setContentText("Möchten Sie die Kompetenz: "
+				+ tbl_kompetenz.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
 		ButtonType buttonTypeOne = new ButtonType("Löschen");
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 		Optional<ButtonType> result = alert.showAndWait();
-		
-		if(result.get() == buttonTypeOne){
+
+		if (result.get() == buttonTypeOne) {
 			try {
 				// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
 				// Kompetenz
