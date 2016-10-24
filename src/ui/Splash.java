@@ -7,17 +7,37 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * 
+ * @author Daniel Sogl
+ *
+ */
 public class Splash extends Preloader {
-	
-	public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("SplashView.fxml"));
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.show();
+
+	Stage stage;
+
+	public void start(Stage stage) throws Exception {
+		this.stage = stage;
+		Parent root = FXMLLoader.load(getClass().getResource("SplashView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.show();
 	}
-	
-    @Override
-    public void handleApplicationNotification(PreloaderNotification pn) {
-    }
+
+	@Override
+	public void handleProgressNotification(ProgressNotification pn) {
+	}
+
+	@Override
+	public void handleStateChangeNotification(StateChangeNotification evt) {
+		if (evt.getType() == StateChangeNotification.Type.BEFORE_START) {
+			// Zeige den Preloader nach erfolgreichem Start der Anwendung für
+			// weitere 2,5 Sekunden
+			long startTime = System.currentTimeMillis();
+			while (false || (System.currentTimeMillis() - startTime) < 2500)
+				;
+			stage.hide();
+		}
+	}
 }

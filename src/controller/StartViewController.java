@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import projektDaten.Projekt;
+import ui.Main;
 import ui.OpenMainPage;
 
 import java.util.Optional;
@@ -83,7 +84,7 @@ public class StartViewController {
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 
-		projektData = FXCollections.observableArrayList(myDB.getProjekte());
+		projektData = FXCollections.observableArrayList(Main.projekte);
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
 		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
@@ -134,13 +135,6 @@ public class StartViewController {
 				}
 			}
 		});
-
-		// Überprüfe ob die DB online ist
-		if (!myDB.testConnection()) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Keine Verbindung zur Datenbank möglich");
-			alert.showAndWait();
-		}
 	}
 
 	@FXML

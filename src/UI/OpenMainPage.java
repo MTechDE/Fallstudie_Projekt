@@ -17,6 +17,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import projektDaten.Projekt;
 
+/**
+ * 
+ * @author Daniel Sogl
+ *
+ */
 public class OpenMainPage extends Stage {
 
 	private Stage stage;

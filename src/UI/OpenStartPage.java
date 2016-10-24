@@ -8,6 +8,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Daniel Sogl
+ *
+ */
 public class OpenStartPage extends Stage{
 	
 	private Stage stage;

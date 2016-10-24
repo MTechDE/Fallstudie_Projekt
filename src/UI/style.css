@@ -1109,11 +1109,11 @@
     -fx-background-color: white;
 }
  
-/* table header label color
+
 .table-view .column-header .label{
-     -fx-text-fill: white;
+     -fx-text-fill: #2b579a;
 }
-*/
+
  
 .table-view .column-header, .table-view .filler {
     -fx-background-color: white;    
