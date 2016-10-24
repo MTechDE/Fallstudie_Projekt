@@ -1,9 +1,8 @@
-package UI;
+package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import Projekt.Projekt;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -14,6 +13,9 @@ import javafx.scene.control.CheckBox;
 
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+import projektDaten.Projekt;
+import ui.OpenMainPage;
+import ui.OpenUebersichtPage;
 
 public class UebersichtFensterController {
 	@FXML
@@ -51,7 +53,7 @@ public class UebersichtFensterController {
 	@FXML
 	private Label lbl_Meldestat;
 	
-	// Projekt
+	// projektDaten
 	private Projekt projekt;
 	
 	
@@ -65,9 +67,9 @@ public class UebersichtFensterController {
 		lbl_SDate.setText(projekt.getStartDate());
 		lbl_EDate.setText(projekt.getEndDate());
 		if (projekt.isAbgeschickt() == true) {
-			lbl_Meldestat.setText("Projekt Gemeldet");
+			lbl_Meldestat.setText("projektDaten Gemeldet");
 		} else {
-			lbl_Meldestat.setText("Projekt nicht Gemeldet");
+			lbl_Meldestat.setText("projektDaten nicht Gemeldet");
 		}
 	}
 

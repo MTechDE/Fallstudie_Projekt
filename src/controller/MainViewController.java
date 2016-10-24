@@ -1,14 +1,10 @@
-package UI;
+package controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Optional;
 
-import Datenbank.Datenbank;
-import Projekt.Aufwand;
-import Projekt.Kompetenz;
-import Projekt.Phase;
-import Projekt.Projekt;
+import datenbank.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,13 +25,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import projektDaten.Aufwand;
+import projektDaten.Kompetenz;
+import projektDaten.Phase;
+import projektDaten.Projekt;
+import ui.OpenMainPage;
+import ui.OpenStartPage;
+import ui.OpenUebersichtPage;
 
 /**
  * Controller für Anlegen.fxml GUI
  * 
  * @author Tim Krießler
  */
-public class AnlegenController {
+public class MainViewController {
 
 	@FXML
 	private TableView<Kompetenz> tbl_kompetenz;
@@ -107,7 +110,7 @@ public class AnlegenController {
 	private void initialize() {
 		System.out.println("Fenster wurde geöffnet.");
 
-		// Importiere Projekt
+		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
 
 		// Initalisiere Tabelle
@@ -437,7 +440,7 @@ public class AnlegenController {
 		if (projekt != null) {
 			try {
 				myDB.updateProjekt(projekt);
-				System.out.println("Projekt gespeichert!");
+				System.out.println("projektDaten gespeichert!");
 				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
 				Stage stage = (Stage) scene.getWindow();

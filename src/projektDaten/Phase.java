@@ -1,11 +1,11 @@
-package Projekt;
+package projektDaten;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Projekt.Aufwand;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import projektDaten.Aufwand;
 
 /**
  * Eine Phase enthält den Namen, sowie das Start- und Enddatum. Sowie eine Liste

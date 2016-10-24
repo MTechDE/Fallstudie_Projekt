@@ -1,4 +1,4 @@
-package UI;
+package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -15,11 +15,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import projektDaten.Projekt;
+import ui.OpenMainPage;
 
 import java.util.Optional;
 
-import Datenbank.Datenbank;
-import Projekt.Projekt;
+import datenbank.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -36,7 +37,7 @@ import javafx.scene.control.TableColumn;
  * @author Daniel Sogl
  *
  */
-public class StartFensterController {
+public class StartViewController {
 	@FXML
 	private AnchorPane startScreen;
 	@FXML
@@ -75,7 +76,7 @@ public class StartFensterController {
 	@FXML
 	private void initialize() {
 
-		// Zellen werden automatisch gefüllt, anhand der Projekt-Klasse
+		// Zellen werden automatisch gefüllt, anhand der projektDaten-Klasse
 		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
@@ -116,7 +117,7 @@ public class StartFensterController {
 					btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem Projekt
+					// Überprüft ob auf einen Tabelleneintrag mit einem projektDaten
 					// geklickt wurde
 					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {
@@ -149,7 +150,7 @@ public class StartFensterController {
 			try {
 				int index = tbl_projektTabelle.getSelectionModel().getSelectedIndex();
 				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setContentText("Möchten Sie das Projekt: "
+				alert.setContentText("Möchten Sie das projektDaten: "
 						+ tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
 				ButtonType buttonTypeOne = new ButtonType("Löschen");
 				ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
