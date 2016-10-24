@@ -1,11 +1,11 @@
-package Export;
+package export;
 
 import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import Projekt.Projekt;
+import projektDaten.Projekt;
 
 /**
  * Exportiert Projekte in eine CSV oder Text Datei
@@ -19,8 +19,8 @@ public class Excel {
 		String file = path;
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file))) {
 			// CSV Header
-			writer.write("Projekt Name;");
-			writer.write("Projekt Ersteller;");
+			writer.write("projektDaten Name;");
+			writer.write("projektDaten Ersteller;");
 			writer.write("Start Datum;");
 			writer.write("End Datum;");
 			writer.write("Abgeschickt?;");

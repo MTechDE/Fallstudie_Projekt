@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +15,7 @@ public class OpenStartPage extends Stage{
 	public OpenStartPage(){
 		try{
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle("Vanilla Sky");

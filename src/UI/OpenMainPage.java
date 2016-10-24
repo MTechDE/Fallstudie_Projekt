@@ -1,9 +1,9 @@
-package UI;
+package ui;
 
 import java.util.Optional;
 
-import Datenbank.Datenbank;
-import Projekt.Projekt;
+import controller.MainViewController;
+import datenbank.Datenbank;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +15,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import projektDaten.Projekt;
 
 public class OpenMainPage extends Stage {
 
@@ -39,7 +40,7 @@ public class OpenMainPage extends Stage {
 
 		try {
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
@@ -51,7 +52,7 @@ public class OpenMainPage extends Stage {
 				@Override
 				public void handle(final WindowEvent event) {
 
-					if (AnlegenController.somethingChanged) {
+					if (MainViewController.somethingChanged) {
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setContentText("Möchten Sie Änderungen speichern?");
 
@@ -64,7 +65,7 @@ public class OpenMainPage extends Stage {
 						Optional<ButtonType> result = alert.showAndWait();
 
 						if (result.get() == buttonTypeOne)
-							AnlegenController.saveProjektRemote();
+							MainViewController.saveProjektRemote();
 						if(result.get() == buttonTypeCancel)
 							event.consume();
 					}
@@ -83,7 +84,7 @@ public class OpenMainPage extends Stage {
 		try {
 			OpenMainPage.tmpProjekt = projekt;
 			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("Anlegen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(tmpProjekt.getName());

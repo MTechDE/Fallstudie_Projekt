@@ -1,12 +1,12 @@
-package UI;
+package ui;
 
-import Projekt.Projekt;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import projektDaten.Projekt;
 
 /**
  * Die Main-Klasse lädt lediglich die MainUI.fxml Datei und stellt diese dar.
@@ -22,7 +22,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("StartFenster.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));

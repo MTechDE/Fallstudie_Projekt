@@ -1,8 +1,7 @@
-package UI;
+package ui;
 
 import java.util.Optional;
 
-import Projekt.Projekt;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +13,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import projektDaten.Projekt;
 
 public class OpenUebersichtPage extends Stage {
 
@@ -49,7 +49,7 @@ public class OpenUebersichtPage extends Stage {
 					Optional<ButtonType> result = alert.showAndWait();
 
 					if (result.get() == buttonTypeOne)
-						System.out.println("Speichere Projekt in der Übersicht");
+						System.out.println("Speichere projektDaten in der Übersicht");
 					if (result.get() == buttonTypeCancel)
 						event.consume();
 				}

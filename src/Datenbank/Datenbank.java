@@ -1,4 +1,4 @@
-package Datenbank;
+package datenbank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
-import Projekt.Aufwand;
-import Projekt.Kompetenz;
-import Projekt.Phase;
-import Projekt.Projekt;
+import projektDaten.Aufwand;
+import projektDaten.Kompetenz;
+import projektDaten.Phase;
+import projektDaten.Projekt;
 
 /**
  * Alle Operationen welche mit der Datenbank zu tun haben (speichern und laden
@@ -49,10 +49,10 @@ public class Datenbank {
 	}
 
 	/**
-	 * Speichert ein Projekt und alle enthaltenen Phasen, Kompetenzen und
+	 * Speichert ein projektDaten und alle enthaltenen Phasen, Kompetenzen und
 	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * 
-	 * @param projekt das zu speichernde Projekt
+	 * @param projekt das zu speichernde projektDaten
 	 * @return boolean
 	 */
 	public boolean speicherProjekt(Projekt projekt) {
@@ -169,11 +169,11 @@ public class Datenbank {
 	}
 
 	/**
-	 * Ein Projekt wird anhand des übergebenen Projekt Objektes aus der
-	 * Datenbank geholt und als komplettes Projekt zurückgegeben.
+	 * Ein projektDaten wird anhand des übergebenen projektDaten Objektes aus der
+	 * Datenbank geholt und als komplettes projektDaten zurückgegeben.
 	 * 
-	 * @param projekt das aus der Datenbank zu holende Projekt
-	 * @return Projekt
+	 * @param projekt das aus der Datenbank zu holende projektDaten
+	 * @return projektDaten
 	 */
 	public Projekt getProjekt(Projekt projekt) {
 
@@ -207,9 +207,9 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Überprüfe ob das Projekt Phasen hat
+		// Überprüfe ob das projektDaten Phasen hat
 		if(!phasen.isEmpty()){
-			// Schreibe die Phasen in das Projekt
+			// Schreibe die Phasen in das projektDaten
 			newprojekt.setPhasen((ArrayList<Phase>) phasen);
 		}
 		
@@ -225,7 +225,7 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 			
-		//Weise Projekt die Kompetenzen mit den gespeicherten Personen hinzu, falls es Kompetenzen gibt
+		//Weise projektDaten die Kompetenzen mit den gespeicherten Personen hinzu, falls es Kompetenzen gibt
 		if(!kompetenzen.isEmpty())
 			newprojekt.setKompetenzen(kompetenzen);
 		
@@ -234,11 +234,11 @@ public class Datenbank {
 	}
 
 	/**
-	 * Ein Projekt wird komplett neu in die Datenbank geschrieben. Dazu wird es
+	 * Ein projektDaten wird komplett neu in die Datenbank geschrieben. Dazu wird es
 	 * zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt das zu updatenede Projekt
+	 * @param projekt das zu updatenede projektDaten
 	 * @return boolean
 	 */
 	public boolean updateProjekt(Projekt projekt) {
@@ -247,10 +247,10 @@ public class Datenbank {
 	}
 
 	/**
-	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen,
+	 * Alle Daten welche mit einem projektDaten zu tun haben (Phasen, Kompetenzen,
 	 * Aufwände), werden anhand des Projektnames aus der Datenbank gelöscht.
 	 * 
-	 * @param projekt das zu löschende Projekt
+	 * @param projekt das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public List<Aufwand> getPersonen() {
@@ -283,10 +283,10 @@ public class Datenbank {
 	}
 
 	/**
-	 * Alle Daten welche mit einem Projekt zu tun haben (Phasen, Kompetenzen, Aufwände),
+	 * Alle Daten welche mit einem projektDaten zu tun haben (Phasen, Kompetenzen, Aufwände),
 	 * werden anhand des Projektnames aus der Datenbank gelöscht.
 	 * 
-	 * @param projekt Das zu löschende Projekt
+	 * @param projekt Das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
