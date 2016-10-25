@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Optional;
 import datenbank.Datenbank;
+import export.Excel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -522,10 +523,17 @@ public class MainViewController {
 
 	@FXML
 	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
-		Node source = (Node) event.getSource();
-		Stage stage = (Stage) source.getScene().getWindow();
-		new OpenUebersichtPage(projekt);
-		stage.close();
+//		Node source = (Node) event.getSource();
+//		Stage stage = (Stage) source.getScene().getWindow();
+//		new OpenUebersichtPage(projekt);
+//		stage.close();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Excel.ExportToExcel(projekt);
+				System.out.println("Export abgeschlossen");
+			}
+		}).start();
 
 	}
 
@@ -584,24 +592,28 @@ public class MainViewController {
 	}
 
 	public void fülleFelder() {
-		Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
-		Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
+		try{
+			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
-		txt_pt_intern.setText("0");
-		txt_pt_extern.setText("0");
-		txt_mak_intern.setText("0");
-		txt_mak_extern.setText("0");
+			txt_pt_intern.setText("0");
+			txt_pt_extern.setText("0");
+			txt_mak_intern.setText("0");
+			txt_mak_extern.setText("0");
 
-		for (Aufwand aufwand : phaseSelected.getAufwände()) {
-			if (aufwand.getName().equals("intern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-				txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
-				txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+			for (Aufwand aufwand : phaseSelected.getAufwände()) {
+				if (aufwand.getName().equals("intern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
+					txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
+					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
 
+				}
+				if (aufwand.getName().equals("extern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
+					txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
+					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+				}
 			}
-			if (aufwand.getName().equals("extern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-				txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
-				txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
-			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
 		}
 	}
 
