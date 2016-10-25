@@ -3,7 +3,6 @@ package controller;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Optional;
-
 import datenbank.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -139,7 +138,7 @@ public class MainViewController {
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()) {
+				if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty() && tbl_phase.getSelectionModel().getSelectedItem().getClass() == Phase.class) {
 					try {
 						btn_deletePhase.setDisable(false);
 						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
@@ -172,15 +171,16 @@ public class MainViewController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()) {
-					btn_deleteKompetenz.setDisable(false);
-					indexKompetenzClicked = true;
-					// was passiert wenn eine phase und eine kompetenz
-					// ausgewählt
-					// wurden
-					if (indexPhaseClicked) {
-						btn_aufwand_festlegen.setDisable(false);
-						fülleFelder();
+				if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty() && tbl_kompetenz.getSelectionModel().getSelectedItem().getClass() == Kompetenz.class) {
+					try{
+						btn_deleteKompetenz.setDisable(false);
+						indexKompetenzClicked = true;
+						if (indexPhaseClicked) {
+							btn_aufwand_festlegen.setDisable(false);
+							fülleFelder();
+						}
+					}catch(Exception e){
+						System.out.println(e.getMessage());
 					}
 				}
 			}
@@ -210,14 +210,6 @@ public class MainViewController {
 						Double risikozuschlag = Double.parseDouble(risikozuschlagString);
 
 						Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
-
-						// Weise den Phasen neue Auwfände zu
-						for (int i = 0; i < projekt.getPhasen().size(); i++) {
-							Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
-							Aufwand extern = new Aufwand("Extern", kompetenz.getName(), 0.0);
-							projekt.getPhasen().get(i).setSingleAufwand(intern);
-							projekt.getPhasen().get(i).setSingleAufwand(extern);
-						}
 
 						projekt.setSingleKompetenz(kompetenz);
 						kompetenzen.add(kompetenz);
@@ -276,12 +268,7 @@ public class MainViewController {
 
 							projekt.setSinglePhase(phase);
 							phasen.add(phase);
-
 							tbl_phase.setItems(phasen);
-							// TODO: Fokus auf ein Element setzen, damit
-							// Arbeitstage
-							// immer
-							// berechnet werden können
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
@@ -391,26 +378,27 @@ public class MainViewController {
 				// Prüfung ob Aufwand für Kompetenz bereits vorhanden ist
 				boolean aufwandVorhanden = false;
 				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
-					if (aufwand.getName().endsWith(kompetenzSelected.getName()))
+					if (aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName()))
 						aufwandVorhanden = true;
 				}
 				if (!aufwandVorhanden) {
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
+							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName()));
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
+							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
 				}
 
-				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
-					if (aufwand.getName().startsWith("intern")
-							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
-						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
-						aufwand.setPt(ptIntern);
+				
+				for(int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++){
+					
+					if(projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("intern") &&
+							projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit().equals(kompetenzSelected.getName())){
+						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptIntern);
 					}
-					if (aufwand.getName().startsWith("extern")
-							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
-						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
-						aufwand.setPt(ptExtern);
+					
+					if(projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("extern") &&
+							projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit().equals(kompetenzSelected.getName())){
+						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptExtern);
 					}
 				}
 
@@ -605,12 +593,12 @@ public class MainViewController {
 		txt_mak_extern.setText("0");
 
 		for (Aufwand aufwand : phaseSelected.getAufwände()) {
-			if (aufwand.getName().startsWith("intern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
+			if (aufwand.getName().equals("intern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
 				txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
 				txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
 
 			}
-			if (aufwand.getName().startsWith("extern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
+			if (aufwand.getName().equals("extern") && aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
 				txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
 				txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
 			}
