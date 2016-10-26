@@ -3,15 +3,10 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-<<<<<<< HEAD
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-=======
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
->>>>>>> refs/remotes/origin/master
 import javafx.stage.Stage;
 import projektDaten.Kompetenz;
 
@@ -36,23 +31,15 @@ public class ChangeKompetenzViewController {
 
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
-<<<<<<< HEAD
-		kompetenz.setName(txt_kompetenz_aendern.getText());
-		kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
-		MainViewController mainViewController = new MainViewController();
-		mainViewController.updateTbl_kompetenz();
-		btn_abbrechen_click(event);
-=======
-		
-		if(!txt_kompetenz_aendern.getText().equals(kompetenz.getName())){
+		if (!txt_kompetenz_aendern.getText().equals(kompetenz.getName())) {
 			boolean check = false;
-			for (Kompetenz	Kompetenz: MainViewController.projekt.getKompetenzen()) {
-				if(Kompetenz.getName().equals(txt_kompetenz_aendern.getText()))
+			for (Kompetenz Kompetenz : MainViewController.projekt.getKompetenzen()) {
+				if (Kompetenz.getName().equals(txt_kompetenz_aendern.getText()))
 					check = true;
 			}
-			if(!check){
+			if (!check) {
 				kompetenz.setName(txt_kompetenz_aendern.getText());
-				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));	
+				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
 				MainViewController.somethingChanged = true;
 				btn_abbrechen_click(event);
 			} else {
@@ -63,7 +50,6 @@ public class ChangeKompetenzViewController {
 		} else {
 			btn_abbrechen_click(event);
 		}
->>>>>>> refs/remotes/origin/master
 	}
 
 	@FXML
@@ -81,8 +67,4 @@ public class ChangeKompetenzViewController {
 	public static void setKompetenz(Kompetenz k) {
 		kompetenz = k;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> refs/remotes/origin/master

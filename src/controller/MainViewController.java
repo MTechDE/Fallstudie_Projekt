@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
+
 import datenbank.Datenbank;
 import export.Excel;
 import javafx.collections.FXCollections;
@@ -135,8 +136,8 @@ public class MainViewController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
-		
-		if(projekt.isAbgeschickt())
+
+		if (projekt.isAbgeschickt())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		txt_pt_intern.setVisible(false);
@@ -311,14 +312,6 @@ public class MainViewController {
 			alert.showAndWait();
 		}
 
-	}
-
-	public void updateTbl_phase() {
-		// TODO Anzeige nach Änderung updaten
-	}
-
-	public void updateTbl_kompetenz() {
-		// TODO Anzeige nach Änderung updaten
 	}
 
 	@FXML
@@ -516,7 +509,7 @@ public class MainViewController {
 					@Override
 					public void run() {
 						btn_projekt_speichern.setDisable(true);
-//						System.out.println(projekt.getMeldeDatum());
+						// System.out.println(projekt.getMeldeDatum());
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
 						btn_projekt_speichern.setDisable(false);
@@ -533,17 +526,17 @@ public class MainViewController {
 		}
 		scene.setCursor(Cursor.DEFAULT);
 	}
-	
+
 	@FXML
 	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
 		System.out.println("Datum ausgewählt");
 	}
-	
+
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
-		
+
 		// TODO: Meldedatum darf nicht null sein
-		
+
 		projekt.setAbgeschickt(true);
 		projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
 		btn_projekt_speichern_click(event);
