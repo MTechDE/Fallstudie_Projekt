@@ -35,7 +35,7 @@ public class OpenUebersichtPage extends Stage {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName() + " - Übersicht");
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

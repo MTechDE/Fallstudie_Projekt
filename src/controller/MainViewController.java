@@ -627,7 +627,8 @@ public class MainViewController {
 	public void updateTbl_phase() {
 		try {
 			phasen = FXCollections.observableArrayList(projekt.getPhasen());
-			checkChanges();
+//			tbl_phase.refresh();
+//			checkChanges();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -636,7 +637,7 @@ public class MainViewController {
 	public void updateTbl_kompetenz() {
 		try {
 			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
-			checkChanges();
+//			checkChanges();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

@@ -24,7 +24,7 @@ public class OpenStartPage extends Stage{
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setTitle("Vanilla Sky");
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
 			stage.show();
 		} catch (Exception e){

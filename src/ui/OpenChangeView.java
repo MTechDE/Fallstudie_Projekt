@@ -24,11 +24,9 @@ public class OpenChangeView extends Stage {
 			Parent root = FXMLLoader.load(getClass().getResource("ChangePhaseView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
-			stage.setTitle("Phase " + phase.getName() + " ändern");
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.setTitle(phase.getName() + " ändern");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
-			// Die MainViewbleibt im Hintergrund und kann erst nach schließen
-			// der neuen View geschlossen werden
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
 		} catch (Exception e) {
@@ -46,10 +44,11 @@ public class OpenChangeView extends Stage {
 			Parent root = FXMLLoader.load(getClass().getResource("ChangeKompetenzView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
-			stage.setTitle("Kompetenz " + kompetenz.getName() + " ändern");
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.setTitle(kompetenz.getName() + " ändern");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
-			stage.show();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);

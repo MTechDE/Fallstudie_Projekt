@@ -40,9 +40,7 @@ public class ChangeKompetenzViewController {
 			}
 			if(!check){
 				kompetenz.setName(txt_kompetenz_aendern.getText());
-				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
-				MainViewController mainViewController = new MainViewController();
-				mainViewController.updateTbl_kompetenz();
+				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));	
 				btn_abbrechen_click(event);
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);
