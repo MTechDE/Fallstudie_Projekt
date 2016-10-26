@@ -9,9 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -45,7 +45,7 @@ public class OpenMainPage extends Stage {
 			stage.setScene(scene);
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
-			stage.setResizable(false);
+			// stage.setResizable(false);
 			stage.show();
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -66,7 +66,7 @@ public class OpenMainPage extends Stage {
 
 						if (result.get() == buttonTypeOne)
 							MainViewController.saveProjektRemote();
-						if(result.get() == buttonTypeCancel)
+						if (result.get() == buttonTypeCancel)
 							event.consume();
 					}
 				}
@@ -74,7 +74,7 @@ public class OpenMainPage extends Stage {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte straten Sie die Anwendung neu.");
+			alert.setContentText("Bitte starten Sie die Anwendung neu.");
 			alert.showAndWait();
 		}
 

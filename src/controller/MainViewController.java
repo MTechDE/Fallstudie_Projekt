@@ -23,12 +23,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import projektDaten.Aufwand;
 import projektDaten.Kompetenz;
 import projektDaten.Phase;
 import projektDaten.Projekt;
+import ui.OpenChangeView;
 import ui.OpenMainPage;
 import ui.OpenStartPage;
 import ui.OpenUebersichtPage;
@@ -165,6 +167,20 @@ public class MainViewController {
 						fülleFelder();
 					}
 				}
+
+				// Phase ändern
+				// Doppelklick + Linke Maustaste
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
+					// Überprüft ob auf einen Tabelleneintrag mit einer Phase
+					// geklickt wurde
+					if (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase) {
+						try {
+							new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+						}
+					}
+				}
 			}
 		});
 
@@ -181,6 +197,20 @@ public class MainViewController {
 					if (indexPhaseClicked) {
 						btn_aufwand_festlegen.setDisable(false);
 						fülleFelder();
+					}
+				}
+
+				// Kompetenz ändern
+				// Doppelklick + Linke Maustaste
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
+					// Überprüft ob auf einen Tabelleneintrag mit einer Phase
+					// geklickt wurde
+					if (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz) {
+						try {
+							new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+						}
 					}
 				}
 			}
@@ -251,6 +281,14 @@ public class MainViewController {
 			alert.showAndWait();
 		}
 
+	}
+
+	public void updateTbl_phase() {
+		// TODO Anzeige nach Änderung updaten
+	}
+
+	public void updateTbl_kompetenz() {
+		// TODO Anzeige nach Änderung updaten
 	}
 
 	@FXML
@@ -528,15 +566,16 @@ public class MainViewController {
 
 	@FXML
 	public void btn_deletePhase_click(ActionEvent event) throws Exception {
-		
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setContentText("Möchten Sie die Phase: " + tbl_phase.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		alert.setContentText("Möchten Sie die Phase: " + tbl_phase.getSelectionModel().getSelectedItem().getName()
+				+ " wirklich löschen?");
 		ButtonType buttonTypeOne = new ButtonType("Löschen");
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 		Optional<ButtonType> result = alert.showAndWait();
-		
-		if(result.get() == buttonTypeOne){
+
+		if (result.get() == buttonTypeOne) {
 			try {
 				projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
 				phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
@@ -549,15 +588,16 @@ public class MainViewController {
 
 	@FXML
 	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
-		
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setContentText("Möchten Sie die Kompetenz: " + tbl_kompetenz.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
+		alert.setContentText("Möchten Sie die Kompetenz: "
+				+ tbl_kompetenz.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
 		ButtonType buttonTypeOne = new ButtonType("Löschen");
 		ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeCancel);
 		Optional<ButtonType> result = alert.showAndWait();
-		
-		if(result.get() == buttonTypeOne){
+
+		if (result.get() == buttonTypeOne) {
 			try {
 				// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
 				// Kompetenz

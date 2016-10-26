@@ -11,13 +11,13 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="819.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="819.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
    <children>
       <Separator layoutX="198.0" layoutY="14.0" orientation="VERTICAL" prefHeight="476.0" prefWidth="8.0" />
-      <Button fx:id="btn_phase" layoutX="17.0" layoutY="167.0" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Neue Phase">
+      <Button fx:id="btn_phase" layoutX="17.0" layoutY="167.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btn_phase_click" prefHeight="34.0" prefWidth="167.0" text="Neue Phase">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -29,7 +29,8 @@
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="file:@../../resources/new-user.png" />
-               </image></ImageView>
+               </image>
+             </ImageView>
          </graphic>
       </Button>
       <TableView fx:id="tbl_kompetenz" editable="true" layoutX="427.0" layoutY="26.0" prefHeight="452.0" prefWidth="196.0">
@@ -52,7 +53,7 @@
          <tooltip>
             <Tooltip text="Kompetenz eingeben" />
          </tooltip></TextField>
-      <TextField fx:id="txt_phase" layoutX="17.0" layoutY="26.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben">
+      <TextField fx:id="txt_phase" layoutX="17.0" layoutY="26.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="26.0">
          <tooltip>
             <Tooltip text="Phase eingeben" />
          </tooltip></TextField>
@@ -79,7 +80,7 @@
          <tooltip>
             <Tooltip text="Personentage (extern)" />
          </tooltip></TextField>
-      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Speichern">
+      <Button fx:id="btn_projekt_speichern" disable="true" layoutX="639.0" layoutY="344.0" mnemonicParsing="false" onAction="#btn_projekt_speichern_click" prefHeight="34.0" prefWidth="167.0" text="Speichern" AnchorPane.bottomAnchor="115.0" AnchorPane.rightAnchor="13.0">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -116,7 +117,7 @@
          <tooltip>
             <Tooltip text="Risikozuschlag in %" />
          </tooltip></TextField>
-      <Button fx:id="btn_zurueck" layoutX="639.0" layoutY="435.0" mnemonicParsing="false" onAction="#btn_zurueck_click" prefHeight="34.0" prefWidth="167.0" text="Zurück">
+      <Button fx:id="btn_zurueck" layoutX="639.0" layoutY="435.0" mnemonicParsing="false" onAction="#btn_zurueck_click" prefHeight="34.0" prefWidth="167.0" text="Zurück" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="13.0">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -124,7 +125,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Export">
+      <Button fx:id="btn_projektuebersicht" layoutX="639.0" layoutY="389.0" mnemonicParsing="false" onAction="#btn_projektuebersicht_click" prefHeight="34.0" prefWidth="167.0" text="Export" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="13.0">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -152,4 +153,4 @@
          </graphic>
       </Button>
    </children>
-</Pane>
+</AnchorPane>
