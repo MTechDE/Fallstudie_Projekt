@@ -48,6 +48,7 @@ public class OpenMainPage extends Stage {
 			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
+			stage.setResizable(false);
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.show();
@@ -82,24 +83,5 @@ public class OpenMainPage extends Stage {
 			alert.showAndWait();
 		}
 
-	}
-
-	public OpenMainPage(Projekt projekt) {
-		try {
-			OpenMainPage.tmpProjekt = projekt;
-			stage = this;
-			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.setTitle(tmpProjekt.getName());
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
-			stage.setResizable(false);
-			stage.show();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte straten Sie die Anwendung neu.");
-			alert.showAndWait();
-		}
 	}
 }
