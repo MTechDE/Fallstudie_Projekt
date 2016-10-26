@@ -55,8 +55,6 @@ public class ChangePhaseViewController {
 				phase.setName(txt_phase_aendern.getText());
 				phase.setStartDate(dtpkr_startdatum_aendern.getValue().toString());
 				phase.setEndDate(dtpkr_enddatum_aendern.getValue().toString());
-				MainViewController mainViewController = new MainViewController();
-				mainViewController.updateTbl_phase();
 				btn_abbrechen_click(event);
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);

@@ -50,7 +50,7 @@ public class OpenMainPage extends Stage {
 			stage.setScene(scene);
 			stage.setResizable(false);
 			stage.setTitle(projekt.getName());
-			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.show();
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -82,6 +82,5 @@ public class OpenMainPage extends Stage {
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
 			alert.showAndWait();
 		}
-
 	}
 }

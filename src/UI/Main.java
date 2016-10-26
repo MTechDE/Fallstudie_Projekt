@@ -22,7 +22,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");
-			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("VanillaSky.png")));
+			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
