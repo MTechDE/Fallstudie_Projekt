@@ -464,8 +464,15 @@ public class MainViewController {
 	}
 
 	public static void saveProjektRemote() {
-		Datenbank db = new Datenbank();
-		db.updateProjekt(projekt);
+		// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Datenbank db = new Datenbank();
+				db.updateProjekt(projekt);
+				System.out.println("Daten in der DB gespeichert!");
+			}
+		}).start();
 	}
 
 	@FXML
@@ -477,14 +484,22 @@ public class MainViewController {
 
 		if (projekt != null) {
 			try {
-				myDB.updateProjekt(projekt);
-				System.out.println("projektDaten gespeichert!");
+				// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						myDB.updateProjekt(projekt);
+						System.out.println("Daten in der DB gespeichert!");
+					}
+				}).start();
 				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
 				Stage stage = (Stage) scene.getWindow();
 				stage.setTitle(projekt.getName());
 			} catch (Exception e) {
-				System.out.println("Speichern fehlgeschlagen!");
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Speichern fehlgeschlagen!");
+				alert.showAndWait();
 			}
 		}
 		scene.setCursor(Cursor.DEFAULT);

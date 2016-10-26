@@ -1,7 +1,6 @@
 package ui;
 
 import java.util.Optional;
-
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +14,12 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import projektDaten.Projekt;
 
+/**
+ * 
+ * @author Daniel Sogl
+ *
+ */
+
 public class OpenUebersichtPage extends Stage {
 
 	private Stage stage;
@@ -23,7 +28,6 @@ public class OpenUebersichtPage extends Stage {
 	public OpenUebersichtPage(Projekt projekt) {
 
 		OpenUebersichtPage.tmpProjekt = projekt;
-		Main.projekt = projekt;
 
 		try {
 			stage = this;

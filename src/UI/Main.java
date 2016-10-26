@@ -1,12 +1,12 @@
 package ui;
 
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import projektDaten.Projekt;
 
 /**
  * Die Main-Klasse lädt lediglich die MainUI.fxml Datei und stellt diese dar.
@@ -16,9 +16,6 @@ import projektDaten.Projekt;
  */
 
 public class Main extends Application {
-	
-	public static Projekt projekt;
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
@@ -38,5 +35,5 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 }
