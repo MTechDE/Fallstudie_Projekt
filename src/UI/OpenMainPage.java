@@ -48,9 +48,15 @@ public class OpenMainPage extends Stage {
 			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
+<<<<<<< HEAD
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			// stage.setResizable(false);
+=======
+			stage.setResizable(false);
+			stage.setTitle(projekt.getName());
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
+>>>>>>> refs/remotes/origin/master
 			stage.show();
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -80,6 +86,7 @@ public class OpenMainPage extends Stage {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
+<<<<<<< HEAD
 			alert.showAndWait();
 		}
 
@@ -100,6 +107,8 @@ public class OpenMainPage extends Stage {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");
+=======
+>>>>>>> refs/remotes/origin/master
 			alert.showAndWait();
 		}
 	}

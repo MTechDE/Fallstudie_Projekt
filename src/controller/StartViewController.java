@@ -57,6 +57,8 @@ public class StartViewController {
 	@FXML
 	private TableColumn<Projekt, String> tblCell_projektSend;
 	@FXML
+	private TableColumn<Projekt, String> tblCell_projektSendDate;
+	@FXML
 	private TextField txt_newProjekt_name;
 	@FXML
 	private TextField txt_newProjekt_ersteller;
@@ -86,6 +88,7 @@ public class StartViewController {
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
+		tblCell_projektSendDate.setCellValueFactory(cellData -> cellData.getValue().getMeldeDatumProperty());
 
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
@@ -148,7 +151,7 @@ public class StartViewController {
 			try {
 				int index = tbl_projektTabelle.getSelectionModel().getSelectedIndex();
 				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setContentText("Möchten Sie das projektDaten: "
+				alert.setContentText("Möchten Sie das Projekt: "
 						+ tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
 				ButtonType buttonTypeOne = new ButtonType("Löschen");
 				ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
@@ -160,9 +163,7 @@ public class StartViewController {
 					Scene scene = source.getScene();
 					scene.setCursor(Cursor.WAIT);
 
-					// Starte einen Thread im Hintergrund, damit der Nutzer die
-					// Anwendung schneller weiterhin benutzen kann.
-					// Der Eintrag in der DB wird im Hintergrund gelöscht
+					// Starte einen Thread
 					new Thread(new Runnable() {
 						@Override
 						public void run() {

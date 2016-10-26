@@ -17,7 +17,6 @@ public class Aufwand {
 	private StringProperty name;
 	private StringProperty zugehoerigkeit;
 	private DoubleProperty pt;
-	private DoubleProperty anwesenheit;
 
 	/**
 	 * Standardkonstruktor
@@ -27,6 +26,17 @@ public class Aufwand {
 	public Aufwand(String name) {
 		this.setName(name);
 		this.setPt(0);
+	}
+	
+	/**
+	 * Erweiterter Konstruktor welcher von der Datenbank-Schnittstelle aufgerufen wird
+	 * 
+	 * @param name Name des Aufwandes
+	 * @param zugehoerigkeit Zugehörigkeit des Aufwandes
+	 */
+	public Aufwand(String name, String zugehoerigkeit) {
+		this.setName(name);
+		this.setZugehoerigkeit(zugehoerigkeit);
 	}
 
 	/**
@@ -112,28 +122,5 @@ public class Aufwand {
 	 */
 	public void setPt(double pt) {
 		this.pt = new SimpleDoubleProperty(pt);
-	}
-	/**
-	 * 
-	 * @return Double
-	 */
-	public double getAnwesenheit() {
-		return anwesenheit.get();
-	}
-
-	/**
-	 * 
-	 * @return DoubleProperty
-	 */
-	public DoubleProperty getAnwesenheitProperty() {
-		return anwesenheit;
-	}
-
-	/**
-	 * 
-	 * @param anwesenheit Anwesenheit des Auwandes
-	 */
-	public void setAnwesenheit(Double anwesenheit) {
-		this.anwesenheit = new SimpleDoubleProperty(anwesenheit);
 	}
 }

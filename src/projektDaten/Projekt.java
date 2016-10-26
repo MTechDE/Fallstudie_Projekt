@@ -23,6 +23,7 @@ public class Projekt {
 	private StringProperty ersteller;
 	private StringProperty startDate;
 	private StringProperty endDate;
+	private StringProperty meldeDatum;
 
 	/**
 	 * Konstruktor um die Grundinformationen eines Projektes abbilden zu können
@@ -37,6 +38,7 @@ public class Projekt {
 		this.setAbgeschickt(abgeschickt);
 		this.setStartDate(null);
 		this.setEndDate(null);
+		this.setMeldeDatum(null);
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class Projekt {
 	 * @param startDate Startdatum des Projektes
 	 * @param endDate Enddatum des Projektes
 	 */
-	public Projekt(String name, String ersteller, boolean abgeschickt, String startDate, String endDate) {
+	public Projekt(String name, String ersteller, boolean abgeschickt, String startDate, String endDate, String meldeDatum) {
 		this.setName(name);
 		this.setErsteller(ersteller);
 		this.setAbgeschickt(abgeschickt);
@@ -55,6 +57,7 @@ public class Projekt {
 		this.setEndDate(endDate);
 		this.setPhasen(null);
 		this.setKompetenzen(null);
+		this.setMeldeDatum(meldeDatum);
 	}
 
 	/**
@@ -226,5 +229,17 @@ public class Projekt {
 	 */
 	public void setSingleKompetenz(Kompetenz kompetenz) {
 		this.kompetenzen.add(kompetenz);
+	}
+
+	public StringProperty getMeldeDatumProperty() {
+		return meldeDatum;
+	}
+	
+	public String getMeldeDatum() {
+		return meldeDatum.get();
+	}
+
+	public void setMeldeDatum(String meldeDatum) {
+		this.meldeDatum = new SimpleStringProperty(meldeDatum);
 	}
 }

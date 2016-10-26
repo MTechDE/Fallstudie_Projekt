@@ -1,10 +1,11 @@
 package controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
-
 import datenbank.Datenbank;
+import export.Excel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -33,7 +35,6 @@ import projektDaten.Projekt;
 import ui.OpenChangeView;
 import ui.OpenMainPage;
 import ui.OpenStartPage;
-import ui.OpenUebersichtPage;
 
 /**
  * Controller für Anlegen.fxml GUI
@@ -81,6 +82,8 @@ public class MainViewController {
 	@FXML
 	private Button btn_deleteKompetenz;
 	@FXML
+	private Button btn_sendProjekt;
+	@FXML
 	private TableColumn<Kompetenz, String> tblCell_kompetenz;
 	@FXML
 	private TableColumn<Phase, String> tblCell_phase;
@@ -90,6 +93,8 @@ public class MainViewController {
 	private DatePicker dtpkr_start;
 	@FXML
 	private DatePicker dtpkr_end;
+	@FXML
+	private DatePicker dtpkr_meldeDatum;
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -101,7 +106,7 @@ public class MainViewController {
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
 
 	// Variablen
-	private static Projekt projekt;
+	public static Projekt projekt;
 	private int arbeitstage = 0;
 	private static Datenbank myDB = new Datenbank();
 	private boolean indexPhaseClicked = false;
@@ -116,7 +121,8 @@ public class MainViewController {
 		projekt = OpenMainPage.tmpProjekt;
 
 		// Initalisiere Tabelle
-
+		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
+		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_phase.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
@@ -129,6 +135,9 @@ public class MainViewController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
+		
+		if(projekt.isAbgeschickt())
+			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		txt_pt_intern.setVisible(false);
 		txt_pt_extern.setVisible(false);
@@ -141,8 +150,10 @@ public class MainViewController {
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()) {
-					try {
+
+				try {
+					if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()
+							&& tbl_phase.getSelectionModel().getSelectedItem().getClass() == Phase.class) {
 						btn_deletePhase.setDisable(false);
 						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
 						// Berechnung Arbeitstage aus Phasenzeitraum für
@@ -154,18 +165,30 @@ public class MainViewController {
 
 						txt_mak_pt_intern.setText(arbeitstage + " PT");
 						txt_mak_pt_extern.setText(arbeitstage + " PT");
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
 
-					indexPhaseClicked = true;
-					// was passiert wenn eine phase und eine kompetenz
-					// ausgewählt
-					// wurden
-					if (indexKompetenzClicked) {
-						btn_aufwand_festlegen.setDisable(false);
-						fülleFelder();
+						indexPhaseClicked = true;
+						// was passiert wenn eine phase und eine kompetenz
+						// ausgewählt
+						// wurden
+						if (indexKompetenzClicked) {
+							btn_aufwand_festlegen.setDisable(false);
+							fülleFelder();
+						}
+
+						if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
+							// Überprüft ob auf einen Tabelleneintrag mit einer
+							// Phase
+							// geklickt wurde
+							if (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase) {
+								try {
+									new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}
+						}
 					}
+				} catch (Exception e) {
 				}
 
 				// Phase ändern
@@ -188,16 +211,31 @@ public class MainViewController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()) {
-					btn_deleteKompetenz.setDisable(false);
-					indexKompetenzClicked = true;
-					// was passiert wenn eine phase und eine kompetenz
-					// ausgewählt
-					// wurden
-					if (indexPhaseClicked) {
-						btn_aufwand_festlegen.setDisable(false);
-						fülleFelder();
+				try {
+					if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()
+							&& tbl_kompetenz.getSelectionModel().getSelectedItem().getClass() == Kompetenz.class) {
+						btn_deleteKompetenz.setDisable(false);
+						indexKompetenzClicked = true;
+						if (indexPhaseClicked) {
+							btn_aufwand_festlegen.setDisable(false);
+							fülleFelder();
+						}
+						// Kompetenz ändern
+						// Doppelklick + Linke Maustaste
+						if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
+							// Überprüft ob auf einen Tabelleneintrag mit einer
+							// Phase
+							// geklickt wurde
+							if (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz) {
+								try {
+									new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}
+						}
 					}
+				} catch (Exception e) {
 				}
 
 				// Kompetenz ändern
@@ -240,14 +278,6 @@ public class MainViewController {
 						Double risikozuschlag = Double.parseDouble(risikozuschlagString);
 
 						Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
-
-						// Weise den Phasen neue Auwfände zu
-						for (int i = 0; i < projekt.getPhasen().size(); i++) {
-							Aufwand intern = new Aufwand("Intern", kompetenz.getName(), 0.0);
-							Aufwand extern = new Aufwand("Extern", kompetenz.getName(), 0.0);
-							projekt.getPhasen().get(i).setSingleAufwand(intern);
-							projekt.getPhasen().get(i).setSingleAufwand(extern);
-						}
 
 						projekt.setSingleKompetenz(kompetenz);
 						kompetenzen.add(kompetenz);
@@ -314,12 +344,7 @@ public class MainViewController {
 
 							projekt.setSinglePhase(phase);
 							phasen.add(phase);
-
 							tbl_phase.setItems(phasen);
-							// TODO: Fokus auf ein Element setzen, damit
-							// Arbeitstage
-							// immer
-							// berechnet werden können
 						} catch (Exception e) {
 							System.out.println(e.getMessage());
 						}
@@ -429,26 +454,28 @@ public class MainViewController {
 				// Prüfung ob Aufwand für Kompetenz bereits vorhanden ist
 				boolean aufwandVorhanden = false;
 				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
-					if (aufwand.getName().endsWith(kompetenzSelected.getName()))
+					if (aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName()))
 						aufwandVorhanden = true;
 				}
 				if (!aufwandVorhanden) {
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("intern " + kompetenzSelected.getName()));
+							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName()));
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("extern " + kompetenzSelected.getName()));
+							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
 				}
 
-				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
-					if (aufwand.getName().startsWith("intern")
-							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
-						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
-						aufwand.setPt(ptIntern);
+				for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
+
+					if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("intern")
+							&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
+									.equals(kompetenzSelected.getName())) {
+						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptIntern);
 					}
-					if (aufwand.getName().startsWith("extern")
-							&& aufwand.getName().endsWith(kompetenzSelected.getName())) {
-						aufwand.setZugehoerigkeit(kompetenzSelected.getName());
-						aufwand.setPt(ptExtern);
+
+					if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("extern")
+							&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
+									.equals(kompetenzSelected.getName())) {
+						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptExtern);
 					}
 				}
 
@@ -488,11 +515,13 @@ public class MainViewController {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						btn_projekt_speichern.setDisable(true);
+//						System.out.println(projekt.getMeldeDatum());
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
+						btn_projekt_speichern.setDisable(false);
 					}
 				}).start();
-				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
 				Stage stage = (Stage) scene.getWindow();
 				stage.setTitle(projekt.getName());
@@ -503,6 +532,21 @@ public class MainViewController {
 			}
 		}
 		scene.setCursor(Cursor.DEFAULT);
+	}
+	
+	@FXML
+	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
+		System.out.println("Datum ausgewählt");
+	}
+	
+	@FXML
+	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
+		
+		// TODO: Meldedatum darf nicht null sein
+		
+		projekt.setAbgeschickt(true);
+		projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+		btn_projekt_speichern_click(event);
 	}
 
 	@FXML
@@ -572,10 +616,13 @@ public class MainViewController {
 
 	@FXML
 	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
-		Node source = (Node) event.getSource();
-		Stage stage = (Stage) source.getScene().getWindow();
-		new OpenUebersichtPage(projekt);
-		stage.close();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Excel.ExportToExcel(projekt);
+				System.out.println("Export abgeschlossen");
+			}
+		}).start();
 
 	}
 
@@ -633,25 +680,49 @@ public class MainViewController {
 		}
 	}
 
+	public void updateTbl_phase() {
+		try {
+			phasen = FXCollections.observableArrayList(projekt.getPhasen());
+			checkChanges();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void updateTbl_kompetenz() {
+		try {
+			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
+			checkChanges();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
 	public void fülleFelder() {
-		Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
-		Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
+		try {
+			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
+			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
-		txt_pt_intern.setText("0");
-		txt_pt_extern.setText("0");
-		txt_mak_intern.setText("0");
-		txt_mak_extern.setText("0");
+			txt_pt_intern.setText("0");
+			txt_pt_extern.setText("0");
+			txt_mak_intern.setText("0");
+			txt_mak_extern.setText("0");
 
-		for (Aufwand aufwand : phaseSelected.getAufwände()) {
-			if (aufwand.getName().startsWith("intern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
-				txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
-				txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+			for (Aufwand aufwand : phaseSelected.getAufwände()) {
+				if (aufwand.getName().equals("intern")
+						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
+					txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
+					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
 
+				}
+				if (aufwand.getName().equals("extern")
+						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
+					txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
+					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+				}
 			}
-			if (aufwand.getName().startsWith("extern") && aufwand.getName().endsWith(kompetenzSelected.getName())) {
-				txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
-				txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
-			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -660,6 +731,5 @@ public class MainViewController {
 		Scene scene = (Scene) txt_pt_extern.getScene();
 		Stage stage = (Stage) scene.getWindow();
 		stage.setTitle("* " + projekt.getName());
-		btn_projekt_speichern.setDisable(false);
 	}
 }
