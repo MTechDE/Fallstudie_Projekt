@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import projektDaten.Kompetenz;
 import projektDaten.Phase;
@@ -26,7 +27,10 @@ public class OpenChangeView extends Stage {
 			stage.setTitle("Phase " + phase.getName() + " ändern");
 			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
 			stage.setResizable(false);
-			stage.show();
+			// Die MainViewbleibt im Hintergrund und kann erst nach schließen
+			// der neuen View geschlossen werden
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);

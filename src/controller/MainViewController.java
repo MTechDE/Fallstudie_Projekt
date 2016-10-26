@@ -80,6 +80,8 @@ public class MainViewController {
 	@FXML
 	private Button btn_deleteKompetenz;
 	@FXML
+	private Button btn_sendProjekt;
+	@FXML
 	private TableColumn<Kompetenz, String> tblCell_kompetenz;
 	@FXML
 	private TableColumn<Phase, String> tblCell_phase;
@@ -100,7 +102,7 @@ public class MainViewController {
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
 
 	// Variablen
-	private static Projekt projekt;
+	public static Projekt projekt;
 	private int arbeitstage = 0;
 	private static Datenbank myDB = new Datenbank();
 	private boolean indexPhaseClicked = false;
@@ -484,6 +486,11 @@ public class MainViewController {
 			}
 		}
 		scene.setCursor(Cursor.DEFAULT);
+	}
+	
+	@FXML
+	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
+		
 	}
 
 	@FXML
