@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author mytec
+ * @author Daniel Sogl
  *
  */
 package controller;
