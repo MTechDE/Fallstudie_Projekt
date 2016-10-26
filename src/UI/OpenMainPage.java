@@ -9,9 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -48,9 +48,15 @@ public class OpenMainPage extends Stage {
 			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
+<<<<<<< HEAD
+			stage.setTitle(projekt.getName());
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			// stage.setResizable(false);
+=======
 			stage.setResizable(false);
 			stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
+>>>>>>> refs/remotes/origin/master
 			stage.show();
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -80,6 +86,29 @@ public class OpenMainPage extends Stage {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
+<<<<<<< HEAD
+			alert.showAndWait();
+		}
+
+	}
+
+	public OpenMainPage(Projekt projekt) {
+		try {
+			OpenMainPage.tmpProjekt = projekt;
+			stage = this;
+			Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.setTitle(tmpProjekt.getName());
+			stage.getIcons().add(new Image(OpenMainPage.class.getResourceAsStream("VanillaSky.png")));
+			stage.setResizable(false);
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte straten Sie die Anwendung neu.");
+=======
+>>>>>>> refs/remotes/origin/master
 			alert.showAndWait();
 		}
 	}

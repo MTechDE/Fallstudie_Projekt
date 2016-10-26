@@ -6,10 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import projektDaten.Phase;
 
@@ -45,13 +45,13 @@ public class ChangePhaseViewController {
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
 		// Überprüfe ob der neue Name bereits verwendet wurde
-		if(!txt_phase_aendern.getText().equals(phase.getName())){
+		if (!txt_phase_aendern.getText().equals(phase.getName())) {
 			boolean check = false;
 			for (Phase Phase : MainViewController.projekt.getPhasen()) {
-				if(Phase.getName().equals(txt_phase_aendern.getText()))
+				if (Phase.getName().equals(txt_phase_aendern.getText()))
 					check = true;
 			}
-			if(!check){
+			if (!check) {
 				phase.setName(txt_phase_aendern.getText());
 				phase.setStartDate(dtpkr_startdatum_aendern.getValue().toString());
 				phase.setEndDate(dtpkr_enddatum_aendern.getValue().toString());

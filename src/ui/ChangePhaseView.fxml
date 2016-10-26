@@ -8,16 +8,33 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
+<<<<<<< HEAD
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="305.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangePhaseViewController">
+   <children>
+      <ImageView fitHeight="140.0" fitWidth="119.0" layoutX="93.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:@../../resources/Programm%20Logo.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txt_phase_aendern" layoutX="69.0" layoutY="112.0" prefHeight="34.0" prefWidth="167.0" promptText="Phase eingeben">
+=======
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="268.0" prefWidth="305.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangePhaseViewController">
    <children>
       <TextField fx:id="txt_phase_aendern" layoutX="48.0" layoutY="14.0" prefHeight="41.0" prefWidth="209.0" promptText="Phase eingeben">
+>>>>>>> refs/remotes/origin/master
          <tooltip>
             <Tooltip text="Phase eingeben" />
          </tooltip>
       </TextField>
+<<<<<<< HEAD
+      <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="69.0" layoutY="160.0" prefHeight="34.0" prefWidth="167.0" promptText="Startdatum" />
+      <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="69.0" layoutY="208.0" prefHeight="34.0" prefWidth="167.0" promptText="Enddatum" />
+      <Button fx:id="btn_aendern" layoutX="69.0" layoutY="259.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="34.0" prefWidth="167.0" text="Speichern">
+=======
       <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="48.0" layoutY="62.0" prefHeight="41.0" prefWidth="209.0" promptText="Startdatum" />
       <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="48.0" layoutY="110.0" prefHeight="41.0" prefWidth="209.0" promptText="Enddatum" />
       <Button fx:id="btn_aendern" layoutX="48.0" layoutY="161.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="209.0" text="Speichern">
+>>>>>>> refs/remotes/origin/master
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -25,7 +42,11 @@
                </image>
             </ImageView>
          </graphic></Button>
+<<<<<<< HEAD
+      <Button fx:id="btn_abbrechen" layoutX="69.0" layoutY="302.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="34.0" prefWidth="167.0" text="Abbrechen">
+=======
       <Button fx:id="btn_abbrechen" layoutX="48.0" layoutY="204.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="39.0" prefWidth="209.0" text="Abbrechen">
+>>>>>>> refs/remotes/origin/master
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
