@@ -1,6 +1,7 @@
 package controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
 import datenbank.Datenbank;
@@ -20,6 +21,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -91,6 +93,8 @@ public class MainViewController {
 	private DatePicker dtpkr_start;
 	@FXML
 	private DatePicker dtpkr_end;
+	@FXML
+	private DatePicker dtpkr_meldeDatum;
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -117,7 +121,8 @@ public class MainViewController {
 		projekt = OpenMainPage.tmpProjekt;
 
 		// Initalisiere Tabelle
-
+		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
+		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_phase.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
@@ -130,6 +135,9 @@ public class MainViewController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
+		
+		if(projekt.isAbgeschickt())
+			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		txt_pt_intern.setVisible(false);
 		txt_pt_extern.setVisible(false);
@@ -471,11 +479,13 @@ public class MainViewController {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						btn_projekt_speichern.setDisable(true);
+//						System.out.println(projekt.getMeldeDatum());
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
+						btn_projekt_speichern.setDisable(false);
 					}
 				}).start();
-				btn_projekt_speichern.setDisable(true);
 				somethingChanged = false;
 				Stage stage = (Stage) scene.getWindow();
 				stage.setTitle(projekt.getName());
@@ -489,8 +499,18 @@ public class MainViewController {
 	}
 	
 	@FXML
+	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
+		System.out.println("Datum ausgewählt");
+	}
+	
+	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
 		
+		// TODO: Meldedatum darf nicht null sein
+		
+		projekt.setAbgeschickt(true);
+		projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+		btn_projekt_speichern_click(event);
 	}
 
 	@FXML
@@ -627,8 +647,7 @@ public class MainViewController {
 	public void updateTbl_phase() {
 		try {
 			phasen = FXCollections.observableArrayList(projekt.getPhasen());
-//			tbl_phase.refresh();
-//			checkChanges();
+			checkChanges();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -637,7 +656,7 @@ public class MainViewController {
 	public void updateTbl_kompetenz() {
 		try {
 			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
-//			checkChanges();
+			checkChanges();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -676,6 +695,5 @@ public class MainViewController {
 		Scene scene = (Scene) txt_pt_extern.getScene();
 		Stage stage = (Stage) scene.getWindow();
 		stage.setTitle("* " + projekt.getName());
-		btn_projekt_speichern.setDisable(false);
 	}
 }

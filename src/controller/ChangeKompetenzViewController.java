@@ -41,6 +41,7 @@ public class ChangeKompetenzViewController {
 			if(!check){
 				kompetenz.setName(txt_kompetenz_aendern.getText());
 				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));	
+				MainViewController.somethingChanged = true;
 				btn_abbrechen_click(event);
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);

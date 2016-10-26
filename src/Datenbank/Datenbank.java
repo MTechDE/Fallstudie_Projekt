@@ -63,14 +63,16 @@ public class Datenbank {
 			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
 		}
 
-		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate) "
-				+ "VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate)";
+		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate, meldeDatum) "
+				+ "VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate, :meldeDatum)";
 
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql).addParameter("name", projekt.getName())
 					.addParameter("ersteller", projekt.getErsteller())
 					.addParameter("abgeschickt", projekt.isAbgeschickt())
-					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
+					.addParameter("startDate", projekt.getStartDate())
+					.addParameter("endDate", projekt.getEndDate())
+					.addParameter("meldeDatum", projekt.getMeldeDatum())
 					.executeUpdate();
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
@@ -103,24 +105,24 @@ public class Datenbank {
 		sql = "INSERT INTO aufwand(person, phase, projekt, pt, zugehoerigkeit) "
 				+ "VALUES(:person, :phase, :projekt, :pt, :zugehoerigkeit)";
 
-		try (Connection con = sql2o.beginTransaction()) {
-			Query query = con.createQuery(sql);
-			if (!projekt.getPhasen().isEmpty()) {
-				for (Phase phase : projekt.getPhasen()) {
-					if (!phase.getAufwände().isEmpty()) {
-						for (Aufwand aufwand : phase.getAufwände()) {
-							query.addParameter("person", aufwand.getName()).addParameter("phase", phase.getName())
-									.addParameter("projekt", projekt.getName()).addParameter("pt", aufwand.getPt())
-									.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit()).addToBatch();
+		if (!projekt.getPhasen().isEmpty()) {
+			try (Connection con = sql2o.beginTransaction()) {
+				Query query = con.createQuery(sql);
+					for (Phase phase : projekt.getPhasen()) {
+						if (!phase.getAufwände().isEmpty()) {
+							for (Aufwand aufwand : phase.getAufwände()) {
+								query.addParameter("person", aufwand.getName()).addParameter("phase", phase.getName())
+										.addParameter("projekt", projekt.getName()).addParameter("pt", aufwand.getPt())
+										.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit()).addToBatch();
+							}
 						}
 					}
-				}
+				query.executeBatch();
+				con.commit();
+			} catch (Sql2oException e) {
+				System.out.println(e.getMessage());
+				return false;
 			}
-			query.executeBatch();
-			con.commit();
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-			return false;
 		}
 
 		sql = "INSERT INTO kompetenzen (name, projekt, risikozuschlag) " + "VALUES(:name, :projekt, :risikozuschlag)";
