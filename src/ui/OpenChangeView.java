@@ -13,10 +13,19 @@ import javafx.stage.Stage;
 import projektDaten.Kompetenz;
 import projektDaten.Phase;
 
+/**
+ * 
+ * @author Daniel Sogl, Tim Krießler
+ *
+ */
 public class OpenChangeView extends Stage {
 
 	private Stage stage;
 
+	/**
+	 * Öffne die View um eine Phase zu bearbeiten
+	 * @param phase
+	 */
 	public OpenChangeView(Phase phase) {
 		try {
 			ChangePhaseViewController.setPhase(phase);
@@ -37,6 +46,10 @@ public class OpenChangeView extends Stage {
 		}
 	}
 
+	/**
+	 * Öffnet die View um eine Kompetenz zu bearbeiten
+	 * @param kompetenz
+	 */
 	public OpenChangeView(Kompetenz kompetenz) {
 		try {
 			ChangeKompetenzViewController.setKompetenz(kompetenz);

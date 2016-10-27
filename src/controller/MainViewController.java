@@ -172,8 +172,8 @@ public class MainViewController {
 
 						arbeitstage = calculateDate(startdatum, enddatum);
 
-						txt_mak_pt_intern.setText(arbeitstage + " PT");
-						txt_mak_pt_extern.setText(arbeitstage + " PT");
+						txt_mak_pt_intern.setText(Math.round(arbeitstage) + " PT");
+						txt_mak_pt_extern.setText(Math.round(arbeitstage) + " PT");
 
 						indexPhaseClicked = true;
 						// was passiert wenn eine phase und eine kompetenz
@@ -603,7 +603,7 @@ public class MainViewController {
 					workingDays++;
 				start.add(Calendar.DATE, 1);
 			}
-			return workingDays;
+			return (17 / workingDays);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

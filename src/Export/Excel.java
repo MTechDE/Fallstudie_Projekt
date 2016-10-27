@@ -50,7 +50,7 @@ public class Excel {
 
 		// Schreibe die Excel Datei in den angegebenen Pfad
 		try {
-			fileOut = new FileOutputStream("text.xls");
+			fileOut = new FileOutputStream(path);
 			wb.write(fileOut);
 			fileOut.close();
 		} catch (Exception e) {
