@@ -101,6 +101,11 @@ public class MainViewController {
 	private ImageView img_loadingSpinner;
 	@FXML
 	private ImageView img_saveBtnImg;
+	@FXML
+	private Label lbl_Intern;
+	@FXML
+	private Label lbl_Extern;
+	
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -144,6 +149,9 @@ public class MainViewController {
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
 		img_loadingSpinner.setVisible(false);
+		lbl_Intern.setVisible(false);
+		lbl_Extern.setVisible(false);
+		btn_aufwand_festlegen.setVisible(false);
 
 		if (projekt.isAbgeschickt())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
@@ -356,23 +364,26 @@ public class MainViewController {
 		System.out.println(chobx_aufwand_selection);
 		switch (chobx_aufwand_selection) {
 		case "Personentage (PT)":
+			btn_aufwand_festlegen.setVisible(true);
 			txt_mak_intern.setVisible(false);
 			txt_mak_extern.setVisible(false);
 			txt_mak_pt_intern.setVisible(false);
 			txt_mak_pt_extern.setVisible(false);
 			txt_pt_intern.setVisible(true);
 			txt_pt_extern.setVisible(true);
+			lbl_Intern.setVisible(true);
+			lbl_Extern.setVisible(true);
 			break;
 		case "Mitarbeiterkapazität (MAK)":
+			btn_aufwand_festlegen.setVisible(true);
 			txt_pt_intern.setVisible(false);
 			txt_pt_extern.setVisible(false);
 			txt_mak_intern.setVisible(true);
 			txt_mak_extern.setVisible(true);
 			txt_mak_pt_intern.setVisible(true);
 			txt_mak_pt_extern.setVisible(true);
-			break;
-
-		default:
+			lbl_Intern.setVisible(true);
+			lbl_Extern.setVisible(true);
 			break;
 		}
 	}
