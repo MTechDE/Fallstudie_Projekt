@@ -2,22 +2,24 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="268.0" prefWidth="305.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangePhaseViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="305.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangePhaseViewController">
    <children>
-      <TextField fx:id="txt_phase_aendern" layoutX="48.0" layoutY="14.0" prefHeight="41.0" prefWidth="209.0" promptText="Phase eingeben">
+      <TextField fx:id="txt_phase_aendern" layoutX="48.0" layoutY="57.0" prefHeight="41.0" prefWidth="209.0" promptText="Phase eingeben">
          <tooltip>
             <Tooltip text="Phase eingeben" />
          </tooltip>
       </TextField>
-      <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="48.0" layoutY="62.0" prefHeight="41.0" prefWidth="209.0" promptText="Startdatum" />
-      <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="48.0" layoutY="110.0" prefHeight="41.0" prefWidth="209.0" promptText="Enddatum" />
-      <Button fx:id="btn_aendern" layoutX="48.0" layoutY="161.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="209.0" text="Speichern">
+      <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="48.0" layoutY="105.0" prefHeight="41.0" prefWidth="209.0" promptText="Startdatum" />
+      <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="48.0" layoutY="153.0" prefHeight="41.0" prefWidth="209.0" promptText="Enddatum" />
+      <Button fx:id="btn_aendern" layoutX="48.0" layoutY="204.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="209.0" text="Speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -25,7 +27,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="btn_abbrechen" layoutX="48.0" layoutY="204.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="39.0" prefWidth="209.0" text="Abbrechen">
+      <Button fx:id="btn_abbrechen" layoutX="48.0" layoutY="247.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="39.0" prefWidth="209.0" text="Abbrechen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -33,5 +35,10 @@
                </image>
             </ImageView>
          </graphic></Button>
+      <Label layoutX="56.0" layoutY="14.0" prefHeight="29.0" prefWidth="193.0" text="Phase bearbeiten" textFill="#2b579a">
+         <font>
+            <Font name="Segoe UI" size="24.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

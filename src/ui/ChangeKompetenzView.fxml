@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="247.0" prefWidth="305.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangeKompetenzViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="262.0" prefWidth="305.0" styleClass="background" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChangeKompetenzViewController">
    <children>
-      <TextField fx:id="txt_kompetenz_aendern" layoutX="44.0" layoutY="14.0" prefHeight="41.0" prefWidth="217.0" promptText="Kompetenz eingeben">
+      <TextField fx:id="txt_kompetenz_aendern" layoutX="45.0" layoutY="50.0" prefHeight="41.0" prefWidth="217.0" promptText="Kompetenz eingeben">
          <tooltip>
             <Tooltip text="Phase eingeben" />
          </tooltip>
       </TextField>
-      <Button fx:id="btn_aendern" layoutX="44.0" layoutY="124.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="217.0" text="Speichern">
+      <Button fx:id="btn_aendern" layoutX="45.0" layoutY="160.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="217.0" text="Speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -22,7 +24,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="btn_abbrechen" layoutX="44.0" layoutY="172.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="39.0" prefWidth="217.0" text="Abbrechen">
+      <Button fx:id="btn_abbrechen" layoutX="45.0" layoutY="208.0" mnemonicParsing="false" onAction="#btn_abbrechen_click" prefHeight="39.0" prefWidth="217.0" text="Abbrechen">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -30,6 +32,11 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <TextField fx:id="txt_risikozuschlag_aendern" layoutX="44.0" layoutY="64.0" prefHeight="41.0" prefWidth="217.0" promptText="Risikozuschlag in %" />
+      <TextField fx:id="txt_risikozuschlag_aendern" layoutX="45.0" layoutY="100.0" prefHeight="41.0" prefWidth="217.0" promptText="Risikozuschlag in %" />
+      <Label layoutX="31.0" layoutY="14.0" prefHeight="29.0" prefWidth="243.0" text="Kompetenz bearbeiten" textFill="#2b579a">
+         <font>
+            <Font name="Segoe UI" size="24.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
