@@ -1,10 +1,10 @@
 package controller;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+
 import datenbank.Datenbank;
 import export.Excel;
 import javafx.collections.FXCollections;
@@ -18,7 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -26,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
@@ -105,7 +105,6 @@ public class MainViewController {
 	private Label lbl_Intern;
 	@FXML
 	private Label lbl_Extern;
-	
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -118,7 +117,7 @@ public class MainViewController {
 
 	// Variablen
 	public static Projekt projekt;
-	private int arbeitstage = 0;
+	private long arbeitstage = 0;
 	private static Datenbank myDB = new Datenbank();
 	private boolean indexPhaseClicked = false;
 	private boolean indexKompetenzClicked = false;
@@ -180,8 +179,8 @@ public class MainViewController {
 
 						arbeitstage = calculateDate(startdatum, enddatum);
 
-						txt_mak_pt_intern.setText(Math.round(arbeitstage) + " PT");
-						txt_mak_pt_extern.setText(Math.round(arbeitstage) + " PT");
+						txt_mak_pt_intern.setText(arbeitstage + " PT");
+						txt_mak_pt_extern.setText(arbeitstage + " PT");
 
 						indexPhaseClicked = true;
 						// was passiert wenn eine phase und eine kompetenz
@@ -540,7 +539,7 @@ public class MainViewController {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		if (file != null){
+		if (file != null) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -594,32 +593,19 @@ public class MainViewController {
 
 	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
 	// Enddatum)
-	public int calculateDate(String startDatum, String endDatum) {
-		String[] datum = startDatum.split("-");
-		startDatum = datum[2] + "/" + datum[1] + "/" + datum[0];
-		String startDate = startDatum;
-
-		datum = endDatum.split("-");
-		endDatum = datum[2] + "/" + datum[1] + "/" + datum[0];
-		String endDate = endDatum;
-
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	public long calculateDate(String startDatum, String endDatum) {
 		try {
-			Calendar start = Calendar.getInstance();
-			start.setTime(sdf.parse(startDate));
-			Calendar end = Calendar.getInstance();
-			end.setTime(sdf.parse(endDate));
-			int workingDays = 0;
-			while (!start.after(end)) {
-				int day = start.get(Calendar.DAY_OF_WEEK);
-				if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY))
-					workingDays++;
-				start.add(Calendar.DATE, 1);
-			}
-			return (17 / workingDays);
+			LocalDate start = LocalDate.parse(startDatum);
+			LocalDate ende = LocalDate.parse(endDatum);
+
+			long daysBetween = ChronoUnit.DAYS.between(start, ende);
+			// Arbeitstage (7-Tage-Woche) werden mit dem Faktor für den 17-Tage
+			// Monat multipliziert
+			double personentage = (0.607 * daysBetween);
+			return Math.round(personentage);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
+			return -1;
 		}
 
 	}
@@ -635,7 +621,7 @@ public class MainViewController {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		if (file != null){
+		if (file != null) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
