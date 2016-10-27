@@ -526,24 +526,26 @@ public class MainViewController {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				btn_sendProjekt.setDisable(true);
-				projekt.setAbgeschickt(true);
-				projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
-				Excel.ExportToExcel(projekt, file.getAbsolutePath());
-				try {
-					btn_projekt_speichern_click(event);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+		if (file != null){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					btn_sendProjekt.setDisable(true);
+					projekt.setAbgeschickt(true);
+					projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+					Excel.ExportToExcel(projekt, file.getAbsolutePath());
+					try {
+						btn_projekt_speichern_click(event);
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					btn_sendProjekt.setDisable(false);
 				}
-				btn_sendProjekt.setDisable(false);
-			}
-		}).start();
+			}).start();
+		}
 	}
 
 	@FXML
@@ -619,16 +621,17 @@ public class MainViewController {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xls", "*.xls"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Excel.ExportToExcel(projekt, file.getAbsolutePath());
-			}
-		}).start();
-
+		if (file != null){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					Excel.ExportToExcel(projekt, file.getAbsolutePath());
+				}
+			}).start();
+		}
 	}
 
 	@FXML
