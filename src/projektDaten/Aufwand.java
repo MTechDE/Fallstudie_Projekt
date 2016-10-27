@@ -26,6 +26,7 @@ public class Aufwand {
 	public Aufwand(String name) {
 		this.setName(name);
 		this.setPt(0);
+		this.setZugehoerigkeit(null);
 	}
 	
 	/**
@@ -36,6 +37,7 @@ public class Aufwand {
 	 */
 	public Aufwand(String name, String zugehoerigkeit) {
 		this.setName(name);
+		this.setPt(0);
 		this.setZugehoerigkeit(zugehoerigkeit);
 	}
 

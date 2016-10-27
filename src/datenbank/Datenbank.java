@@ -55,7 +55,7 @@ public class Datenbank {
 	 *            das zu speichernde projektDaten
 	 * @return boolean
 	 */
-	public boolean speicherProjekt(Projekt projekt) {
+	public void speicherProjekt(Projekt projekt) {
 
 		// Setze das Start und Enddatum
 		if (!projekt.getPhasen().isEmpty()) {
@@ -76,7 +76,6 @@ public class Datenbank {
 					.executeUpdate();
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
-			return false;
 		}
 
 		sql = "INSERT INTO phasen(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
@@ -94,10 +93,7 @@ public class Datenbank {
 
 			} catch (Sql2oException e) {
 				System.out.println(e.getMessage());
-				return false;
 			}
-		} else {
-			projekt.setPhasen(null);
 		}
 
 		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
@@ -121,7 +117,6 @@ public class Datenbank {
 				con.commit();
 			} catch (Sql2oException e) {
 				System.out.println(e.getMessage());
-				return false;
 			}
 		}
 
@@ -137,14 +132,9 @@ public class Datenbank {
 				}
 				query.executeBatch();
 				con.commit();
-				return true;
 			} catch (Sql2oException e) {
 				System.out.println(e.getMessage());
-				return false;
 			}
-		} else {
-			projekt.setKompetenzen(null);
-			return true;
 		}
 	}
 
@@ -161,6 +151,7 @@ public class Datenbank {
 		Projekt newprojekt = projekt;
 		List<Phase> phasen = new ArrayList<Phase>();
 		List<Aufwand> personen = new ArrayList<Aufwand>();
+		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 
 		// Hole Phasen anhand des Projektnamens
 		String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
@@ -175,35 +166,38 @@ public class Datenbank {
 		sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a "
 				+ "WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 
-		try (Connection con = sql2o.open()) {
-			for (Phase phase : phasen) {
-				personen = con.createQuery(sql).addParameter("phasenName", phase.getName())
-						.addParameter("projektName", newprojekt.getName()).executeAndFetch(Aufwand.class);
-				phase.setAufwände(personen);
+		if(!phasen.isEmpty()){
+			try (Connection con = sql2o.open()) {
+				for (Phase phase : phasen) {
+					personen = con.createQuery(sql).addParameter("phasenName", phase.getName())
+							.addParameter("projektName", newprojekt.getName()).executeAndFetch(Aufwand.class);
+					phase.setAufwände(personen);
+				}
+				
+				newprojekt.setPhasen((ArrayList<Phase>) phasen);
+			} catch (Sql2oException e) {
+				System.out.println(e.getMessage());
 			}
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-		}
-
-		// Überprüfe ob das projektDaten Phasen hat
-		if (!phasen.isEmpty()) {
-			// Schreibe die Phasen in das projektDaten
-			newprojekt.setPhasen((ArrayList<Phase>) phasen);
 		}
 
 		// Hole die Kompetenzen aus der DB
 		sql = "SELECT DISTINCT  name, risikozuschlag FROM kompetenzen WHERE projekt=:projektName";
-		List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
 		try (Connection con = sql2o.open()) {
 			kompetenzen = con.createQuery(sql).addParameter("projektName", newprojekt.getName())
 					.executeAndFetch(Kompetenz.class);
+			
+			// Weise projektDaten die Kompetenzen mit den gespeicherten Personen
+			// hinzu, falls es Kompetenzen gibt
+			if (!kompetenzen.isEmpty())
+				newprojekt.setKompetenzen(kompetenzen);
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 		}
-
-		// Weise projektDaten die Kompetenzen mit den gespeicherten Personen
-		// hinzu, falls es Kompetenzen gibt
-		if (!kompetenzen.isEmpty())
+		
+		// Überprüfe ob Phasen und/oder Kompetenzen exsistieren
+		if(phasen.isEmpty())
+			newprojekt.setPhasen(phasen);
+		if(kompetenzen.isEmpty())
 			newprojekt.setKompetenzen(kompetenzen);
 
 		return newprojekt;
@@ -218,9 +212,9 @@ public class Datenbank {
 	 *            das zu updatenede projektDaten
 	 * @return boolean
 	 */
-	public boolean updateProjekt(Projekt projekt) {
+	public void updateProjekt(Projekt projekt) {
 		this.deleteProjekt(projekt);
-		return this.speicherProjekt(projekt);
+		this.speicherProjekt(projekt);
 	}
 
 	/**

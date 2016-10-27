@@ -41,7 +41,7 @@ import ui.OpenStartPage;
 /**
  * Controller für Anlegen.fxml GUI
  * 
- * @author Tim Krießler
+ * @author Tim Krießler, Daniel Sogl
  */
 public class MainViewController {
 
@@ -168,9 +168,12 @@ public class MainViewController {
 			public void handle(MouseEvent mouseEvent) {
 
 				try {
+
+					if (!tbl_phase.getItems().isEmpty())
+						btn_deletePhase.setDisable(false);
+
 					if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()
 							&& tbl_phase.getSelectionModel().getSelectedItem().getClass() == Phase.class) {
-						btn_deletePhase.setDisable(false);
 						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
 						// Berechnung Arbeitstage aus Phasenzeitraum für
 						// PT-Berechnung bei MAK
@@ -214,9 +217,11 @@ public class MainViewController {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 				try {
+					if (!tbl_kompetenz.getItems().isEmpty())
+						btn_deleteKompetenz.setDisable(false);
+
 					if (!tbl_kompetenz.getItems().isEmpty() && !tbl_phase.getItems().isEmpty()
 							&& tbl_kompetenz.getSelectionModel().getSelectedItem().getClass() == Kompetenz.class) {
-						btn_deleteKompetenz.setDisable(false);
 						indexKompetenzClicked = true;
 						if (indexPhaseClicked) {
 							btn_aufwand_festlegen.setDisable(false);
@@ -385,6 +390,10 @@ public class MainViewController {
 			lbl_Extern.setVisible(true);
 			break;
 		}
+		
+		if (indexPhaseClicked && indexKompetenzClicked) {
+			fülleFelder();
+		}
 	}
 
 	@FXML
@@ -491,31 +500,25 @@ public class MainViewController {
 		Node source = (Node) event.getSource();
 		Scene scene = source.getScene();
 
-		if (projekt != null && !projekt.getKompetenzen().isEmpty() && !projekt.getPhasen().isEmpty()) {
-			try {
-				// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						img_loadingSpinner.setVisible(true);
-						btn_projekt_speichern.setDisable(true);
-						myDB.updateProjekt(projekt);
-						System.out.println("Daten in der DB gespeichert!");
-						btn_projekt_speichern.setDisable(false);
-						img_loadingSpinner.setVisible(false);
-					}
-				}).start();
-				somethingChanged = false;
-				Stage stage = (Stage) scene.getWindow();
-				stage.setTitle(projekt.getName());
-			} catch (Exception e) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Speichern fehlgeschlagen!");
-				alert.showAndWait();
-			}
-		} else {
+		try {
+			// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					img_loadingSpinner.setVisible(true);
+					btn_projekt_speichern.setDisable(true);
+					myDB.updateProjekt(projekt);
+					System.out.println("Daten in der DB gespeichert!");
+					btn_projekt_speichern.setDisable(false);
+					img_loadingSpinner.setVisible(false);
+				}
+			}).start();
+			somethingChanged = false;
+			Stage stage = (Stage) scene.getWindow();
+			stage.setTitle(projekt.getName());
+		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte legen Sie mindestens eine Phase und eine Kompetenz an.");
+			alert.setContentText("Speichern fehlgeschlagen!");
 			alert.showAndWait();
 		}
 	}
@@ -646,6 +649,10 @@ public class MainViewController {
 			try {
 				projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
 				phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
+
+				if (tbl_phase.getItems().isEmpty())
+					btn_deletePhase.setDisable(true);
+
 				checkChanges();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -677,6 +684,10 @@ public class MainViewController {
 				}
 				projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 				kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
+
+				if (tbl_kompetenz.getItems().isEmpty())
+					btn_deleteKompetenz.setDisable(true);
+
 				checkChanges();
 
 			} catch (Exception e) {
