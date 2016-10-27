@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -68,6 +69,8 @@ public class StartViewController {
 	private ProgressBar progress_statusBar;
 	@FXML
 	private Label lbl_projekteGefunden;
+	@FXML
+	private ImageView img_loadingSpinner;
 
 	Datenbank myDB = new Datenbank();
 
@@ -77,6 +80,8 @@ public class StartViewController {
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
+		
+		img_loadingSpinner.setVisible(false);
 
 		// Falls keine Projekte gefunden wurden, wird dieser Text in der Tabelle
 		// angezeigt
@@ -90,9 +95,11 @@ public class StartViewController {
 		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
 		tblCell_projektSendDate.setCellValueFactory(cellData -> cellData.getValue().getMeldeDatumProperty());
 
+		// Weise Daten der Tabelle zu
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
+		// Tabelle wird Filterbar durch das Suchfeld
 		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
 		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredData.setPredicate(projekt -> {
@@ -108,6 +115,7 @@ public class StartViewController {
 			});
 		});
 
+		// Lade Daten in die Tabelle
 		SortedList<Projekt> sortedData = new SortedList<>(filteredData);
 		sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
 
@@ -167,7 +175,11 @@ public class StartViewController {
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
+							btn_deleteProjekt.setDisable(true);
+							img_loadingSpinner.setVisible(true);
 							myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
+							img_loadingSpinner.setVisible(false);
+							btn_deleteProjekt.setDisable(false);
 						}
 					}).start();
 					projektData.remove(index);

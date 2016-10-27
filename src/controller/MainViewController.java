@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -96,6 +97,10 @@ public class MainViewController {
 	private DatePicker dtpkr_end;
 	@FXML
 	private DatePicker dtpkr_meldeDatum;
+	@FXML
+	private ImageView img_loadingSpinner;
+	@FXML
+	private ImageView img_saveBtnImg;
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -116,7 +121,7 @@ public class MainViewController {
 
 	@FXML
 	private void initialize() {
-		System.out.println("Fenster wurde geöffnet.");
+		System.out.println("MainView wurde geöffnet.");
 
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
@@ -130,12 +135,15 @@ public class MainViewController {
 		kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
 		phasen = FXCollections.observableArrayList(projekt.getPhasen());
 
+		// Weise den Tabellen die Daten zu
 		tbl_kompetenz.setItems(kompetenzen);
 		tbl_phase.setItems(phasen);
 
+		// UI wird initalisiert
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
+		img_loadingSpinner.setVisible(false);
 
 		if (projekt.isAbgeschickt())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
@@ -479,10 +487,12 @@ public class MainViewController {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						img_loadingSpinner.setVisible(true);
 						btn_projekt_speichern.setDisable(true);
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
 						btn_projekt_speichern.setDisable(false);
+						img_loadingSpinner.setVisible(false);
 					}
 				}).start();
 				somethingChanged = false;
