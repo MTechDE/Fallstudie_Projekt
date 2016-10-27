@@ -473,7 +473,7 @@ public class MainViewController {
 		Node source = (Node) event.getSource();
 		Scene scene = source.getScene();
 
-		if (projekt != null) {
+		if (projekt != null && !projekt.getKompetenzen().isEmpty() && !projekt.getPhasen().isEmpty()) {
 			try {
 				// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
 				new Thread(new Runnable() {
@@ -493,6 +493,10 @@ public class MainViewController {
 				alert.setContentText("Speichern fehlgeschlagen!");
 				alert.showAndWait();
 			}
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte legen Sie mindestens eine Phase und eine Kompetenz an.");
+			alert.showAndWait();
 		}
 	}
 
