@@ -621,7 +621,7 @@ public class MainViewController {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xls", "*.xls"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
 		if (file != null){
