@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -11,7 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import projektDaten.Aufwand;
 import projektDaten.Kompetenz;
@@ -135,8 +136,8 @@ public class MainViewController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
-		
-		if(projekt.isAbgeschickt())
+
+		if (projekt.isAbgeschickt())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		txt_pt_intern.setVisible(false);
@@ -471,7 +472,6 @@ public class MainViewController {
 
 		Node source = (Node) event.getSource();
 		Scene scene = source.getScene();
-		scene.setCursor(Cursor.WAIT);
 
 		if (projekt != null) {
 			try {
@@ -480,7 +480,6 @@ public class MainViewController {
 					@Override
 					public void run() {
 						btn_projekt_speichern.setDisable(true);
-//						System.out.println(projekt.getMeldeDatum());
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
 						btn_projekt_speichern.setDisable(false);
@@ -495,22 +494,42 @@ public class MainViewController {
 				alert.showAndWait();
 			}
 		}
-		scene.setCursor(Cursor.DEFAULT);
 	}
-	
+
 	@FXML
 	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
 		System.out.println("Datum ausgewählt");
 	}
-	
+
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
-		
+
 		// TODO: Meldedatum darf nicht null sein
-		
-		projekt.setAbgeschickt(true);
-		projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
-		btn_projekt_speichern_click(event);
+
+		Node source = (Node) event.getSource();
+		Scene scene = source.getScene();
+		Stage stage = (Stage) scene.getWindow();
+
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Projektdaten exportieren");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		File file = fileChooser.showSaveDialog(stage);
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				btn_sendProjekt.setDisable(true);
+				projekt.setAbgeschickt(true);
+				projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+				Excel.ExportToExcel(projekt, file.getAbsolutePath());
+				try {
+					btn_projekt_speichern_click(event);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+				btn_sendProjekt.setDisable(false);
+			}
+		}).start();
 	}
 
 	@FXML
@@ -580,11 +599,19 @@ public class MainViewController {
 
 	@FXML
 	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
+		Node source = (Node) event.getSource();
+		Scene scene = source.getScene();
+		Stage stage = (Stage) scene.getWindow();
+
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Projektdaten exportieren");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		File file = fileChooser.showSaveDialog(stage);
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Excel.ExportToExcel(projekt);
-				System.out.println("Export abgeschlossen");
+				Excel.ExportToExcel(projekt, file.getAbsolutePath());
 			}
 		}).start();
 
