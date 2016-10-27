@@ -9,7 +9,7 @@ import javafx.stage.StageStyle;
 
 /**
  * Startet den Preloader beim Start der fertigen (*.exe) Anwendung.
- * Anschließend wird dieser nach 2,5 Sekunden geschlßen, sobald die
+ * Anschließend wird dieser nach 2,5 Sekunden geschlossen, sobald die
  * Initialisierungs Methode des Startfenstern abgeschlossen wurde.
  * @author Daniel Sogl
  *
