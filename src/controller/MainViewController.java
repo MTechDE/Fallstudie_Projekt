@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -96,6 +97,15 @@ public class MainViewController {
 	private DatePicker dtpkr_end;
 	@FXML
 	private DatePicker dtpkr_meldeDatum;
+	@FXML
+	private ImageView img_loadingSpinner;
+	@FXML
+	private ImageView img_saveBtnImg;
+	@FXML
+	private Label lbl_Intern;
+	@FXML
+	private Label lbl_Extern;
+	
 
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
@@ -116,7 +126,7 @@ public class MainViewController {
 
 	@FXML
 	private void initialize() {
-		System.out.println("Fenster wurde geöffnet.");
+		System.out.println("MainView wurde geöffnet.");
 
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
@@ -130,12 +140,18 @@ public class MainViewController {
 		kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
 		phasen = FXCollections.observableArrayList(projekt.getPhasen());
 
+		// Weise den Tabellen die Daten zu
 		tbl_kompetenz.setItems(kompetenzen);
 		tbl_phase.setItems(phasen);
 
+		// UI wird initalisiert
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
+		img_loadingSpinner.setVisible(false);
+		lbl_Intern.setVisible(false);
+		lbl_Extern.setVisible(false);
+		btn_aufwand_festlegen.setVisible(false);
 
 		if (projekt.isAbgeschickt())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
@@ -164,8 +180,8 @@ public class MainViewController {
 
 						arbeitstage = calculateDate(startdatum, enddatum);
 
-						txt_mak_pt_intern.setText(arbeitstage + " PT");
-						txt_mak_pt_extern.setText(arbeitstage + " PT");
+						txt_mak_pt_intern.setText(Math.round(arbeitstage) + " PT");
+						txt_mak_pt_extern.setText(Math.round(arbeitstage) + " PT");
 
 						indexPhaseClicked = true;
 						// was passiert wenn eine phase und eine kompetenz
@@ -348,23 +364,26 @@ public class MainViewController {
 		System.out.println(chobx_aufwand_selection);
 		switch (chobx_aufwand_selection) {
 		case "Personentage (PT)":
+			btn_aufwand_festlegen.setVisible(true);
 			txt_mak_intern.setVisible(false);
 			txt_mak_extern.setVisible(false);
 			txt_mak_pt_intern.setVisible(false);
 			txt_mak_pt_extern.setVisible(false);
 			txt_pt_intern.setVisible(true);
 			txt_pt_extern.setVisible(true);
+			lbl_Intern.setVisible(true);
+			lbl_Extern.setVisible(true);
 			break;
 		case "Mitarbeiterkapazität (MAK)":
+			btn_aufwand_festlegen.setVisible(true);
 			txt_pt_intern.setVisible(false);
 			txt_pt_extern.setVisible(false);
 			txt_mak_intern.setVisible(true);
 			txt_mak_extern.setVisible(true);
 			txt_mak_pt_intern.setVisible(true);
 			txt_mak_pt_extern.setVisible(true);
-			break;
-
-		default:
+			lbl_Intern.setVisible(true);
+			lbl_Extern.setVisible(true);
 			break;
 		}
 	}
@@ -479,10 +498,12 @@ public class MainViewController {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+						img_loadingSpinner.setVisible(true);
 						btn_projekt_speichern.setDisable(true);
 						myDB.updateProjekt(projekt);
 						System.out.println("Daten in der DB gespeichert!");
 						btn_projekt_speichern.setDisable(false);
+						img_loadingSpinner.setVisible(false);
 					}
 				}).start();
 				somethingChanged = false;
@@ -516,24 +537,26 @@ public class MainViewController {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				btn_sendProjekt.setDisable(true);
-				projekt.setAbgeschickt(true);
-				projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
-				Excel.ExportToExcel(projekt, file.getAbsolutePath());
-				try {
-					btn_projekt_speichern_click(event);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
+		if (file != null){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					btn_sendProjekt.setDisable(true);
+					projekt.setAbgeschickt(true);
+					projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+					Excel.ExportToExcel(projekt, file.getAbsolutePath());
+					try {
+						btn_projekt_speichern_click(event);
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					btn_sendProjekt.setDisable(false);
 				}
-				btn_sendProjekt.setDisable(false);
-			}
-		}).start();
+			}).start();
+		}
 	}
 
 	@FXML
@@ -593,7 +616,7 @@ public class MainViewController {
 					workingDays++;
 				start.add(Calendar.DATE, 1);
 			}
-			return workingDays;
+			return (17 / workingDays);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -609,16 +632,17 @@ public class MainViewController {
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("XLS", "*.xls"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Excel.ExportToExcel(projekt, file.getAbsolutePath());
-			}
-		}).start();
-
+		if (file != null){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					Excel.ExportToExcel(projekt, file.getAbsolutePath());
+				}
+			}).start();
+		}
 	}
 
 	@FXML

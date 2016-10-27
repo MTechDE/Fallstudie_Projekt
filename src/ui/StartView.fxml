@@ -82,5 +82,10 @@
             <Image url="file:@../../resources/delete.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="img_loadingSpinner" fitHeight="36.0" fitWidth="69.0" layoutX="164.0" layoutY="407.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:@../../resources/loading.gif" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

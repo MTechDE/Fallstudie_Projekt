@@ -53,11 +53,15 @@ public class OpenMainPage extends Stage {
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.show();
 
+			// Wird die Anwendung geschloßen, ohne das Änderungen gespeichert
+			// wurden muss der Nutzer bestätigen ob er die Änderungen verwerfen
+			// oder speichern möchte. Er kann aber auch abbrechen.
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(final WindowEvent event) {
 
-					if (MainViewController.somethingChanged && !MainViewController.projekt.getPhasen().isEmpty() && !MainViewController.projekt.getKompetenzen().isEmpty()) {
+					if (MainViewController.somethingChanged && !MainViewController.projekt.getPhasen().isEmpty()
+							&& !MainViewController.projekt.getKompetenzen().isEmpty()) {
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setContentText("Möchten Sie Änderungen speichern?");
 
