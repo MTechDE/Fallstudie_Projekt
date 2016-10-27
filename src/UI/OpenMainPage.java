@@ -57,7 +57,7 @@ public class OpenMainPage extends Stage {
 				@Override
 				public void handle(final WindowEvent event) {
 
-					if (MainViewController.somethingChanged) {
+					if (MainViewController.somethingChanged && !MainViewController.projekt.getPhasen().isEmpty() && !MainViewController.projekt.getKompetenzen().isEmpty()) {
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setContentText("Möchten Sie Änderungen speichern?");
 

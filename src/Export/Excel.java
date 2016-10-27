@@ -22,7 +22,7 @@ import projektDaten.Projekt;
  */
 public class Excel {
 
-	public static void ExportToExcel(Projekt projekt) {
+	public static void ExportToExcel(Projekt projekt, String path) {
 
 		Workbook wb = new HSSFWorkbook();
 		CreationHelper createHelper = wb.getCreationHelper();	

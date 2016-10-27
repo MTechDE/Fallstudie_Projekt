@@ -94,7 +94,7 @@ public class Aufwand {
 
 	/**
 	 * 
-	 * @param zugehoerigkeit des Aufwands
+	 * @param String zugehoerigkeit des Aufwands
 	 */
 	public void setZugehoerigkeit(String zugehoerigkeit) {
 		this.zugehoerigkeit = new SimpleStringProperty(zugehoerigkeit);
