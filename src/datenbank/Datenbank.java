@@ -51,11 +51,10 @@ public class Datenbank {
 	 * Speichert ein projektDaten und alle enthaltenen Phasen, Kompetenzen und
 	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * 
-	 * @param projekt
-	 *            das zu speichernde projektDaten
+	 * @param projekt das zu speichernde Projekt
 	 * @return boolean
 	 */
-	public void speicherProjekt(Projekt projekt) {
+	private void speicherProjekt(Projekt projekt) {
 
 		// Setze das Start und Enddatum
 		if (!projekt.getPhasen().isEmpty()) {
@@ -142,8 +141,7 @@ public class Datenbank {
 	 * Ein projektDaten wird anhand des übergebenen projektDaten Objektes aus
 	 * der Datenbank geholt und als komplettes projektDaten zurückgegeben.
 	 * 
-	 * @param projekt
-	 *            das aus der Datenbank zu holende projektDaten
+	 * @param projekt das aus der Datenbank zu holende Projekt
 	 * @return projektDaten
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -208,8 +206,7 @@ public class Datenbank {
 	 * wird es zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt
-	 *            das zu updatenede projektDaten
+	 * @param projekt das zu updatenede Projekte
 	 * @return boolean
 	 */
 	public void updateProjekt(Projekt projekt) {
@@ -240,8 +237,7 @@ public class Datenbank {
 	 * Kompetenzen, Aufwände), werden anhand des Projektnames aus der Datenbank
 	 * gelöscht.
 	 * 
-	 * @param projekt
-	 *            Das zu löschende projektDaten
+	 * @param projekt Das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
