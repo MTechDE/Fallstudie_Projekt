@@ -29,7 +29,6 @@ public class Excel {
 		// Initalisiere Daten
 		kompetenzen = projekt.getKompetenzen(); // Kompetenzenliste laden
 		phasen = projekt.getPhasen(); // Phasenliste laden
-		
 
 		// Erzeuge XSS Workbook
 		XSSFWorkbook workbook = new XSSFWorkbook();
@@ -49,10 +48,6 @@ public class Excel {
 
 		sheet1.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 		sheet2.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
-		
-
-		
-		
 
 		// Erzeuge Tabellenstruktur für die einfache Übersicht
 
@@ -69,34 +64,74 @@ public class Excel {
 		// Erzeuge Phasen Header
 		header1 = sheet1.createRow(3);
 		header1.createCell(0).setCellValue("Technologien / Kompetenzen");
-		for (int i = 0; i < projekt.getPhasen().size(); i++) {
-			header1.createCell(i + 1).setCellValue(projekt.getPhasen().get(i).getName());
+		for (int i = 0; i < phasen.size(); i++) {
+			header1.createCell(i + 1).setCellValue(phasen.get(i).getName());
 		}
 
 		// Erzeuge Kompetenzen Spalte
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet1.createRow(4 + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
-			
+
 		}
 
-		// Berechne gesamt PT pr Phase pro Kompetenz
-		for (int p = 0; p < projekt.getPhasen().size(); p++) {
-			for (int k = 0; k < projekt.getKompetenzen().size(); k++) {
+		// Berechne gesamt PT pro Phase pro Kompetenz
+		for (int p = 0; p < phasen.size(); p++) {
+			for (int k = 0; k < kompetenzen.size(); k++) {
 				double gesPT = 0;
-				for (int a = 0; a < projekt.getPhasen().get(p).getAufwände().size(); a++) {
-					if (projekt.getPhasen().get(p).getAufwände().get(a).getZugehoerigkeit()
-							.equals(projekt.getKompetenzen().get(k).getName())) {
-						gesPT += projekt.getPhasen().get(p).getAufwände().get(a).getPt();
+				for (int a = 0; a < phasen.get(p).getAufwände().size(); a++) {
+					if (phasen.get(p).getAufwände().get(a).getZugehoerigkeit().equals(kompetenzen.get(k).getName())) {
+						gesPT += phasen.get(p).getAufwände().get(a).getPt();
 					}
 				}
 				int row = 4 + k;
 				int cell = 1 + p;
-				
+
 				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
 
 			}
 		}
+
+		sheet1.createRow(6 + kompetenzen.size());
+		sheet1.getRow((6 + kompetenzen.size())).createCell(0).setCellValue("Mit Risikozuschlag");
+
+		header1 = sheet1.createRow(8 + kompetenzen.size());
+		header1.createCell(1).setCellValue("Phasen bzw. Aktivitäten");
+		sheet1.addMergedRegion(new CellRangeAddress(8 + kompetenzen.size(), 8 + kompetenzen.size(), 1, headerLenght));
+
+		// Erzeuge Phasen Header
+		header1 = sheet1.createRow(9 + kompetenzen.size());
+		header1.createCell(0).setCellValue("Technologien / Kompetenzen");
+		for (int i = 0; i < phasen.size(); i++) {
+			header1.createCell(i + 1).setCellValue(phasen.get(i).getName());
+		}
+
+		// Erzeuge Kompetenzen Spalte
+		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
+			Row kompetenzenRow = sheet1.createRow(10 + kompetenzen.size() + i);
+			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
+
+		}
+
+		// Berechne gesamt PT pro Phase pro Kompetenz
+		for (int p = 0; p < phasen.size(); p++) {
+			for (int k = 0; k < kompetenzen.size(); k++) {
+				double gesPT = 0;
+				for (int a = 0; a < phasen.get(p).getAufwände().size(); a++) {
+					if (phasen.get(p).getAufwände().get(a).getZugehoerigkeit().equals(kompetenzen.get(k).getName())) {
+						gesPT += phasen.get(p).getAufwände().get(a).getPt()
+								* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100));
+					}
+				}
+				int row = 10 + kompetenzen.size() + k;
+				int cell = 1 + p;
+
+				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
+
+			}
+		}
+
+		// Erstelle erweiterte Ansicht
 
 		// Schreibe die Excel Datei in den angegebenen Pfad
 		try {
