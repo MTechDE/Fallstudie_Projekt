@@ -63,6 +63,9 @@ public class Datenbank {
 			projekt.getPhasen().sort(Comparator.comparing(Phase::getStartDate));
 			projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
 			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
+		} else {
+			projekt.setStartDate(null);
+			projekt.setEndDate(null);
 		}
 
 		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate, meldeDatum) "

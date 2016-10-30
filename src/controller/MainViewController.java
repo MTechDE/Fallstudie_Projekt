@@ -2,7 +2,6 @@ package controller;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -32,7 +31,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.converter.LocalDateStringConverter;
 import projektDaten.Aufwand;
 import projektDaten.Kompetenz;
 import projektDaten.Phase;
@@ -170,8 +168,17 @@ public class MainViewController {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 
-				try {
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
+						&& !tbl_phase.getItems().isEmpty()
+						&& (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase)) {
+					try {
+						new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
 
+				try {
 					if (!tbl_phase.getItems().isEmpty())
 						btn_deletePhase.setDisable(false);
 
@@ -196,19 +203,6 @@ public class MainViewController {
 							btn_aufwand_festlegen.setDisable(false);
 							fülleFelder();
 						}
-
-						if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-							// Überprüft ob auf einen Tabelleneintrag mit einer
-							// Phase
-							// geklickt wurde
-							if (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase) {
-								try {
-									new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
-								} catch (Exception e) {
-									System.out.println(e.getMessage());
-								}
-							}
-						}
 					}
 				} catch (Exception e) {
 				}
@@ -219,6 +213,18 @@ public class MainViewController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
+				
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
+						&& !tbl_kompetenz.getItems().isEmpty()
+						&& (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz)) {
+					try {
+						new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}
+				
+				
 				try {
 					if (!tbl_kompetenz.getItems().isEmpty())
 						btn_deleteKompetenz.setDisable(false);
@@ -230,22 +236,9 @@ public class MainViewController {
 							btn_aufwand_festlegen.setDisable(false);
 							fülleFelder();
 						}
-						// Kompetenz ändern
-						// Doppelklick + Linke Maustaste
-						if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-							// Überprüft ob auf einen Tabelleneintrag mit einer
-							// Phase
-							// geklickt wurde
-							if (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz) {
-								try {
-									new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
-								} catch (Exception e) {
-									System.out.println(e.getMessage());
-								}
-							}
-						}
 					}
 				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		});
@@ -254,112 +247,88 @@ public class MainViewController {
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
-		if (txt_kompetenz.getText().length() <= 120) {
-			boolean vorhanden = false;
-			for (Kompetenz kompetenz : kompetenzen) {
-				if (kompetenz.getName().equals(txt_kompetenz.getText()))
-					vorhanden = true;
-			}
-			if (!vorhanden) {
-				if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
-						&& !(txt_risikozuschlag.getText().equals(""))) {
+		boolean vorhanden = false;
+		for (Kompetenz kompetenz : kompetenzen) {
+			if (kompetenz.getName().equals(txt_kompetenz.getText()))
+				vorhanden = true;
+		}
+		if (!vorhanden) {
+			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
+					&& !(txt_risikozuschlag.getText().equals(""))) {
 
-					// Risikozuschlag von -,% und falschem Dezimalzeichen
-					// befreien
+				// Risikozuschlag von -,% und falschem Dezimalzeichen
+				// befreien
 
-					try {
-						String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
-						risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
-						risikozuschlagString = risikozuschlagString.replaceAll("-", "");
-						Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+				try {
+					String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
+					risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
+					risikozuschlagString = risikozuschlagString.replaceAll("-", "");
+					Double risikozuschlag = Double.parseDouble(risikozuschlagString);
 
-						Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
+					Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
 
-						projekt.setSingleKompetenz(kompetenz);
-						kompetenzen.add(kompetenz);
-						tbl_kompetenz.setItems(kompetenzen);
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-
-				} else {
-					String fehlermeldung = "";
-
-					if (txt_risikozuschlag.getText().equals(""))
-						fehlermeldung = "Risikozuschlag eingeben.";
-					if (txt_kompetenz.getText().equals(""))
-						fehlermeldung = "Kompetenzbezeichnung darf nicht leer sein.";
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText(fehlermeldung);
-					alert.showAndWait();
+					projekt.setSingleKompetenz(kompetenz);
+					kompetenzen.add(kompetenz);
+					tbl_kompetenz.setItems(kompetenzen);
+					checkChanges();
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
+
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
+				if (txt_risikozuschlag.getText().equals(""))
+					alert.setContentText("Risikozuschlag eingeben.");
+				if (txt_kompetenz.getText().equals(""))
+					alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
 				alert.showAndWait();
 			}
-
-			checkChanges();
-
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Kompetenzname zu lang");
+			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 			alert.showAndWait();
 		}
-
 	}
 
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
 
-		if (txt_phase.getText().length() <= 60) {
+		boolean vorhanden = false;
+		// Prüfung ob Phase bereits vorhanden
+		for (Phase phase : phasen) {
+			if (phase.getName().equals(txt_phase.getText()))
+				vorhanden = true;
+		}
+		if (!datepicker_ende_selected(event)) {
+			if (!vorhanden) {
+				// Prüfung ob alle Felder ausgefüllt
+				if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
+						&& (dtpkr_end.getValue() != null)) {
 
-			boolean vorhanden = false;
-			// Prüfung ob Phase bereits vorhanden
-			for (Phase phase : phasen) {
-				if (phase.getName().equals(txt_phase.getText()))
-					vorhanden = true;
-			}
-			if (!datepicker_ende_selected(event)) {
-				if (!vorhanden) {
-					// Prüfung ob alle Felder ausgefüllt
-					if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
-							&& (dtpkr_end.getValue() != null)) {
+					try {
+						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
+								dtpkr_end.getValue().toString());
 
-						try {
-							Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-									dtpkr_end.getValue().toString());
-
-							projekt.setSinglePhase(phase);
-							phasen.add(phase);
-							tbl_phase.setItems(phasen);
-						} catch (Exception e) {
-							System.out.println(e.getMessage());
-						}
-					} else {
-						String fehlermeldung = "";
-
-						if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
-							fehlermeldung = "Zeitraum muss ausgewählt werden.";
-
-						if (txt_phase.getText().equals("") || txt_phase == null)
-							fehlermeldung = "Phasenbezeichnung darf nicht leer sein.";
-
-						Alert alert = new Alert(AlertType.ERROR);
-						alert.setContentText(fehlermeldung);
-						alert.showAndWait();
+						projekt.setSinglePhase(phase);
+						phasen.add(phase);
+						tbl_phase.setItems(phasen);
+						checkChanges();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
 					}
 				} else {
 					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
+					if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
+						alert.setContentText("Zeitraum muss ausgewählt werden.");
+					if (txt_phase.getText().equals("") || txt_phase == null)
+						alert.setContentText("Phasenbezeichnung darf nicht leer sein.");
 					alert.showAndWait();
 				}
+			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
+				alert.showAndWait();
 			}
-			checkChanges();
-		} else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Phasenname zu lang");
-			alert.showAndWait();
 		}
 
 	}
@@ -486,15 +455,9 @@ public class MainViewController {
 	}
 
 	public static void saveProjektRemote() {
-		// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Datenbank db = new Datenbank();
-				db.updateProjekt(projekt);
-				System.out.println("Daten in der DB gespeichert!");
-			}
-		}).start();
+		// Kein Thread damit die Startview ebenfalls Aktuell ist
+		Datenbank db = new Datenbank();
+		db.updateProjekt(projekt);
 	}
 
 	@FXML
@@ -533,18 +496,18 @@ public class MainViewController {
 
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
-		
+
 		// Holle aktuelles Datum
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-		
-		
-		if(dtpkr_meldeDatum.getValue() == null){
+
+		if (dtpkr_meldeDatum.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Ungültiges Meldedatum");
 			alert.setContentText("Bitte geben Sie ein Meldedatum an!");
 			alert.showAndWait();
-		} else if(Integer.parseInt(dtpkr_meldeDatum.getValue().toString().replaceAll("-", "")) > Integer.parseInt(date.format(formatter).replaceAll(" ", ""))){
+		} else if (Integer.parseInt(dtpkr_meldeDatum.getValue().toString().replaceAll("-", "")) > Integer
+				.parseInt(date.format(formatter).replaceAll(" ", ""))) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Ungültiges Meldedatum");
 			alert.setContentText("Meldedatum darf nicht in der Zukunft liegen!");
