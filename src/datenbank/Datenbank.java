@@ -1,6 +1,7 @@
 package datenbank;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.sql2o.Connection;
@@ -56,8 +57,10 @@ public class Datenbank {
 	 */
 	private void speicherProjekt(Projekt projekt) {
 
-		// Setze das Start und Enddatum
+		// Bestimme das Start- und Enddatum
 		if (!projekt.getPhasen().isEmpty()) {
+			// Sortiere die Liste anhand des Startdatums
+			projekt.getPhasen().sort(Comparator.comparing(Phase::getStartDate));
 			projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
 			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
 		}

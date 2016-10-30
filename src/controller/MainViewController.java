@@ -2,6 +2,8 @@ package controller;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
@@ -30,6 +32,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateStringConverter;
 import projektDaten.Aufwand;
 import projektDaten.Kompetenz;
 import projektDaten.Phase;
@@ -76,7 +79,7 @@ public class MainViewController {
 	@FXML
 	private Button btn_projekt_speichern;
 	@FXML
-	private Button btn_projektuebersicht;
+	private Button btn_export;
 	@FXML
 	private Button btn_zurueck;
 	@FXML
@@ -390,7 +393,7 @@ public class MainViewController {
 			lbl_Extern.setVisible(true);
 			break;
 		}
-		
+
 		if (indexPhaseClicked && indexKompetenzClicked) {
 			fülleFelder();
 		}
@@ -530,34 +533,49 @@ public class MainViewController {
 
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
+		
+		// Holle aktuelles Datum
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+		
+		
+		if(dtpkr_meldeDatum.getValue() == null){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Ungültiges Meldedatum");
+			alert.setContentText("Bitte geben Sie ein Meldedatum an!");
+			alert.showAndWait();
+		} else if(Integer.parseInt(dtpkr_meldeDatum.getValue().toString().replaceAll("-", "")) > Integer.parseInt(date.format(formatter).replaceAll(" ", ""))){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Ungültiges Meldedatum");
+			alert.setContentText("Meldedatum darf nicht in der Zukunft liegen!");
+			alert.showAndWait();
+		} else {
+			Node source = (Node) event.getSource();
+			Scene scene = source.getScene();
+			Stage stage = (Stage) scene.getWindow();
 
-		// TODO: Meldedatum darf nicht null sein
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Projektdaten exportieren");
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
+			File file = fileChooser.showSaveDialog(stage);
 
-		Node source = (Node) event.getSource();
-		Scene scene = source.getScene();
-		Stage stage = (Stage) scene.getWindow();
-
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Projektdaten exportieren");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
-		File file = fileChooser.showSaveDialog(stage);
-
-		if (file != null) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					btn_sendProjekt.setDisable(true);
-					projekt.setAbgeschickt(true);
-					projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
-					Excel.ExportToExcel(projekt, file.getAbsolutePath());
-					try {
-						btn_projekt_speichern_click(event);
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
+			if (file != null) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						btn_sendProjekt.setDisable(true);
+						projekt.setAbgeschickt(true);
+						projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
+						Excel.ExportToExcel(projekt, file.getAbsolutePath());
+						try {
+							btn_projekt_speichern_click(event);
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+						}
+						btn_sendProjekt.setDisable(false);
 					}
-					btn_sendProjekt.setDisable(false);
-				}
-			}).start();
+				}).start();
+			}
 		}
 	}
 
@@ -614,7 +632,7 @@ public class MainViewController {
 	}
 
 	@FXML
-	public void btn_projektuebersicht_click(ActionEvent event) throws Exception {
+	public void btn_export_click(ActionEvent event) throws Exception {
 		Node source = (Node) event.getSource();
 		Scene scene = source.getScene();
 		Stage stage = (Stage) scene.getWindow();
