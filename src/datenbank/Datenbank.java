@@ -62,6 +62,8 @@ public class Datenbank {
 			// Sortiere die Liste anhand des Startdatums
 			projekt.getPhasen().sort(Comparator.comparing(Phase::getStartDate));
 			projekt.setStartDate(projekt.getPhasen().get(0).getStartDate());
+			// Sortiere Liste anhand des Enddatum
+			projekt.getPhasen().sort(Comparator.comparing(Phase::getEndDate));
 			projekt.setEndDate(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate());
 		} else {
 			projekt.setStartDate(null);
