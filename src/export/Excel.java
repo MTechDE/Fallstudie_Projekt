@@ -1,8 +1,13 @@
 package export;
 
 import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
+
+import org.apache.poi.ss.formula.functions.Days360;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -12,8 +17,8 @@ import projektDaten.Phase;
 import projektDaten.Projekt;
 
 /**
- * Die Excel Klasse exportiert das Projekt mit Hilfe der Apache POI Bibliothek in einem
- * xlsx Format an den gewählten Speicherort.
+ * Die Excel Klasse exportiert das Projekt mit Hilfe der Apache POI Bibliothek
+ * in einem xlsx Format an den gewählten Speicherort.
  * 
  * @author Daniel Sogl
  *
@@ -37,7 +42,6 @@ public class Excel {
 		// Erzeuge Sheets
 		XSSFSheet sheet1 = workbook.createSheet("Projektübersicht");
 		XSSFSheet sheet2 = workbook.createSheet("Erweiterte Projektübersicht");
-
 
 		// Erzeue Header
 		Row header1 = sheet1.createRow(0);
@@ -143,10 +147,10 @@ public class Excel {
 		projekt.getPhasen().sort(Comparator.comparing(Phase::getEndDate));
 		int endJahr = Integer
 				.parseInt(projekt.getPhasen().get(projekt.getPhasen().size() - 1).getEndDate().substring(0, 4));
-		
+
 		// Es muss mindestens ein Jahr geben
 		int anzJahre = (endJahr - startJahr) + 1;
-		
+
 		// Erzeuge Kompetenzen Spalte
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet2.createRow(4 + i);
@@ -158,50 +162,107 @@ public class Excel {
 		header1 = sheet2.createRow(3);
 		header1.createCell(0).setCellValue("Technologien / Kompetenzen");
 		for (int j = 0; j < anzJahre; j++) {
-			for(int i = 1; i <= 4; i++){
+			for (int i = 1; i <= 4; i++) {
 				header1.createCell((j * 4) + i).setCellValue("Q" + i + " - " + String.valueOf(startJahr + j));
-			}			
+			}
 		}
-	
-		
+
 		// Weise die PT dem richtigen Quartal sowie der richtigen Kompetenz zu
-		
-		// Durchlaufe jedes Jahr und dessen Quartale um die passenden PT herauszufiltern
-		for (int j = 0; j < anzJahre; j++) {
-			// 4 Quartale pro Jahr
-			for(int i = 1; i <= 4; i++){
-				
-				for (int p = 0; p < phasen.size(); p++) {
-					for (int k = 0; k < kompetenzen.size(); k++) {
-						double gesPT = 0;
+
+		// Durchlaufe jedes Jahr und dessen Quartale um die passenden PT
+		// herauszufiltern
+
+		for (int k = 0; k < kompetenzen.size(); k++) {
+			for (int j = 0; j < anzJahre; j++) {
+				// 4 Quartale pro Jahr
+				for (int i = 1; i <= 4; i++) {
+					double gesPT = 0;
+					for (int p = 0; p < phasen.size(); p++) {
 						for (int a = 0; a < phasen.get(p).getAufwände().size(); a++) {
-							if (phasen.get(p).getAufwände().get(a).getZugehoerigkeit().equals(kompetenzen.get(k).getName()) && (startJahr + j) == Integer.parseInt(phasen.get(p).getStartDate().substring(0, 4))) {
-								
-								// Berechne anzahl der Jahre zwischen Start und Enddatum
-								int difJahre = Integer.parseInt(phasen.get(p).getEndDate().substring(0, 4)) - Integer.parseInt(phasen.get(p).getStartDate().substring(0, 4));
-								
-								// Berechne die Anzahl der Quartale durch die die Phase geht
-								
+							if (phasen.get(p).getAufwände().get(a).getZugehoerigkeit()
+									.equals(kompetenzen.get(k).getName())
+									&& (startJahr + j) == Integer
+											.parseInt(phasen.get(p).getStartDate().substring(0, 4))) {
+
+								// Berechne anzahl der Jahre zwischen Start und
+								// Enddatum
+								int difJahre = Integer.parseInt(phasen.get(p).getEndDate().substring(0, 4))
+										- Integer.parseInt(phasen.get(p).getStartDate().substring(0, 4));
+
+								// Berechne die Anzahl der Quartale durch die
+								// die Phase geht
+
 								int startMonat = Integer.parseInt(phasen.get(p).getStartDate().substring(5, 7));
 								int endMonat = Integer.parseInt(phasen.get(p).getEndDate().substring(5, 7));
-								
-								// Ist die Differenz 0, sind sie im selben Monat
-								
-								System.out.println("Differezn Start und Enddatum: " + (endMonat - startMonat));
-								
+
+								int startQuartal, endQuartal;
+
+								if (startMonat == 1 || startMonat == 2 || startMonat == 3)
+									startQuartal = 1;
+								else if (startMonat == 4 || startMonat == 5 || startMonat == 6)
+									startQuartal = 2;
+								else if (startMonat == 7 || startMonat == 8 || startMonat == 9)
+									startQuartal = 3;
+								else
+									startQuartal = 4;
+
+								if (endMonat == 1 || endMonat == 2 || endMonat == 3)
+									endQuartal = 1;
+								else if (endMonat == 4 || endMonat == 5 || endMonat == 6)
+									endQuartal = 2;
+								else if (endMonat == 7 || endMonat == 8 || endMonat == 9)
+									endQuartal = 3;
+								else
+									endQuartal = 4;
+
+								if (startQuartal == endQuartal && difJahre == 0 && startQuartal == i) {
+									gesPT += (phasen.get(p).getAufwände().get(a).getPt()
+											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100)));
+								}
+								if (startQuartal != endQuartal && difJahre == 0 && (startQuartal == i || endQuartal == i)) {
+									
+
+									// Berechne Tage
+									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+									LocalDate startDate = LocalDate.parse(phasen.get(p).getStartDate(), formatter);
+									LocalDate endDate = LocalDate.parse(phasen.get(p).getEndDate(), formatter);
+									
+
+									int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate);
+
+									// Berechne die Tage im jeweiligen Quartal
+									
+									gesPT += (phasen.get(p).getAufwände().get(a).getPt()
+											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100))) / (endQuartal - startQuartal + 1);
+									
+									
+									switch (endQuartal - startQuartal) {
+									case 1:
+										break;
+									case 2:
+										break;
+									case 3:
+										break;
+									}
+
+								}
+
 							}
 						}
-						int row = 10 + kompetenzen.size() + k;
-						int cell = 1 + p;
-
-//						sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
 
 					}
+
+					// Speichere die PT des Quartals
+					int row = 4 + k;
+					int cell = i + j;
+
+					// Reihe = Kompetenz
+					// Spalte = Jahr + Quartal
+					sheet2.getRow(row).createCell(cell).setCellValue(gesPT);
 				}
-				
-			}			
+			}
 		}
-		
 
 		// Schreibe die Excel Datei in den angegebenen Pfad
 		try {
