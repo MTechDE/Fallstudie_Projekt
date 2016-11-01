@@ -80,7 +80,7 @@ public class StartViewController {
 	// Diese Methode wird autoamtisch beim Starten aufgerufen
 	@FXML
 	private void initialize() {
-		
+
 		img_loadingSpinner.setVisible(false);
 
 		// Falls keine Projekte gefunden wurden, wird dieser Text in der Tabelle
@@ -197,33 +197,27 @@ public class StartViewController {
 	@FXML
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
-		if (!txt_newProjekt_name.getText().isEmpty() && !txt_newProjekt_ersteller.getText().isEmpty()) {
-			if (txt_newProjekt_name.getText().length() <= 120 && txt_newProjekt_ersteller.getText().length() <= 60) {
-				// Überprüfe ob der gewünschte Name bereits verwendet wurde
-				boolean doubleName = false;
-				for (Projekt projekt : projektData) {
-					if (projekt.getName().equals(txt_newProjekt_name.getText()))
-						doubleName = true;
-				}
-				if (!doubleName) {
-					Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
-							false);
-					// Öffne Hauptfenster
-					Node source = (Node) event.getSource();
-					Stage stage = (Stage) source.getScene().getWindow();
-					new OpenMainPage(newProjekt, true);
+		if (!txt_newProjekt_name.getText().trim().isEmpty() && !txt_newProjekt_ersteller.getText().trim().isEmpty()) {
 
-					// Schließe Fenster
-					stage.close();
-				} else {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Projektname wurde bereits verwendet!");
-					alert.showAndWait();
-				}
+			// Überprüfe ob der gewünschte Name bereits verwendet wurde
+			boolean doubleName = false;
+			for (Projekt projekt : projektData) {
+				if (projekt.getName().equals(txt_newProjekt_name.getText()))
+					doubleName = true;
+			}
+			if (!doubleName) {
+				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
+						false);
+				// Öffne Hauptfenster
+				Node source = (Node) event.getSource();
+				Stage stage = (Stage) source.getScene().getWindow();
+				new OpenMainPage(newProjekt, true);
 
+				// Schließe Fenster
+				stage.close();
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Ihr gewählter Projektname wurde bereits verwendet!");
+				alert.setContentText("Projektname wurde bereits verwendet!");
 				alert.showAndWait();
 			}
 		} else {

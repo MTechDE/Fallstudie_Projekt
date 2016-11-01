@@ -2,8 +2,8 @@ package controller;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import datenbank.Datenbank;
@@ -130,7 +130,7 @@ public class MainViewController {
 
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
-
+		
 		// Initalisiere Tabelle
 		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
 		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
@@ -162,6 +162,9 @@ public class MainViewController {
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
+		
+		if(OpenMainPage.newProjekt)
+			somethingChanged = true;
 
 		// ActionHandler Tabelle Phase
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -213,7 +216,7 @@ public class MainViewController {
 		tbl_kompetenz.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				
+
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
 						&& !tbl_kompetenz.getItems().isEmpty()
 						&& (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz)) {
@@ -223,8 +226,7 @@ public class MainViewController {
 						System.out.println(e.getMessage());
 					}
 				}
-				
-				
+
 				try {
 					if (!tbl_kompetenz.getItems().isEmpty())
 						btn_deleteKompetenz.setDisable(false);
@@ -247,14 +249,13 @@ public class MainViewController {
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
-		boolean vorhanden = false;
-		for (Kompetenz kompetenz : kompetenzen) {
-			if (kompetenz.getName().equals(txt_kompetenz.getText()))
-				vorhanden = true;
-		}
-		if (!vorhanden) {
-			if (!(txt_kompetenz.getText().equals("") || txt_kompetenz == null)
-					&& !(txt_risikozuschlag.getText().equals(""))) {
+		if (!txt_kompetenz.getText().trim().isEmpty() && !txt_risikozuschlag.getText().trim().isEmpty()) {
+			boolean vorhanden = false;
+			for (Kompetenz kompetenz : kompetenzen) {
+				if (kompetenz.getName().equals(txt_kompetenz.getText()))
+					vorhanden = true;
+			}
+			if (!vorhanden) {
 
 				// Risikozuschlag von -,% und falschem Dezimalzeichen
 				// befreien
@@ -277,15 +278,15 @@ public class MainViewController {
 
 			} else {
 				Alert alert = new Alert(AlertType.ERROR);
-				if (txt_risikozuschlag.getText().equals(""))
-					alert.setContentText("Risikozuschlag eingeben.");
-				if (txt_kompetenz.getText().equals(""))
-					alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
+				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 				alert.showAndWait();
 			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
+			if (txt_risikozuschlag.getText().trim().isEmpty())
+				alert.setContentText("Risikozuschlag eingeben.");
+			if (txt_kompetenz.getText().trim().isEmpty())
+				alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
 			alert.showAndWait();
 		}
 	}
@@ -302,8 +303,8 @@ public class MainViewController {
 		if (!datepicker_ende_selected(event)) {
 			if (!vorhanden) {
 				// Prüfung ob alle Felder ausgefüllt
-				if ((!(txt_phase.getText().equals("")) || txt_phase != null) && (dtpkr_start.getValue() != null)
-						&& (dtpkr_end.getValue() != null)) {
+				if (!txt_phase.getText().trim().isEmpty() && dtpkr_start.getValue() != null
+						&& dtpkr_end.getValue() != null) {
 
 					try {
 						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
@@ -390,8 +391,9 @@ public class MainViewController {
 		double ptExtern = 0;
 		int auswahl = chobx_aufwand.getSelectionModel().getSelectedIndex();
 
-		if ((auswahl == 0 && (txt_pt_intern.equals("") || txt_pt_extern.equals("")))
-				|| (auswahl == 1 && (txt_mak_intern.equals("") || txt_mak_extern.equals("")))) {
+		if ((auswahl == 0 && (txt_pt_intern.getText().trim().isEmpty() || txt_pt_extern.getText().trim().isEmpty()))
+				|| (auswahl == 1
+						&& (txt_mak_intern.getText().isEmpty() || txt_mak_extern.getText().trim().isEmpty()))) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte Aufwände für intern und extern eingeben!");
 			alert.showAndWait();
@@ -578,20 +580,61 @@ public class MainViewController {
 	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
 	// Enddatum)
 	public long calculateDate(String startDatum, String endDatum) {
-		try {
-			LocalDate start = LocalDate.parse(startDatum);
-			LocalDate ende = LocalDate.parse(endDatum);
 
-			long daysBetween = ChronoUnit.DAYS.between(start, ende);
-			// Arbeitstage (7-Tage-Woche) werden mit dem Faktor für den 17-Tage
-			// Monat multipliziert
-			double personentage = (0.607 * daysBetween);
-			return Math.round(personentage);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -1;
+		LocalDate start = LocalDate.parse(startDatum);
+		LocalDate ende = LocalDate.parse(endDatum);
+		double personentage = 0;
+		long daysBetween = 0;
+
+		while (!start.getMonth().equals(ende.getMonth())) {
+			int monatslaenge = start.getMonth().maxLength();
+			Month startMonat = start.getMonth();
+			daysBetween = monatslaenge - start.getDayOfMonth();
+			daysBetween++; // Ein Tag mehr, damit EndDatum inklusive ist
+			// Je nach Länge des Monats wird anderer Faktor benötigt
+			// Februar wird immer mit 29T gerechnet.
+			switch (monatslaenge) {
+			case 29:
+				personentage += 0.586 * daysBetween;
+				break;
+			case 30:
+				personentage += 0.567 * daysBetween;
+				break;
+			case 31:
+				personentage += 0.548 * daysBetween;
+				break;
+
+			default:
+				break;
+			}
+
+			// Datum bis zum 1. Tag des nächsten Monats verändern
+			while (startMonat.equals(start.getMonth())) {
+				start = start.plusDays(1);
+			}
 		}
 
+		// Berechnung der restlichen Tage
+		daysBetween = ende.getDayOfMonth() - start.getDayOfMonth();
+		daysBetween++;
+		int monatslaenge = start.getMonth().maxLength();
+		// Je nach Länge des Monats wird anderer Faktor benötigt
+		// Februar wird immer mit 29T gerechnet.
+		switch (monatslaenge) {
+		case 29:
+			personentage += 0.586 * daysBetween;
+			break;
+		case 30:
+			personentage += 0.567 * daysBetween;
+			break;
+		case 31:
+			personentage += 0.548 * daysBetween;
+			break;
+
+		default:
+			break;
+		}
+		return Math.round(personentage);
 	}
 
 	@FXML

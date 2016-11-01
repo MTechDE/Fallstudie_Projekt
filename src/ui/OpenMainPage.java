@@ -27,10 +27,12 @@ public class OpenMainPage extends Stage {
 	private Stage stage;
 	private Datenbank myDB = new Datenbank();
 	public static Projekt tmpProjekt;
+	public static boolean newProjekt;
 
 	public OpenMainPage(Projekt projekt, boolean newProjekt) throws Exception {
 
 		tmpProjekt = projekt;
+		OpenMainPage.newProjekt = newProjekt;
 
 		if (newProjekt) {
 			tmpProjekt = projekt;
@@ -49,7 +51,10 @@ public class OpenMainPage extends Stage {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setResizable(false);
-			stage.setTitle(projekt.getName());
+			if(OpenMainPage.newProjekt)
+				stage.setTitle("* " + projekt.getName());
+			else
+				stage.setTitle(projekt.getName());
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("VanillaSky.png")));
 			stage.show();
 
@@ -60,8 +65,7 @@ public class OpenMainPage extends Stage {
 				@Override
 				public void handle(final WindowEvent event) {
 
-					if (MainViewController.somethingChanged && !MainViewController.projekt.getPhasen().isEmpty()
-							&& !MainViewController.projekt.getKompetenzen().isEmpty()) {
+					if (MainViewController.somethingChanged) {
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setContentText("Möchten Sie Änderungen speichern?");
 

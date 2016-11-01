@@ -32,24 +32,31 @@ public class ChangeKompetenzViewController {
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
 		
-		if(!txt_kompetenz_aendern.getText().equals(kompetenz.getName())){
-			boolean check = false;
-			for (Kompetenz	Kompetenz: MainViewController.projekt.getKompetenzen()) {
-				if(Kompetenz.getName().equals(txt_kompetenz_aendern.getText()))
-					check = true;
-			}
-			if(!check){
-				kompetenz.setName(txt_kompetenz_aendern.getText());
-				kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));	
-				MainViewController.somethingChanged = true;
-				btn_abbrechen_click(event);
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
-				alert.showAndWait();
-			}
+		
+		if(txt_kompetenz_aendern.getText().trim().isEmpty() || txt_risikozuschlag_aendern.getText().trim().isEmpty()){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte füllen Sie alle Felder aus!");
+			alert.showAndWait();
 		} else {
-			btn_abbrechen_click(event);
+			if(!txt_kompetenz_aendern.getText().equals(kompetenz.getName())){
+				boolean check = false;
+				for (Kompetenz	Kompetenz: MainViewController.projekt.getKompetenzen()) {
+					if(Kompetenz.getName().equals(txt_kompetenz_aendern.getText()))
+						check = true;
+				}
+				if(!check){
+					kompetenz.setName(txt_kompetenz_aendern.getText());
+					kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));	
+					MainViewController.somethingChanged = true;
+					btn_abbrechen_click(event);
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
+					alert.showAndWait();
+				}
+			} else {
+				btn_abbrechen_click(event);
+			}
 		}
 	}
 

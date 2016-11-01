@@ -44,26 +44,33 @@ public class ChangePhaseViewController {
 
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
-		// Überprüfe ob der neue Name bereits verwendet wurde
-		if(!txt_phase_aendern.getText().equals(phase.getName())){
-			boolean check = false;
-			for (Phase Phase : MainViewController.projekt.getPhasen()) {
-				if(Phase.getName().equals(txt_phase_aendern.getText()))
-					check = true;
-			}
-			if(!check){
-				phase.setName(txt_phase_aendern.getText());
-				phase.setStartDate(dtpkr_startdatum_aendern.getValue().toString());
-				phase.setEndDate(dtpkr_enddatum_aendern.getValue().toString());
-				MainViewController.somethingChanged = true;
-				btn_abbrechen_click(event);
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
-				alert.showAndWait();
-			}
+		
+		if(txt_phase_aendern.getText().trim().isEmpty() || dtpkr_startdatum_aendern.getValue() == null || dtpkr_enddatum_aendern.getValue() == null){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte Füllen Sie alle Felder aus!");
+			alert.showAndWait();
 		} else {
-			btn_abbrechen_click(event);
+			// Überprüfe ob der neue Name bereits verwendet wurde
+			if(!txt_phase_aendern.getText().equals(phase.getName())){
+				boolean check = false;
+				for (Phase Phase : MainViewController.projekt.getPhasen()) {
+					if(Phase.getName().equals(txt_phase_aendern.getText()))
+						check = true;
+				}
+				if(!check){
+					phase.setName(txt_phase_aendern.getText());
+					phase.setStartDate(dtpkr_startdatum_aendern.getValue().toString());
+					phase.setEndDate(dtpkr_enddatum_aendern.getValue().toString());
+					MainViewController.somethingChanged = true;
+					btn_abbrechen_click(event);
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
+					alert.showAndWait();
+				}
+			} else {
+				btn_abbrechen_click(event);
+			}
 		}
 	}
 
