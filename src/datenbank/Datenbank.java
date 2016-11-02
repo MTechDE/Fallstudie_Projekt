@@ -27,7 +27,7 @@ public class Datenbank {
 	private Sql2o sql2o;
 
 	/**
-	 * DB Anmeldedaten werden im Konstruktur konfiguriert.
+	 * DB Anmeldedaten werden im Konstruktor konfiguriert.
 	 */
 	public Datenbank() {
 		sql2o = new Sql2o("jdbc:mysql://lolstats.org:3306/fallstudie", "fallstudie_user", "bYv735!r");
@@ -52,8 +52,7 @@ public class Datenbank {
 	 * Speichert ein projektDaten und alle enthaltenen Phasen, Kompetenzen und
 	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * 
-	 * @param projekt
-	 *            das zu speichernde Projekt
+	 * @param projekt das zu speichernde Projekt
 	 * @return boolean
 	 */
 	private void speicherProjekt(Projekt projekt) {
@@ -144,8 +143,7 @@ public class Datenbank {
 	 * Ein projektDaten wird anhand des übergebenen projektDaten Objektes aus
 	 * der Datenbank geholt und als komplettes projektDaten zurückgegeben.
 	 * 
-	 * @param projekt
-	 *            das aus der Datenbank zu holende Projekt
+	 * @param projekt das aus der Datenbank zu holende Projekt
 	 * @return projektDaten
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -157,12 +155,12 @@ public class Datenbank {
 
 		try (Connection con = sql2o.open()) {
 
-			// Hole Phasen anhand des Projektnamens
+			// Hole Phasen anhand des Projektnamen
 			String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
 			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName())
 					.executeAndFetch(Phase.class);
 
-			// Hole Alle Personen anhand des Projektnamnes
+			// Hole Alle Personen anhand des Projektnamen
 			sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a "
 					+ "WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 			if (!phasen.isEmpty()) {
@@ -185,7 +183,7 @@ public class Datenbank {
 			System.out.println(e.getMessage());
 		}
 
-		// Überprüfe ob Phasen und/oder Kompetenzen exsistieren
+		// Überprüfe ob Phasen und/oder Kompetenzen existieren
 		if (phasen.isEmpty())
 			newprojekt.setPhasen(phasen);
 		if (kompetenzen.isEmpty())
@@ -199,8 +197,7 @@ public class Datenbank {
 	 * wird es zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt
-	 *            das zu updatenede Projekte
+	 * @param projekt das zu updatende Projekte
 	 * @return boolean
 	 */
 	public void updateProjekt(Projekt projekt) {
@@ -228,11 +225,10 @@ public class Datenbank {
 
 	/**
 	 * Alle Daten welche mit einem projektDaten zu tun haben (Phasen,
-	 * Kompetenzen, Aufwände), werden anhand des Projektnames aus der Datenbank
+	 * Kompetenzen, Aufwände), werden anhand des Projektname aus der Datenbank
 	 * gelöscht.
 	 * 
-	 * @param projekt
-	 *            Das zu löschende projektDaten
+	 * @param projekt Das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public boolean deleteProjekt(Projekt projekt) {
