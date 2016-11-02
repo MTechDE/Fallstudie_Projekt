@@ -6,10 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import projektDaten.Phase;
 
@@ -44,25 +44,27 @@ public class ChangePhaseViewController {
 
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
-		
-		if(txt_phase_aendern.getText().trim().isEmpty() || dtpkr_startdatum_aendern.getValue() == null || dtpkr_enddatum_aendern.getValue() == null){
+
+		if (txt_phase_aendern.getText().trim().isEmpty() || dtpkr_startdatum_aendern.getValue() == null
+				|| dtpkr_enddatum_aendern.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte Füllen Sie alle Felder aus!");
 			alert.showAndWait();
 		} else {
 			// Überprüfe ob der neue Name bereits verwendet wurde
-			if(!txt_phase_aendern.getText().equals(phase.getName())){
+			if (!txt_phase_aendern.getText().equals(phase.getName())) {
 				boolean check = false;
 				for (Phase Phase : MainViewController.projekt.getPhasen()) {
-					if(Phase.getName().equals(txt_phase_aendern.getText()))
+					if (Phase.getName().equals(txt_phase_aendern.getText()))
 						check = true;
 				}
-				if(!check){
+				if (!check) {
 					phase.setName(txt_phase_aendern.getText());
 					phase.setStartDate(dtpkr_startdatum_aendern.getValue().toString());
 					phase.setEndDate(dtpkr_enddatum_aendern.getValue().toString());
 					MainViewController.somethingChanged = true;
 					btn_abbrechen_click(event);
+
 				} else {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
@@ -72,6 +74,22 @@ public class ChangePhaseViewController {
 				btn_abbrechen_click(event);
 			}
 		}
+	}
+
+	@FXML
+	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
+
+		boolean fehler = false;
+		int startDatum = Integer.parseInt(dtpkr_startdatum_aendern.getValue().toString().replaceAll("-", ""));
+		int endDatum = Integer.parseInt(dtpkr_enddatum_aendern.getValue().toString().replaceAll("-", ""));
+		if (endDatum <= startDatum) {
+			dtpkr_enddatum_aendern.setValue(dtpkr_startdatum_aendern.getValue().plusDays(1));
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
+			alert.showAndWait();
+			fehler = true;
+		}
+		return fehler;
 	}
 
 	/**

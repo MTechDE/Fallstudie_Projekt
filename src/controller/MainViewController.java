@@ -4,6 +4,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Optional;
+
 import datenbank.Datenbank;
 import export.Excel;
 import javafx.collections.FXCollections;
@@ -174,6 +175,7 @@ public class MainViewController {
 						&& (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase)) {
 					try {
 						new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
+						aktualisierePhasen();
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
@@ -220,6 +222,7 @@ public class MainViewController {
 						&& (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz)) {
 					try {
 						new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
+						aktualisiereKompetenzen();
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
@@ -289,6 +292,15 @@ public class MainViewController {
 		}
 	}
 
+	public void aktualisiereKompetenzen() {
+		Kompetenz kompetenz = new Kompetenz(" ", 0.0);
+		projekt.setSingleKompetenz(kompetenz);
+		kompetenzen.add(kompetenz);
+		tbl_kompetenz.setItems(kompetenzen);
+		projekt.getKompetenzen().remove(kompetenz);
+		kompetenzen.remove(kompetenz);
+	}
+
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
 
@@ -329,7 +341,16 @@ public class MainViewController {
 				alert.showAndWait();
 			}
 		}
+	}
 
+	public void aktualisierePhasen() {
+		Phase phase = new Phase(" ", "", "");
+		projekt.setSinglePhase(phase);
+		phasen.add(phase);
+		tbl_phase.setItems(phasen);
+
+		projekt.getPhasen().remove(phase);
+		phasen.remove(phase);
 	}
 
 	@FXML
