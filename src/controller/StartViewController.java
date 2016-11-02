@@ -99,7 +99,7 @@ public class StartViewController {
 		projektData = FXCollections.observableArrayList(myDB.getProjekte());
 		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
-		// Tabelle wird Filterbar durch das Suchfeld
+		// Tabelle wird gefiltert durch das Suchfeld
 		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
 		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredData.setPredicate(projekt -> {
