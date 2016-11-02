@@ -106,13 +106,13 @@ public class MainViewController {
 	@FXML
 	private Label lbl_Extern;
 
-	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
+	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
 
-	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
+	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Phase> phasen = FXCollections.observableArrayList();
 
-	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
+	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
 
 	// Variablen
@@ -130,7 +130,7 @@ public class MainViewController {
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
 
-		// Initalisiere Tabelle
+		// Initialisiere Tabelle
 		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
 		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -143,7 +143,7 @@ public class MainViewController {
 		tbl_kompetenz.setItems(kompetenzen);
 		tbl_phase.setItems(phasen);
 
-		// UI wird initalisiert
+		// UI wird initialisiert
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
@@ -199,7 +199,7 @@ public class MainViewController {
 						txt_mak_pt_extern.setText(arbeitstage + " PT");
 
 						indexPhaseClicked = true;
-						// was passiert wenn eine phase und eine kompetenz
+						// was passiert wenn eine phase und eine Kompetenz
 						// ausgewählt
 						// wurden
 						if (indexKompetenzClicked) {
@@ -251,12 +251,7 @@ public class MainViewController {
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
 		if (!txt_kompetenz.getText().trim().isEmpty() && !txt_risikozuschlag.getText().trim().isEmpty()) {
-			boolean vorhanden = false;
-			for (Kompetenz kompetenz : kompetenzen) {
-				if (kompetenz.getName().equals(txt_kompetenz.getText()))
-					vorhanden = true;
-			}
-			if (!vorhanden) {
+			if (!kompetenzen.stream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
 
 				// Risikozuschlag von -,% und falschem Dezimalzeichen
 				// befreien
@@ -303,15 +298,8 @@ public class MainViewController {
 
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
-
-		boolean vorhanden = false;
-		// Prüfung ob Phase bereits vorhanden
-		for (Phase phase : phasen) {
-			if (phase.getName().equals(txt_phase.getText()))
-				vorhanden = true;
-		}
 		if (!datepicker_ende_selected(event)) {
-			if (!vorhanden) {
+			if (!phasen.stream().anyMatch(obj -> obj.getName().equals(txt_phase.getText()))) {
 				// Prüfung ob alle Felder ausgefüllt
 				if (!txt_phase.getText().trim().isEmpty() && dtpkr_start.getValue() != null
 						&& dtpkr_end.getValue() != null) {
@@ -436,13 +424,7 @@ public class MainViewController {
 					break;
 				}
 
-				// Prüfung ob Aufwand für Kompetenz bereits vorhanden ist
-				boolean aufwandVorhanden = false;
-				for (Aufwand aufwand : projekt.getPhasen().get(phasenIndex).getAufwände()) {
-					if (aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName()))
-						aufwandVorhanden = true;
-				}
-				if (!aufwandVorhanden) {
+				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream().anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
 					projekt.getPhasen().get(phasenIndex)
 							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName()));
 					projekt.getPhasen().get(phasenIndex)

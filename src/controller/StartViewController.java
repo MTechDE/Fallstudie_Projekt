@@ -199,13 +199,7 @@ public class StartViewController {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().trim().isEmpty() && !txt_newProjekt_ersteller.getText().trim().isEmpty()) {
 
-			// Überprüfe ob der gewünschte Name bereits verwendet wurde
-			boolean doubleName = false;
-			for (Projekt projekt : projektData) {
-				if (projekt.getName().equals(txt_newProjekt_name.getText()))
-					doubleName = true;
-			}
-			if (!doubleName) {
+			if (!projektData.stream().anyMatch(obj -> obj.getName().equals(txt_newProjekt_name.getText()))) {
 				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
 						false);
 				// Öffne Hauptfenster
