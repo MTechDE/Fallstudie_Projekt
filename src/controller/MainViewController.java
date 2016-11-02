@@ -3,9 +3,7 @@ package controller;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
 import datenbank.Datenbank;
 import export.Excel;
 import javafx.collections.FXCollections;
@@ -130,7 +128,7 @@ public class MainViewController {
 
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
-		
+
 		// Initalisiere Tabelle
 		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
 		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
@@ -162,8 +160,8 @@ public class MainViewController {
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
-		
-		if(OpenMainPage.newProjekt)
+
+		if (OpenMainPage.newProjekt)
 			somethingChanged = true;
 
 		// ActionHandler Tabelle Phase
@@ -405,13 +403,13 @@ public class MainViewController {
 
 				switch (auswahl) {
 				case 0:
-					ptIntern = Double.parseDouble(txt_pt_intern.getText());
-					ptExtern = Double.parseDouble(txt_pt_extern.getText());
+					ptIntern = Double.parseDouble(txt_pt_intern.getText().replace(",", "."));
+					ptExtern = Double.parseDouble(txt_pt_extern.getText().replace(",", "."));
 					break;
 				case 1:
 					// Berechnung der PT: MAK * verfügbare Werktage der Phase
-					ptIntern = Double.parseDouble(txt_mak_intern.getText()) * arbeitstage;
-					ptExtern = Double.parseDouble(txt_mak_extern.getText()) * arbeitstage;
+					ptIntern = Double.parseDouble(txt_mak_intern.getText().replace(",", ".")) * arbeitstage;
+					ptExtern = Double.parseDouble(txt_mak_extern.getText().replace(",", ".")) * arbeitstage;
 					break;
 				default:
 					break;
@@ -498,21 +496,10 @@ public class MainViewController {
 
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
-
-		// Holle aktuelles Datum
-		LocalDate date = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-
 		if (dtpkr_meldeDatum.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Ungültiges Meldedatum");
 			alert.setContentText("Bitte geben Sie ein Meldedatum an!");
-			alert.showAndWait();
-		} else if (Integer.parseInt(dtpkr_meldeDatum.getValue().toString().replaceAll("-", "")) > Integer
-				.parseInt(date.format(formatter).replaceAll(" ", ""))) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setHeaderText("Ungültiges Meldedatum");
-			alert.setContentText("Meldedatum darf nicht in der Zukunft liegen!");
 			alert.showAndWait();
 		} else {
 			Node source = (Node) event.getSource();
@@ -743,10 +730,10 @@ public class MainViewController {
 			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
 			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
-			txt_pt_intern.setText("0");
-			txt_pt_extern.setText("0");
-			txt_mak_intern.setText("0");
-			txt_mak_extern.setText("0");
+			txt_pt_intern.setText("0,0");
+			txt_pt_extern.setText("0,0");
+			txt_mak_intern.setText("0,0");
+			txt_mak_extern.setText("0,0");
 
 			for (Aufwand aufwand : phaseSelected.getAufwände()) {
 				if (aufwand.getName().equals("intern")
