@@ -9,10 +9,10 @@ import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
-import projektDaten.Aufwand;
-import projektDaten.Kompetenz;
-import projektDaten.Phase;
-import projektDaten.Projekt;
+import model.Aufwand;
+import model.Kompetenz;
+import model.Phase;
+import model.Projekt;
 
 /**
  * Schnittstelle zwischen der MySQL Datenbank und dem Programm
@@ -69,13 +69,13 @@ public class Datenbank {
 			projekt.setEndDate(null);
 		}
 
-		String sql = "INSERT INTO projekte(name, ersteller, abgeschickt, startDate, endDate, meldeDatum) "
-				+ "VALUES(:name, :ersteller, :abgeschickt, :startDate, :endDate, :meldeDatum)";
+		String sql = "INSERT INTO projekte(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
+				+ "VALUES(:name, :ersteller, :gemeldet, :startDate, :endDate, :meldeDatum)";
 
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql).addParameter("name", projekt.getName())
 					.addParameter("ersteller", projekt.getErsteller())
-					.addParameter("abgeschickt", projekt.isAbgeschickt())
+					.addParameter("gemeldet", projekt.isgemeldet())
 					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
 					.addParameter("meldeDatum", projekt.getMeldeDatum()).executeUpdate();
 		} catch (Sql2oException e) {

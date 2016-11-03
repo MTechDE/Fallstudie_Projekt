@@ -1,4 +1,4 @@
-package ui;
+package view;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import projektDaten.Projekt;
+import model.Projekt;
 
 /**
  * 
@@ -27,19 +27,18 @@ public class OpenMainPage extends Stage {
 	private Stage stage;
 	private Datenbank myDB = new Datenbank();
 	public static Projekt tmpProjekt;
-	public static boolean newProjekt;
 
 	public OpenMainPage(Projekt projekt, boolean newProjekt) throws Exception {
 
 		tmpProjekt = projekt;
-		OpenMainPage.newProjekt = newProjekt;
-
 		if (newProjekt) {
 			tmpProjekt = projekt;
+			MainViewController.somethingChanged = true;
 
 		} else {
 			try {
 				tmpProjekt = myDB.getProjekt(projekt);
+				MainViewController.somethingChanged = false;
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
@@ -51,7 +50,7 @@ public class OpenMainPage extends Stage {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setResizable(false);
-			if(OpenMainPage.newProjekt)
+			if(MainViewController.somethingChanged)
 				stage.setTitle("* " + projekt.getName());
 			else
 				stage.setTitle(projekt.getName());

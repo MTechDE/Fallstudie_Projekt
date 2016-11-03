@@ -14,8 +14,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import projektDaten.Projekt;
-import ui.OpenMainPage;
+import model.Projekt;
+import view.OpenMainPage;
 
 import java.util.Optional;
 
@@ -92,7 +92,7 @@ public class StartViewController {
 		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
 		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
 		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
-		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().abgeschicktProperty());
+		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().gemeldetProperty());
 		tblCell_projektSendDate.setCellValueFactory(cellData -> cellData.getValue().getMeldeDatumProperty());
 
 		// Weise Daten der Tabelle zu

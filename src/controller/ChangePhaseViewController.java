@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import projektDaten.Phase;
+import model.Phase;
 
 /**
  * Viewcontroller für die Phase ändern View

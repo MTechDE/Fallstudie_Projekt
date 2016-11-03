@@ -1,4 +1,4 @@
-package ui;
+package view;
 
 import controller.ChangeKompetenzViewController;
 import controller.ChangePhaseViewController;
@@ -10,8 +10,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import projektDaten.Kompetenz;
-import projektDaten.Phase;
+import model.Kompetenz;
+import model.Phase;
 
 /**
  * 

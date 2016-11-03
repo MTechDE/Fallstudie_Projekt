@@ -7,9 +7,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import projektDaten.Kompetenz;
-import projektDaten.Phase;
-import projektDaten.Projekt;
+import model.Kompetenz;
+import model.Phase;
+import model.Projekt;
 
 /**
  * Die Excel Klasse exportiert das Projekt mit Hilfe der Apache POI Bibliothek
@@ -20,11 +20,6 @@ import projektDaten.Projekt;
  */
 public class Excel {
 
-	/**
-	 * Erzeugt eine Excel Datei mit zwei Seiten
-	 * @param projekt
-	 * @param path
-	 */
 	public static void ExportToExcel(Projekt projekt, String path) {
 
 		// Variablen
@@ -32,7 +27,7 @@ public class Excel {
 		List<Phase> phasen;
 		FileOutputStream fileOut;
 
-		// Initialisiere Daten
+		// Initalisiere Daten
 		kompetenzen = projekt.getKompetenzen(); // Kompetenzenliste laden
 		phasen = projekt.getPhasen(); // Phasenliste laden
 
@@ -43,7 +38,7 @@ public class Excel {
 		XSSFSheet sheet1 = workbook.createSheet("Projektübersicht");
 		XSSFSheet sheet2 = workbook.createSheet("Erweiterte Projektübersicht");
 
-		// Erzeuge Header
+		// Erzeue Header
 		Row header1 = sheet1.createRow(0);
 		Row header2 = sheet2.createRow(0);
 
@@ -78,6 +73,7 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet1.createRow(4 + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
+
 		}
 
 		// Berechne gesamt PT pro Phase pro Kompetenz
@@ -93,6 +89,7 @@ public class Excel {
 				int cell = 1 + p;
 
 				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
+
 			}
 		}
 
@@ -114,6 +111,7 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet1.createRow(10 + kompetenzen.size() + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
+
 		}
 
 		// Berechne gesamt PT pro Phase pro Kompetenz
@@ -130,6 +128,7 @@ public class Excel {
 				int cell = 1 + p;
 
 				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
+
 			}
 		}
 
@@ -151,6 +150,7 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet2.createRow(4 + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
+
 		}
 
 		// Erzeuge Quartal Spalten
@@ -179,7 +179,7 @@ public class Excel {
 									&& (startJahr + j) == Integer
 											.parseInt(phasen.get(p).getStartDate().substring(0, 4))) {
 
-								// Berechne Anzahl der Jahre zwischen Start und
+								// Berechne anzahl der Jahre zwischen Start und
 								// Enddatum
 								int difJahre = Integer.parseInt(phasen.get(p).getEndDate().substring(0, 4))
 										- Integer.parseInt(phasen.get(p).getStartDate().substring(0, 4));
@@ -214,10 +214,11 @@ public class Excel {
 									gesPT += (phasen.get(p).getAufwände().get(a).getPt()
 											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100)));
 								}
-								if (startQuartal != endQuartal && difJahre == 0 && (startQuartal == i || endQuartal == i)) {
+								if (startQuartal != endQuartal && difJahre == 0 && (startQuartal == i || endQuartal == i)) {									
 									gesPT += (phasen.get(p).getAufwände().get(a).getPt()
 											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100))) / (endQuartal - startQuartal + 1);
 								}
+
 							}
 						}
 

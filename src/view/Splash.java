@@ -1,4 +1,4 @@
-package ui;
+package view;
 
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +31,7 @@ public class Splash extends Preloader {
 	public void handleStateChangeNotification(StateChangeNotification evt) {
 		if (evt.getType() == StateChangeNotification.Type.BEFORE_START) {
 			long startTime = System.currentTimeMillis();
-			while (false || (System.currentTimeMillis() - startTime) < 2500);
+			while (false || (System.currentTimeMillis() - startTime) < 2000);
 			stage.hide();
 		}
 	}

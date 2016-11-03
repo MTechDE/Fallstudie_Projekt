@@ -1,4 +1,4 @@
-package projektDaten;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import javafx.beans.property.StringProperty;
 public class Projekt {
 	private List<Phase> phasen = new ArrayList<Phase>();
 	private List<Kompetenz> kompetenzen = new ArrayList<Kompetenz>();
-	private BooleanProperty abgeschickt;
+	private BooleanProperty gemeldet;
 	private StringProperty name;
 	private StringProperty ersteller;
 	private StringProperty startDate;
@@ -29,12 +29,12 @@ public class Projekt {
 	 * 
 	 * @param name Name des Projektes
 	 * @param ersteller Ersteller des Projektes
-	 * @param abgeschickt Ob das projekt abgeschickt wurde
+	 * @param gemeldet Ob das projekt gemeldet wurde
 	 */
-	public Projekt(String name, String ersteller, boolean abgeschickt) {
+	public Projekt(String name, String ersteller, boolean gemeldet) {
 		this.setName(name);
 		this.setErsteller(ersteller);
-		this.setAbgeschickt(abgeschickt);
+		this.setgemeldet(gemeldet);
 		this.setStartDate(null);
 		this.setEndDate(null);
 		this.setMeldeDatum(null);
@@ -44,14 +44,14 @@ public class Projekt {
 	 * Konstruktor welcher von der Datenbankklasse aufgerufen wird
 	 * @param name Name des Projektes
 	 * @param ersteller Ersteller des Projektes
-	 * @param abgeschickt Ob das projekt abgeschickt wurde
+	 * @param gemeldet Ob das projekt gemeldet wurde
 	 * @param startDate Startdatum des Projektes
 	 * @param endDate Enddatum des Projektes
 	 */
-	public Projekt(String name, String ersteller, boolean abgeschickt, String startDate, String endDate, String meldeDatum) {
+	public Projekt(String name, String ersteller, boolean gemeldet, String startDate, String endDate, String meldeDatum) {
 		this.setName(name);
 		this.setErsteller(ersteller);
-		this.setAbgeschickt(abgeschickt);
+		this.setgemeldet(gemeldet);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 		this.setPhasen(null);
@@ -135,16 +135,16 @@ public class Projekt {
 	 * 
 	 * @return boolean
 	 */
-	public boolean isAbgeschickt() {
-		return abgeschickt.get();
+	public boolean isgemeldet() {
+		return gemeldet.get();
 	}
 
 	/**
 	 * 
 	 * @return StringProperty
 	 */
-	public StringProperty abgeschicktProperty() {
-		if (this.isAbgeschickt())
+	public StringProperty gemeldetProperty() {
+		if (this.isgemeldet())
 			return new SimpleStringProperty("Ja");
 		else
 			return new SimpleStringProperty("Nein");
@@ -152,10 +152,10 @@ public class Projekt {
 
 	/**
 	 * 
-	 * @param abgeschickt Abgeschickt Status des Projektes
+	 * @param gemeldet gemeldet Status des Projektes
 	 */
-	public void setAbgeschickt(boolean abgeschickt) {
-		this.abgeschickt = new SimpleBooleanProperty(abgeschickt);
+	public void setgemeldet(boolean gemeldet) {
+		this.gemeldet = new SimpleBooleanProperty(gemeldet);
 	}
 
 	/**

@@ -30,13 +30,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import projektDaten.Aufwand;
-import projektDaten.Kompetenz;
-import projektDaten.Phase;
-import projektDaten.Projekt;
-import ui.OpenChangeView;
-import ui.OpenMainPage;
-import ui.OpenStartPage;
+import model.Aufwand;
+import model.Kompetenz;
+import model.Phase;
+import model.Projekt;
+import view.OpenChangeView;
+import view.OpenMainPage;
+import view.OpenStartPage;
 
 /**
  * Controller für die Haupt View
@@ -155,7 +155,7 @@ public class MainViewController {
 		lbl_Extern.setVisible(false);
 		btn_aufwand_festlegen.setVisible(false);
 
-		if (projekt.isAbgeschickt())
+		if (projekt.isgemeldet())
 			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		txt_pt_intern.setVisible(false);
@@ -164,9 +164,6 @@ public class MainViewController {
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
-
-		if (OpenMainPage.newProjekt)
-			somethingChanged = true;
 
 		// ActionHandler Tabelle Phase
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -472,6 +469,7 @@ public class MainViewController {
 					projekt.getPhasen().get(phasenIndex)
 							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
 				}
+				
 
 				for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
 
@@ -582,7 +580,7 @@ public class MainViewController {
 					@Override
 					public void run() {
 						btn_sendProjekt.setDisable(true);
-						projekt.setAbgeschickt(true);
+						projekt.setgemeldet(true);
 						projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
 						Excel.ExportToExcel(projekt, file.getAbsolutePath());
 						try {
@@ -782,11 +780,7 @@ public class MainViewController {
 				// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
 				// Kompetenz
 				for (int i = 0; i < projekt.getPhasen().size(); i++) {
-					for (int k = 0; k < projekt.getPhasen().get(i).getAufwände().size(); k++) {
-						if (projekt.getPhasen().get(i).getAufwände().get(k).getZugehoerigkeit().equals(projekt
-								.getKompetenzen().get(tbl_kompetenz.getSelectionModel().getSelectedIndex()).getName()))
-							projekt.getPhasen().get(i).getAufwände().remove(k);
-					}
+					projekt.getPhasen().get(i).getAufwände().removeIf(a -> a.getZugehoerigkeit().equalsIgnoreCase(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()));
 				}
 				projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 				kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
@@ -816,6 +810,8 @@ public class MainViewController {
 			txt_mak_extern.setText("0,0");
 
 			// Durchsuche die Audwände nach dem Passenden Aufwand
+			// Verwendet dazu die Java 8 foreach Methode um die Aufgabe
+			// auf mehrere Threads zu verteilen
 			phaseSelected.getAufwände().forEach(aufwand -> {
 				if (aufwand.getName().equals("intern")
 						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
