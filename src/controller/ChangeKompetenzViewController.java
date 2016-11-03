@@ -53,6 +53,17 @@ public class ChangeKompetenzViewController {
 			alert.showAndWait();
 		} else if (!MainViewController.projekt.getKompetenzen().stream()
 				.anyMatch(obj -> obj.getName().equals(txt_kompetenz_aendern.getText())) || kompetenz.getName().equals(txt_kompetenz_aendern.getText())) {
+			
+			// Ändere den Namen in den Aufwänden, falls sich der Name geändert hat
+			if(!kompetenz.getName().equals(txt_kompetenz_aendern.getText())){
+				for(int p = 0; p < MainViewController.projekt.getPhasen().size(); p++){
+					for(int a = 0; a < MainViewController.projekt.getPhasen().get(p).getAufwände().size(); a++){
+						if(MainViewController.projekt.getPhasen().get(p).getAufwände().get(a).getZugehoerigkeit().equals(kompetenz.getName()))
+							MainViewController.projekt.getPhasen().get(p).getAufwände().get(a).setZugehoerigkeit(txt_kompetenz_aendern.getText());
+					}
+				}
+			}
+			
 			kompetenz.setName(txt_kompetenz_aendern.getText());
 			kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
 			MainViewController.somethingChanged = true;
