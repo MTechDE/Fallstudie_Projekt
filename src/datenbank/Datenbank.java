@@ -38,7 +38,6 @@ public class Datenbank {
 	 * @return boolean
 	 */
 	public boolean testConnection() {
-
 		try (Connection con = sql2o.open()) {
 			return true;
 		} catch (Sql2oException e) {
@@ -69,43 +68,35 @@ public class Datenbank {
 			projekt.setEndDate(null);
 		}
 
-		String sql = "INSERT INTO projekte(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
-				+ "VALUES(:name, :ersteller, :gemeldet, :startDate, :endDate, :meldeDatum)";
+		try (Connection con = sql2o.beginTransaction()) {
 
-		try (Connection con = sql2o.open()) {
+			String sql = "INSERT INTO projekte(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
+					+ "VALUES(:name, :ersteller, :gemeldet, :startDate, :endDate, :meldeDatum)";
+
+			Query query = con.createQuery(sql);
 			con.createQuery(sql).addParameter("name", projekt.getName())
-					.addParameter("ersteller", projekt.getErsteller())
-					.addParameter("gemeldet", projekt.isgemeldet())
+					.addParameter("ersteller", projekt.getErsteller()).addParameter("gemeldet", projekt.isgemeldet())
 					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
 					.addParameter("meldeDatum", projekt.getMeldeDatum()).executeUpdate();
-		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
-		}
 
-		sql = "INSERT INTO phasen(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
-		if (!projekt.getPhasen().isEmpty()) {
-			try (Connection con = sql2o.beginTransaction()) {
-				Query query = con.createQuery(sql);
-				projekt.getPhasen().forEach(phase -> {
+			if (!projekt.getPhasen().isEmpty()) {
+				sql = "INSERT INTO phasen(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
+				query = con.createQuery(sql);
+
+				for (Phase phase : projekt.getPhasen()) {
 					query.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
-					.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
-					.addToBatch();
-				});
+							.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
+							.addToBatch();
+				}
 				query.executeBatch();
-				con.commit();
-			} catch (Sql2oException e) {
-				System.out.println(e.getMessage());
 			}
-		}
 
-		// Speichere alle beteiligten Aufwände der jeweiligen Phasen in die DB
-
-		sql = "INSERT INTO aufwand(person, phase, projekt, pt, zugehoerigkeit) "
-				+ "VALUES(:person, :phase, :projekt, :pt, :zugehoerigkeit)";
-
-		if (!projekt.getPhasen().isEmpty()) {
-			try (Connection con = sql2o.beginTransaction()) {
-				Query query = con.createQuery(sql);
+			// Speichere alle beteiligten Aufwände der jeweiligen Phasen in
+			// die DB
+			sql = "INSERT INTO aufwand(person, phase, projekt, pt, zugehoerigkeit) "
+					+ "VALUES(:person, :phase, :projekt, :pt, :zugehoerigkeit)";
+			if (!projekt.getPhasen().isEmpty()) {
+				query = con.createQuery(sql);
 				for (Phase phase : projekt.getPhasen()) {
 					if (!phase.getAufwände().isEmpty()) {
 						for (Aufwand aufwand : phase.getAufwände()) {
@@ -116,24 +107,23 @@ public class Datenbank {
 					}
 				}
 				query.executeBatch();
-
 				if (!projekt.getKompetenzen().isEmpty()) {
 					sql = "INSERT INTO kompetenzen (name, projekt, risikozuschlag) "
 							+ "VALUES(:name, :projekt, :risikozuschlag)";
 					query = con.createQuery(sql);
-
 					for (Kompetenz kompetenz : projekt.getKompetenzen()) {
 						query.addParameter("name", kompetenz.getName()).addParameter("projekt", projekt.getName())
 								.addParameter("risikozuschlag", kompetenz.getRisikozuschlag()).addToBatch();
 					}
 					query.executeBatch();
 				}
-
-				con.commit();
-			} catch (Sql2oException e) {
-				System.out.println(e.getMessage());
 			}
+
+			con.commit();
+		} catch (Sql2oException e) {
+			System.out.println(e.getMessage());
 		}
+
 	}
 
 	/**
@@ -157,7 +147,7 @@ public class Datenbank {
 			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName())
 					.executeAndFetch(Phase.class);
 
-			// Hole Alle Personen anhand des Projektnamen
+			// Hole Alle Aufwände anhand des Projektnamen
 			sql = "SELECT person AS name, zugehoerigkeit, pt from aufwand a "
 					+ "WHERE a.phase=:phasenName AND a.projekt=:projektName ORDER BY person DESC";
 			if (!phasen.isEmpty()) {
@@ -175,7 +165,7 @@ public class Datenbank {
 					.executeAndFetch(Kompetenz.class);
 			if (!kompetenzen.isEmpty())
 				newprojekt.setKompetenzen(kompetenzen);
-			
+
 			// Überprüfe ob Phasen und/oder Kompetenzen existieren
 			if (phasen.isEmpty())
 				newprojekt.setPhasen(phasen);
@@ -225,26 +215,21 @@ public class Datenbank {
 	 * Kompetenzen, Aufwände), werden anhand des Projektname aus der Datenbank
 	 * gelöscht.
 	 * 
-	 * @param projekt Das zu löschende projektDaten
+	 * @param projekt das zu löschende projektDaten
 	 * @return boolean
 	 */
-	public boolean deleteProjekt(Projekt projekt) {
+	public void deleteProjekt(Projekt projekt) {
 		String sql1 = "DELETE FROM aufwand WHERE projekt=:projektName";
 		String sql2 = "DELETE FROM phasen WHERE projekt=:projektName";
 		String sql3 = "DELETE FROM projekte WHERE name=:projektName";
 		String sql4 = "DELETE FROM kompetenzen WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql1).addParameter("projektName", projekt.getName()).executeUpdate();
-
 			con.createQuery(sql2).addParameter("projektName", projekt.getName()).executeUpdate();
-
 			con.createQuery(sql3).addParameter("projektName", projekt.getName()).executeUpdate();
-
 			con.createQuery(sql4).addParameter("projektName", projekt.getName()).executeUpdate();
-			return true;
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
-			return false;
 		}
 	}
 

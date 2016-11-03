@@ -139,8 +139,10 @@ public class MainViewController {
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_phase.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
-		kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
-		phasen = FXCollections.observableArrayList(projekt.getPhasen());
+		if(!projekt.getKompetenzen().isEmpty())
+			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
+		if(!projekt.getPhasen().isEmpty())
+			phasen = FXCollections.observableArrayList(projekt.getPhasen());
 
 		// Weise den Tabellen die Daten zu
 		tbl_kompetenz.setItems(kompetenzen);
@@ -246,21 +248,20 @@ public class MainViewController {
 				}
 			}
 		});
-		
+
 		btn_aufwand_festlegen.setDisable(true);
-		
-		
+
 		txt_pt_intern.textProperty().addListener((observable, oldValue, newValue) -> {
-		    btn_aufwand_festlegen.setDisable(false);
+			btn_aufwand_festlegen.setDisable(false);
 		});
 		txt_pt_extern.textProperty().addListener((observable, oldValue, newValue) -> {
-		    btn_aufwand_festlegen.setDisable(false);
+			btn_aufwand_festlegen.setDisable(false);
 		});
 		txt_mak_intern.textProperty().addListener((observable, oldValue, newValue) -> {
-		    btn_aufwand_festlegen.setDisable(false);
+			btn_aufwand_festlegen.setDisable(false);
 		});
 		txt_mak_extern.textProperty().addListener((observable, oldValue, newValue) -> {
-		    btn_aufwand_festlegen.setDisable(false);
+			btn_aufwand_festlegen.setDisable(false);
 		});
 	}
 
@@ -485,7 +486,6 @@ public class MainViewController {
 					projekt.getPhasen().get(phasenIndex)
 							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
 				}
-				
 
 				for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
 
@@ -542,7 +542,6 @@ public class MainViewController {
 					img_loadingSpinner.setVisible(true);
 					btn_projekt_speichern.setDisable(true);
 					myDB.updateProjekt(projekt);
-					System.out.println("Daten in der DB gespeichert!");
 					btn_projekt_speichern.setDisable(false);
 					img_loadingSpinner.setVisible(false);
 				}
@@ -796,7 +795,8 @@ public class MainViewController {
 				// Lösche die Aufwände in den Phasen mit der Zugehörigkeit zur
 				// Kompetenz
 				for (int i = 0; i < projekt.getPhasen().size(); i++) {
-					projekt.getPhasen().get(i).getAufwände().removeIf(a -> a.getZugehoerigkeit().equalsIgnoreCase(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()));
+					projekt.getPhasen().get(i).getAufwände().removeIf(a -> a.getZugehoerigkeit()
+							.equalsIgnoreCase(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()));
 				}
 				projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 				kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
@@ -825,18 +825,17 @@ public class MainViewController {
 			txt_mak_intern.setText("0,0");
 			txt_mak_extern.setText("0,0");
 
-			// Durchsuche die Audwände nach dem Passenden Aufwand
-			phaseSelected.getAufwände().forEach(aufwand -> {
-				if (aufwand.getName().equals("intern")
-						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-					txt_pt_intern.setText(String.valueOf(aufwand.getPt()).replace(".", ","));
-					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage).replace(".", ","));
-				} else if (aufwand.getName().equals("extern")
-						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-					txt_pt_extern.setText(String.valueOf(aufwand.getPt()).replace(".", ","));
-					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage).replace(".", ","));
-				}
-			});
+			// Durchsuche die Aufwände nach dem Passenden Aufwand
+			phaseSelected.getAufwände().parallelStream()
+					.filter(a -> a.getZugehoerigkeit().equals(kompetenzSelected.getName())).forEach(a -> {
+						if (a.getName().equals("intern")) {
+							txt_pt_intern.setText(String.valueOf(a.getPt()).replace(".", ","));
+							txt_mak_intern.setText(String.valueOf(a.getPt() / arbeitstage).replace(".", ","));
+						} else {
+							txt_pt_extern.setText(String.valueOf(a.getPt()).replace(".", ","));
+							txt_mak_extern.setText(String.valueOf(a.getPt() / arbeitstage).replace(".", ","));
+						}
+					});
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
