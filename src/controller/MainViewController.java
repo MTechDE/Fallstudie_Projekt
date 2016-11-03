@@ -246,6 +246,22 @@ public class MainViewController {
 				}
 			}
 		});
+		
+		btn_aufwand_festlegen.setDisable(true);
+		
+		
+		txt_pt_intern.textProperty().addListener((observable, oldValue, newValue) -> {
+		    btn_aufwand_festlegen.setDisable(false);
+		});
+		txt_pt_extern.textProperty().addListener((observable, oldValue, newValue) -> {
+		    btn_aufwand_festlegen.setDisable(false);
+		});
+		txt_mak_intern.textProperty().addListener((observable, oldValue, newValue) -> {
+		    btn_aufwand_festlegen.setDisable(false);
+		});
+		txt_mak_extern.textProperty().addListener((observable, oldValue, newValue) -> {
+		    btn_aufwand_festlegen.setDisable(false);
+		});
 	}
 
 	/**
@@ -258,7 +274,7 @@ public class MainViewController {
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
 		if (!txt_kompetenz.getText().trim().isEmpty() && !txt_risikozuschlag.getText().trim().isEmpty()) {
-			if (!kompetenzen.stream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
+			if (!kompetenzen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
 
 				// Risikozuschlag von -,% und falschem Dezimalzeichen
 				// befreien
@@ -315,7 +331,7 @@ public class MainViewController {
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
 		if (!datepicker_ende_selected(event)) {
-			if (!phasen.stream().anyMatch(obj -> obj.getName().equals(txt_phase.getText()))) {
+			if (!phasen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_phase.getText()))) {
 				// Prüfung ob alle Felder ausgefüllt
 				if (!txt_phase.getText().trim().isEmpty() && dtpkr_start.getValue() != null
 						&& dtpkr_end.getValue() != null) {
@@ -490,7 +506,7 @@ public class MainViewController {
 				phasen = FXCollections.observableArrayList(projekt.getPhasen());
 
 				checkChanges();
-
+				btn_aufwand_festlegen.setDisable(true);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
@@ -810,17 +826,15 @@ public class MainViewController {
 			txt_mak_extern.setText("0,0");
 
 			// Durchsuche die Audwände nach dem Passenden Aufwand
-			// Verwendet dazu die Java 8 foreach Methode um die Aufgabe
-			// auf mehrere Threads zu verteilen
 			phaseSelected.getAufwände().forEach(aufwand -> {
 				if (aufwand.getName().equals("intern")
 						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-					txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
-					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+					txt_pt_intern.setText(String.valueOf(aufwand.getPt()).replace(".", ","));
+					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage).replace(".", ","));
 				} else if (aufwand.getName().equals("extern")
 						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
-					txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
-					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
+					txt_pt_extern.setText(String.valueOf(aufwand.getPt()).replace(".", ","));
+					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage).replace(".", ","));
 				}
 			});
 		} catch (Exception e) {
