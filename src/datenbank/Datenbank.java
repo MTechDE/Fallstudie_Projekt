@@ -22,6 +22,7 @@ import projektDaten.Projekt;
 
 public class Datenbank {
 
+	// Variablen
 	private Sql2o sql2o;
 
 	/**
@@ -85,15 +86,13 @@ public class Datenbank {
 		if (!projekt.getPhasen().isEmpty()) {
 			try (Connection con = sql2o.beginTransaction()) {
 				Query query = con.createQuery(sql);
-
-				for (Phase phase : projekt.getPhasen()) {
+				projekt.getPhasen().forEach(phase -> {
 					query.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
-							.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
-							.addToBatch();
-				}
+					.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
+					.addToBatch();
+				});
 				query.executeBatch();
 				con.commit();
-
 			} catch (Sql2oException e) {
 				System.out.println(e.getMessage());
 			}

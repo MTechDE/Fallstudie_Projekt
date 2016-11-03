@@ -1,9 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -174,10 +172,6 @@ public class StartViewController {
 				Optional<ButtonType> result = alert.showAndWait();
 
 				if (result.get() == buttonTypeOne) {
-					Node source = (Node) event.getSource();
-					Scene scene = source.getScene();
-					scene.setCursor(Cursor.WAIT);
-
 					// Starte einen Thread
 					new Thread(new Runnable() {
 						@Override
@@ -191,9 +185,7 @@ public class StartViewController {
 					}).start();
 					projektData.remove(index);
 					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
-					scene.setCursor(Cursor.DEFAULT);
 				}
-
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
@@ -210,7 +202,7 @@ public class StartViewController {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden
 		if (!txt_newProjekt_name.getText().trim().isEmpty() && !txt_newProjekt_ersteller.getText().trim().isEmpty()) {
 
-			if (!projektData.stream().anyMatch(obj -> obj.getName().equals(txt_newProjekt_name.getText()))) {
+			if (!projektData.stream().parallel().anyMatch(obj -> obj.getName().equals(txt_newProjekt_name.getText()))) {
 				Projekt newProjekt = new Projekt(txt_newProjekt_name.getText(), txt_newProjekt_ersteller.getText(),
 						false);
 				// Öffne Hauptfenster

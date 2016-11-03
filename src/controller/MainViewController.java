@@ -211,6 +211,7 @@ public class MainViewController {
 						}
 					}
 				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		});
@@ -252,6 +253,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Neue Kompetenz-Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -309,6 +311,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Neue Phase-Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -362,6 +365,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für das Aufwands Menü
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -402,6 +406,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Enddatum Datepicker
+	 * 
 	 * @param event
 	 * @return
 	 * @throws Exception
@@ -424,6 +429,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Aufwand festlegen Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -459,7 +465,8 @@ public class MainViewController {
 					break;
 				}
 
-				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream().anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
+				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream()
+						.anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
 					projekt.getPhasen().get(phasenIndex)
 							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName()));
 					projekt.getPhasen().get(phasenIndex)
@@ -503,6 +510,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Projekt speichern Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -537,6 +545,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Meldedatum DAtepicker
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -547,6 +556,7 @@ public class MainViewController {
 
 	/**
 	 * Eventlistener für den Projekt melden Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -589,6 +599,7 @@ public class MainViewController {
 
 	/**
 	 * Eventlistener für den Zurück Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -627,6 +638,7 @@ public class MainViewController {
 
 	/**
 	 * Berechne die ANzahl der Arbeitstage zwischen zwei Daten
+	 * 
 	 * @param startDatum
 	 * @param endDatum
 	 * @return
@@ -691,6 +703,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Export Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -717,6 +730,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Phase löschen Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -748,6 +762,7 @@ public class MainViewController {
 
 	/**
 	 * Actionlistener für den Kompetenz löschen Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -800,19 +815,18 @@ public class MainViewController {
 			txt_mak_intern.setText("0,0");
 			txt_mak_extern.setText("0,0");
 
-			for (Aufwand aufwand : phaseSelected.getAufwände()) {
+			// Durchsuche die Audwände nach dem Passenden Aufwand
+			phaseSelected.getAufwände().forEach(aufwand -> {
 				if (aufwand.getName().equals("intern")
 						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
 					txt_pt_intern.setText(String.valueOf(aufwand.getPt()));
 					txt_mak_intern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
-
-				}
-				if (aufwand.getName().equals("extern")
+				} else if (aufwand.getName().equals("extern")
 						&& aufwand.getZugehoerigkeit().equals(kompetenzSelected.getName())) {
 					txt_pt_extern.setText(String.valueOf(aufwand.getPt()));
 					txt_mak_extern.setText(String.valueOf(aufwand.getPt() / arbeitstage));
 				}
-			}
+			});
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
