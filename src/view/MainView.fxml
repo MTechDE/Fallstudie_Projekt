@@ -176,7 +176,7 @@
          </textFill>
       </Label>
       <Separator layoutX="20.0" layoutY="79.0" prefHeight="3.0" prefWidth="866.0" />
-      <DatePicker fx:id="dtpkr_meldeDatum" layoutX="712.0" layoutY="446.0" onAction="#dtpkr_meldeDatum_ende_selected" prefHeight="41.0" prefWidth="224.0" promptText="Melde Datum" showWeekNumbers="true">
+      <DatePicker fx:id="dtpkr_meldeDatum" layoutX="712.0" layoutY="446.0" prefHeight="41.0" prefWidth="224.0" promptText="Melde Datum" showWeekNumbers="true">
          <tooltip>
             <Tooltip text="Enddatum" />
          </tooltip>

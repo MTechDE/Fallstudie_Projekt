@@ -12,6 +12,7 @@ import model.Kompetenz;
 
 /**
  * Viewcontroller für die Kompetenz ändern View
+ * 
  * @author Tim Krießler
  *
  */
@@ -39,6 +40,7 @@ public class ChangeKompetenzViewController {
 
 	/**
 	 * Actionlistener für den Ändern-Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -49,31 +51,22 @@ public class ChangeKompetenzViewController {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte füllen Sie alle Felder aus!");
 			alert.showAndWait();
+		} else if (!MainViewController.projekt.getKompetenzen().stream()
+				.anyMatch(obj -> obj.getName().equals(txt_kompetenz_aendern.getText())) || kompetenz.getName().equals(txt_kompetenz_aendern.getText())) {
+			kompetenz.setName(txt_kompetenz_aendern.getText());
+			kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
+			MainViewController.somethingChanged = true;
+			btn_abbrechen_click(event);
 		} else {
-			if (!txt_kompetenz_aendern.getText().equals(kompetenz.getName())) {
-				boolean check = false;
-				for (Kompetenz Kompetenz : MainViewController.projekt.getKompetenzen()) {
-					if (Kompetenz.getName().equals(txt_kompetenz_aendern.getText()))
-						check = true;
-				}
-				if (!check) {
-					kompetenz.setName(txt_kompetenz_aendern.getText());
-					kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
-					MainViewController.somethingChanged = true;
-					btn_abbrechen_click(event);
-				} else {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
-					alert.showAndWait();
-				}
-			} else {
-				btn_abbrechen_click(event);
-			}
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
+			alert.showAndWait();
 		}
 	}
 
 	/**
 	 * Actionlistener für den Abbrechen-Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */

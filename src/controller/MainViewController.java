@@ -128,7 +128,6 @@ public class MainViewController {
 	 */
 	@FXML
 	private void initialize() {
-		System.out.println("MainView wurde geöffnet.");
 
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
@@ -139,9 +138,9 @@ public class MainViewController {
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		tblCell_phase.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
-		if(!projekt.getKompetenzen().isEmpty())
+		if (!projekt.getKompetenzen().isEmpty())
 			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
-		if(!projekt.getPhasen().isEmpty())
+		if (!projekt.getPhasen().isEmpty())
 			phasen = FXCollections.observableArrayList(projekt.getPhasen());
 
 		// Weise den Tabellen die Daten zu
@@ -331,36 +330,20 @@ public class MainViewController {
 	 */
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
-		if (!datepicker_ende_selected(event)) {
-			if (!phasen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_phase.getText()))) {
-				// Prüfung ob alle Felder ausgefüllt
-				if (!txt_phase.getText().trim().isEmpty() && dtpkr_start.getValue() != null
-						&& dtpkr_end.getValue() != null) {
-
-					try {
-						Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
-								dtpkr_end.getValue().toString());
-
-						projekt.setSinglePhase(phase);
-						phasen.add(phase);
-						tbl_phase.setItems(phasen);
-						checkChanges();
-					} catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
-				} else {
-					Alert alert = new Alert(AlertType.ERROR);
-					if ((dtpkr_start.getValue() == null) || (dtpkr_end.getValue() == null))
-						alert.setContentText("Zeitraum muss ausgewählt werden.");
-					if (txt_phase.getText().equals("") || txt_phase == null)
-						alert.setContentText("Phasenbezeichnung darf nicht leer sein.");
-					alert.showAndWait();
-				}
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
-				alert.showAndWait();
-			}
+		if (txt_phase.getText().trim().isEmpty() || dtpkr_start.getValue() == null || dtpkr_end.getValue() == null) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Bitte füllen Sie alle Felder aus!");
+			alert.showAndWait();
+		} else if (!phasen.parallelStream().anyMatch(p -> p.getName().equals(txt_phase.getText()))) {
+			Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
+					dtpkr_end.getValue().toString());
+			projekt.setSinglePhase(phase);
+			phasen.add(phase);
+			tbl_phase.setItems(phasen);
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Der angegebene Phasenname ist bereits vorhanden!");
+			alert.showAndWait();
 		}
 	}
 
@@ -372,7 +355,6 @@ public class MainViewController {
 		projekt.setSinglePhase(phase);
 		phasen.add(phase);
 		tbl_phase.setItems(phasen);
-
 		projekt.getPhasen().remove(phase);
 		phasen.remove(phase);
 	}
@@ -387,7 +369,6 @@ public class MainViewController {
 	public void chobx_aufwand_selected(ActionEvent event) throws Exception {
 
 		String chobx_aufwand_selection = chobx_aufwand.getValue();
-		System.out.println(chobx_aufwand_selection);
 		switch (chobx_aufwand_selection) {
 		case "Personentage (PT)":
 			btn_aufwand_festlegen.setVisible(true);
@@ -557,17 +538,6 @@ public class MainViewController {
 	}
 
 	/**
-	 * Actionlistener für den Meldedatum DAtepicker
-	 * 
-	 * @param event
-	 * @throws Exception
-	 */
-	@FXML
-	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
-		System.out.println("Datum ausgewählt");
-	}
-
-	/**
 	 * Eventlistener für den Projekt melden Button
 	 * 
 	 * @param event
@@ -679,9 +649,6 @@ public class MainViewController {
 				break;
 			case 31:
 				personentage += 0.548 * daysBetween;
-				break;
-
-			default:
 				break;
 			}
 
