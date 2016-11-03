@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * In einem Kompetenzen Objekt werden die beteiligten Personen abgespeichert.
+ * Speichert Kompetenzen
  * 
  * @author Daniel Sogl
  */

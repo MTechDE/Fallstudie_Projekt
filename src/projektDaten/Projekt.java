@@ -9,8 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Ein projektDaten-Objekt enthält neben den Projektdaten, die dazu gehörenden
- * Kompetenzen, Phasen und Beteiligten Personen.
+ * Speichert Projekte
  * 
  * @author Daniel Sogl
  *

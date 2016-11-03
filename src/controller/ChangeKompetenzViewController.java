@@ -10,6 +10,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import projektDaten.Kompetenz;
 
+/**
+ * Viewcontroller für die Kompetenz ändern View
+ * @author Tim Krießler
+ *
+ */
 public class ChangeKompetenzViewController {
 
 	@FXML
@@ -23,12 +28,20 @@ public class ChangeKompetenzViewController {
 
 	private static Kompetenz kompetenz;
 
+	/**
+	 * Initialisiert die View
+	 */
 	@FXML
 	private void initialize() {
 		txt_kompetenz_aendern.setText(kompetenz.getName());
 		txt_risikozuschlag_aendern.setText(String.valueOf(kompetenz.getRisikozuschlag()));
 	}
 
+	/**
+	 * Actionlistener für den Ändern-Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
 
@@ -59,6 +72,11 @@ public class ChangeKompetenzViewController {
 		}
 	}
 
+	/**
+	 * Actionlistener für den Abbrechen-Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	private void btn_abbrechen_click(ActionEvent event) throws Exception {
 		Node source = (Node) event.getSource();

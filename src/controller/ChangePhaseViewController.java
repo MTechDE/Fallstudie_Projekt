@@ -13,6 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import projektDaten.Phase;
 
+/**
+ * Viewcontroller für die Phase ändern View
+ * @author Tim Krießler
+ *
+ */
 public class ChangePhaseViewController {
 
 	@FXML
@@ -28,6 +33,9 @@ public class ChangePhaseViewController {
 
 	private static Phase phase;
 
+	/**
+	 * Initialisiert die View
+	 */
 	@FXML
 	private void initialize() {
 		txt_phase_aendern.setText(phase.getName());
@@ -35,13 +43,11 @@ public class ChangePhaseViewController {
 		dtpkr_enddatum_aendern.setValue(LocalDate.parse(phase.getEndDate()));
 	}
 
-	@FXML
-	private void btn_abbrechen_click(ActionEvent event) throws Exception {
-		Node source = (Node) event.getSource();
-		Stage stage = (Stage) source.getScene().getWindow();
-		stage.close();
-	}
-
+	/**
+	 * Actionlistener für den Ändern-Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
 
@@ -75,7 +81,25 @@ public class ChangePhaseViewController {
 			}
 		}
 	}
-
+	
+	/**
+	 * Actionlistener für den ABbrechen-Button
+	 * @param event
+	 * @throws Exception
+	 */
+	@FXML
+	private void btn_abbrechen_click(ActionEvent event) throws Exception {
+		Node source = (Node) event.getSource();
+		Stage stage = (Stage) source.getScene().getWindow();
+		stage.close();
+	}
+	
+	/**
+	 * Actionlistener für den Endedatum-Datepicker
+	 * @param event
+	 * @return
+	 * @throws Exception
+	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
 
@@ -93,7 +117,7 @@ public class ChangePhaseViewController {
 	}
 
 	/**
-	 * Controller wird zu änderndes Phasenobjekt direkt zugewiesen.
+	 * Controller wird dem zu änderten Phasenobjekt direkt zugewiesen.
 	 * 
 	 * @param p
 	 */

@@ -6,10 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Ein Personen Objekt beinhaltet alle personenbezogene Daten.
+ * Speichert die Aufwände
  * 
  * @author Daniel Sogl
- * @version 1.2
  */
 
 public class Aufwand {

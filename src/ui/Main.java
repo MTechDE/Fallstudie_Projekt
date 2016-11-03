@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * Die Main-Klasse lädt lediglich die MainUI.fxml Datei und stellt diese dar.
+ * Läd die Start View
  * 
  * @author Daniel Sogl
  *

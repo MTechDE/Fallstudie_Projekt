@@ -39,7 +39,7 @@ import ui.OpenMainPage;
 import ui.OpenStartPage;
 
 /**
- * Controller für Anlegen.fxml GUI
+ * Controller für die Haupt View
  * 
  * @author Tim Krießler, Daniel Sogl
  */
@@ -123,6 +123,9 @@ public class MainViewController {
 	private boolean indexKompetenzClicked = false;
 	public static boolean somethingChanged = false;
 
+	/**
+	 * Initialisiert die View
+	 */
 	@FXML
 	private void initialize() {
 		System.out.println("MainView wurde geöffnet.");
@@ -247,6 +250,11 @@ public class MainViewController {
 		});
 	}
 
+	/**
+	 * Actionlistener für den Neue Kompetenz-Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
@@ -287,6 +295,9 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Aktualisiert die Kompetenztabelle
+	 */
 	public void aktualisiereKompetenzen() {
 		Kompetenz kompetenz = new Kompetenz(" ", 0.0);
 		projekt.setSingleKompetenz(kompetenz);
@@ -296,6 +307,11 @@ public class MainViewController {
 		kompetenzen.remove(kompetenz);
 	}
 
+	/**
+	 * Actionlistener für den Neue Phase-Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
 		if (!datepicker_ende_selected(event)) {
@@ -331,6 +347,9 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Aktualisiert die Phasen Tabelle
+	 */
 	public void aktualisierePhasen() {
 		Phase phase = new Phase(" ", "", "");
 		projekt.setSinglePhase(phase);
@@ -341,6 +360,11 @@ public class MainViewController {
 		phasen.remove(phase);
 	}
 
+	/**
+	 * Actionlistener für das Aufwands Menü
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void chobx_aufwand_selected(ActionEvent event) throws Exception {
 
@@ -376,6 +400,12 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Actionlistener für den Enddatum Datepicker
+	 * @param event
+	 * @return
+	 * @throws Exception
+	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
 
@@ -392,6 +422,11 @@ public class MainViewController {
 		return fehler;
 	}
 
+	/**
+	 * Actionlistener für den Aufwand festlegen Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_aufwand_festlegen_click(ActionEvent event) throws Exception {
 		double ptIntern = 0;
@@ -457,12 +492,20 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Speichert das Projekt auserhalb der offenen View
+	 */
 	public static void saveProjektRemote() {
 		// Kein Thread damit die Startview ebenfalls Aktuell ist
 		Datenbank db = new Datenbank();
 		db.updateProjekt(projekt);
 	}
 
+	/**
+	 * Actionlistener für den Projekt speichern Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_projekt_speichern_click(ActionEvent event) throws Exception {
 
@@ -492,11 +535,21 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Actionlistener für den Meldedatum DAtepicker
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void dtpkr_meldeDatum_ende_selected(ActionEvent event) throws Exception {
 		System.out.println("Datum ausgewählt");
 	}
 
+	/**
+	 * Eventlistener für den Projekt melden Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
 		if (dtpkr_meldeDatum.getValue() == null) {
@@ -534,6 +587,11 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Eventlistener für den Zurück Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_zurueck_click(ActionEvent event) throws Exception {
 
@@ -567,8 +625,12 @@ public class MainViewController {
 
 	}
 
-	// berechne Anzahl der Arbeitstage zwischen zwei Daten (inklusive Start- und
-	// Enddatum)
+	/**
+	 * Berechne die ANzahl der Arbeitstage zwischen zwei Daten
+	 * @param startDatum
+	 * @param endDatum
+	 * @return
+	 */
 	public long calculateDate(String startDatum, String endDatum) {
 
 		LocalDate start = LocalDate.parse(startDatum);
@@ -627,6 +689,11 @@ public class MainViewController {
 		return Math.round(personentage);
 	}
 
+	/**
+	 * Actionlistener für den Export Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_export_click(ActionEvent event) throws Exception {
 		Node source = (Node) event.getSource();
@@ -648,6 +715,11 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Actionlistener für den Phase löschen Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_deletePhase_click(ActionEvent event) throws Exception {
 
@@ -674,6 +746,11 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Actionlistener für den Kompetenz löschen Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_deleteKompetenz_click(ActionEvent event) throws Exception {
 
@@ -710,24 +787,9 @@ public class MainViewController {
 		}
 	}
 
-	public void updateTbl_phase() {
-		try {
-			phasen = FXCollections.observableArrayList(projekt.getPhasen());
-			checkChanges();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public void updateTbl_kompetenz() {
-		try {
-			kompetenzen = FXCollections.observableArrayList(projekt.getKompetenzen());
-			checkChanges();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
+	/**
+	 * Befüllt die PT Textfelder
+	 */
 	public void fülleFelder() {
 		try {
 			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
@@ -756,6 +818,9 @@ public class MainViewController {
 		}
 	}
 
+	/**
+	 * Überprüft Änderungen
+	 */
 	public void checkChanges() {
 		somethingChanged = true;
 		Scene scene = (Scene) txt_pt_extern.getScene();

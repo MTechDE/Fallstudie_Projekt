@@ -33,7 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
 /**
- * In dieser Klasse wird die Logik des Startfensters behandelt.
+ * Controller der Start View
  * 
  * @author Daniel Sogl
  *
@@ -77,7 +77,9 @@ public class StartViewController {
 	// Diese Liste aktualsiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Projekt> projektData;
 
-	// Diese Methode wird autoamtisch beim Starten aufgerufen
+	/**
+	 * Initialisiert die View
+	 */
 	@FXML
 	private void initialize() {
 
@@ -152,6 +154,11 @@ public class StartViewController {
 		});
 	}
 
+	/**
+	 * Actionlistener für den Projekt löschen Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_deleteProjekt_click(ActionEvent event) throws Exception {
 
@@ -193,7 +200,11 @@ public class StartViewController {
 		}
 	}
 
-	// Event Listener on Button[#btn_newProjekt].onAction
+	/**
+	 * Eventlistener für den Neues Projekt Button
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void btn_newProjekt_click(ActionEvent event) throws Exception {
 		// Überprüfe ob alle Eingabefelder ausgefüllt wurden

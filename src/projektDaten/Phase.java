@@ -8,8 +8,7 @@ import javafx.beans.property.StringProperty;
 import projektDaten.Aufwand;
 
 /**
- * Eine Phase enthält den Namen, sowie das Start- und Enddatum. Sowie eine Liste
- * aller darin eingeteilter Personen.
+ * Speichert Phasen
  * 
  * @author Daniel Sogl
  */

@@ -15,11 +15,9 @@ import projektDaten.Phase;
 import projektDaten.Projekt;
 
 /**
- * Alle Operationen welche mit der Datenbank zu tun haben (speichern und laden
- * von Projekten), werden mit dieser Klasse realisiert.
+ * Schnittstelle zwischen der MySQL Datenbank und dem Programm
  * 
  * @author Daniel Sogl
- * @version 1.2.1
  */
 
 public class Datenbank {
@@ -178,16 +176,16 @@ public class Datenbank {
 					.executeAndFetch(Kompetenz.class);
 			if (!kompetenzen.isEmpty())
 				newprojekt.setKompetenzen(kompetenzen);
+			
+			// Überprüfe ob Phasen und/oder Kompetenzen existieren
+			if (phasen.isEmpty())
+				newprojekt.setPhasen(phasen);
+			if (kompetenzen.isEmpty())
+				newprojekt.setKompetenzen(kompetenzen);
 
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
 		}
-
-		// Überprüfe ob Phasen und/oder Kompetenzen existieren
-		if (phasen.isEmpty())
-			newprojekt.setPhasen(phasen);
-		if (kompetenzen.isEmpty())
-			newprojekt.setKompetenzen(kompetenzen);
 
 		return newprojekt;
 	}

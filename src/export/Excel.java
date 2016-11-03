@@ -1,9 +1,6 @@
 package export;
 
 import java.io.FileOutputStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,6 +20,11 @@ import projektDaten.Projekt;
  */
 public class Excel {
 
+	/**
+	 * Erzeugt eine Excel Datei mit zwei Seiten
+	 * @param projekt
+	 * @param path
+	 */
 	public static void ExportToExcel(Projekt projekt, String path) {
 
 		// Variablen
@@ -30,7 +32,7 @@ public class Excel {
 		List<Phase> phasen;
 		FileOutputStream fileOut;
 
-		// Initalisiere Daten
+		// Initialisiere Daten
 		kompetenzen = projekt.getKompetenzen(); // Kompetenzenliste laden
 		phasen = projekt.getPhasen(); // Phasenliste laden
 
@@ -41,7 +43,7 @@ public class Excel {
 		XSSFSheet sheet1 = workbook.createSheet("Projektübersicht");
 		XSSFSheet sheet2 = workbook.createSheet("Erweiterte Projektübersicht");
 
-		// Erzeue Header
+		// Erzeuge Header
 		Row header1 = sheet1.createRow(0);
 		Row header2 = sheet2.createRow(0);
 
@@ -76,7 +78,6 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet1.createRow(4 + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
-
 		}
 
 		// Berechne gesamt PT pro Phase pro Kompetenz
@@ -92,7 +93,6 @@ public class Excel {
 				int cell = 1 + p;
 
 				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
-
 			}
 		}
 
@@ -114,7 +114,6 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet1.createRow(10 + kompetenzen.size() + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
-
 		}
 
 		// Berechne gesamt PT pro Phase pro Kompetenz
@@ -131,7 +130,6 @@ public class Excel {
 				int cell = 1 + p;
 
 				sheet1.getRow(row).createCell(cell).setCellValue(gesPT);
-
 			}
 		}
 
@@ -153,7 +151,6 @@ public class Excel {
 		for (int i = 0; i < projekt.getKompetenzen().size(); i++) {
 			Row kompetenzenRow = sheet2.createRow(4 + i);
 			kompetenzenRow.createCell(0).setCellValue(projekt.getKompetenzen().get(i).getName());
-
 		}
 
 		// Erzeuge Quartal Spalten
@@ -182,7 +179,7 @@ public class Excel {
 									&& (startJahr + j) == Integer
 											.parseInt(phasen.get(p).getStartDate().substring(0, 4))) {
 
-								// Berechne anzahl der Jahre zwischen Start und
+								// Berechne Anzahl der Jahre zwischen Start und
 								// Enddatum
 								int difJahre = Integer.parseInt(phasen.get(p).getEndDate().substring(0, 4))
 										- Integer.parseInt(phasen.get(p).getStartDate().substring(0, 4));
@@ -218,34 +215,9 @@ public class Excel {
 											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100)));
 								}
 								if (startQuartal != endQuartal && difJahre == 0 && (startQuartal == i || endQuartal == i)) {
-									
-
-									// Berechne Tage
-									DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-									LocalDate startDate = LocalDate.parse(phasen.get(p).getStartDate(), formatter);
-									LocalDate endDate = LocalDate.parse(phasen.get(p).getEndDate(), formatter);
-									
-
-									int daysBetween = (int) ChronoUnit.DAYS.between(startDate, endDate);
-
-									// Berechne die Tage im jeweiligen Quartal
-									
 									gesPT += (phasen.get(p).getAufwände().get(a).getPt()
 											* (1 + (kompetenzen.get(k).getRisikozuschlag() / 100))) / (endQuartal - startQuartal + 1);
-									
-									
-									switch (endQuartal - startQuartal) {
-									case 1:
-										break;
-									case 2:
-										break;
-									case 3:
-										break;
-									}
-
 								}
-
 							}
 						}
 
