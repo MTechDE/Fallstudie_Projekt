@@ -1,5 +1,6 @@
 package view;
 
+import configuration.Configuration;
 import controller.ChangeKompetenzViewController;
 import controller.ChangePhaseViewController;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +40,8 @@ public class OpenChangeView extends Stage {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
 			alert.showAndWait();
@@ -63,7 +65,8 @@ public class OpenChangeView extends Stage {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
 			alert.showAndWait();

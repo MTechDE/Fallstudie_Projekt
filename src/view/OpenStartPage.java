@@ -1,5 +1,6 @@
 package view;
 
+import configuration.Configuration;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,7 +29,8 @@ public class OpenStartPage extends Stage{
 			stage.setResizable(false);
 			stage.show();
 		} catch (Exception e){
-			e.printStackTrace();
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 			System.out.println("Fehler aufgetreten!");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte straten Sie die Anwendung neu.");

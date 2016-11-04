@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import configuration.Configuration;
 import model.Kompetenz;
 import model.Phase;
 import model.Projekt;
@@ -242,7 +244,8 @@ public class Excel {
 			fileOut.close();
 			workbook.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 	}
 

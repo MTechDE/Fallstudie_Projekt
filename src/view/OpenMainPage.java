@@ -2,6 +2,7 @@ package view;
 
 import java.util.Optional;
 
+import configuration.Configuration;
 import controller.MainViewController;
 import datenbank.Datenbank;
 import javafx.event.EventHandler;
@@ -40,7 +41,8 @@ public class OpenMainPage extends Stage {
 				tmpProjekt = myDB.getProjekt(projekt);
 				MainViewController.somethingChanged = false;
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if(Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		}
 
@@ -81,7 +83,8 @@ public class OpenMainPage extends Stage {
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");
 			alert.showAndWait();

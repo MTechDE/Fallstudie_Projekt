@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Optional;
 
+import configuration.Configuration;
 import datenbank.Datenbank;
 import export.Excel;
 import javafx.collections.FXCollections;
@@ -175,7 +176,8 @@ public class MainViewController {
 						new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
 						aktualisierePhasen();
 					} catch (Exception e) {
-						System.out.println(e.getMessage());
+						if(Configuration.DEBUG)
+							System.out.println(e.getMessage());
 					}
 				}
 
@@ -203,7 +205,8 @@ public class MainViewController {
 						}
 					}
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					if(Configuration.DEBUG)
+						System.out.println(e.getMessage());
 				}
 			}
 		});
@@ -220,7 +223,8 @@ public class MainViewController {
 						new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
 						aktualisiereKompetenzen();
 					} catch (Exception e) {
-						System.out.println(e.getMessage());
+						if(Configuration.DEBUG)
+							System.out.println(e.getMessage());
 					}
 				}
 
@@ -237,7 +241,8 @@ public class MainViewController {
 						}
 					}
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					if(Configuration.DEBUG)
+						System.out.println(e.getMessage());
 				}
 			}
 		});
@@ -285,7 +290,8 @@ public class MainViewController {
 					tbl_kompetenz.setItems(kompetenzen);
 					checkChanges();
 				} catch (Exception e) {
-					System.out.println(e.getMessage());
+					if(Configuration.DEBUG)
+						System.out.println(e.getMessage());
 				}
 
 			} else {
@@ -474,7 +480,8 @@ public class MainViewController {
 				checkChanges();
 				btn_aufwand_festlegen.setDisable(true);
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if(Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		}
 	}
@@ -555,7 +562,8 @@ public class MainViewController {
 						try {
 							btn_projekt_speichern_click(event);
 						} catch (Exception e) {
-							System.out.println(e.getMessage());
+							if(Configuration.DEBUG)
+								System.out.println(e.getMessage());
 						}
 						btn_sendProjekt.setDisable(false);
 					}
@@ -718,7 +726,8 @@ public class MainViewController {
 
 				checkChanges();
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if(Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		}
 	}
@@ -757,7 +766,8 @@ public class MainViewController {
 				checkChanges();
 
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if(Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		}
 	}
@@ -786,7 +796,8 @@ public class MainViewController {
 						}
 					});
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 	}
 

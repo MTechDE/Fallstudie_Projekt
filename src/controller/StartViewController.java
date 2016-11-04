@@ -19,6 +19,7 @@ import view.OpenMainPage;
 
 import java.util.Optional;
 
+import configuration.Configuration;
 import datenbank.Datenbank;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -140,7 +141,8 @@ public class StartViewController {
 						Stage stage = (Stage) source.getScene().getWindow();
 						stage.close();
 					} catch (Exception e) {
-						System.out.println(e.getMessage());
+						if(Configuration.DEBUG)
+							System.out.println(e.getMessage());
 					}
 				}
 			}
@@ -185,7 +187,8 @@ public class StartViewController {
 						btn_deleteProjekt.setDisable(true);
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				if(Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		}
 	}

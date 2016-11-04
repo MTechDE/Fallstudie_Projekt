@@ -9,6 +9,7 @@ import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+import configuration.Configuration;
 import model.Aufwand;
 import model.Kompetenz;
 import model.Phase;
@@ -42,7 +43,8 @@ public class Datenbank {
 		try (Connection con = sql2o.open()) {
 			return true;
 		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 			return false;
 		}
 	}
@@ -123,7 +125,8 @@ public class Datenbank {
 			}
 			con.commit();
 		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 
 	}
@@ -175,7 +178,8 @@ public class Datenbank {
 				newprojekt.setKompetenzen(kompetenzen);
 
 		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 
 		return newprojekt;
@@ -207,7 +211,8 @@ public class Datenbank {
 		try (Connection con = sql2o.open()) {
 			projekte = con.createQuery(sql).executeAndFetch(Projekt.class);
 		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 		return projekte;
 	}
@@ -231,7 +236,8 @@ public class Datenbank {
 			con.createQuery(sql3).addParameter("projektName", projekt.getName()).executeUpdate();
 			con.createQuery(sql4).addParameter("projektName", projekt.getName()).executeUpdate();
 		} catch (Sql2oException e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 	}
 

@@ -1,5 +1,6 @@
 package view;
 
+import configuration.Configuration;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		if(Configuration.DEBUG)
+			System.out.println("Debug");
+		
 		try {
 			// Lade die FXML Datei
 			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
@@ -27,7 +32,8 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			if(Configuration.DEBUG)
+				System.out.println(e.getMessage());
 		}
 	}
 
