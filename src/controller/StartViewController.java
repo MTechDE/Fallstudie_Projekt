@@ -159,10 +159,8 @@ public class StartViewController {
 	 */
 	@FXML
 	public void btn_deleteProjekt_click(ActionEvent event) throws Exception {
-
 		if (!tbl_projektTabelle.getItems().isEmpty()) {
 			try {
-				int index = tbl_projektTabelle.getSelectionModel().getSelectedIndex();
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setContentText("Möchten Sie das Projekt: "
 						+ tbl_projektTabelle.getSelectionModel().getSelectedItem().getName() + " wirklich löschen?");
@@ -172,18 +170,19 @@ public class StartViewController {
 				Optional<ButtonType> result = alert.showAndWait();
 
 				if (result.get() == buttonTypeOne) {
-					// Starte einen Thread
+					Projekt projekt = new Projekt(tbl_projektTabelle.getSelectionModel().getSelectedItem().getName());
+//					 Starte einen Thread
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
 							btn_deleteProjekt.setDisable(true);
 							img_loadingSpinner.setVisible(true);
-							myDB.deleteProjekt(tbl_projektTabelle.getSelectionModel().getSelectedItem());
+							myDB.deleteProjekt(projekt);
 							img_loadingSpinner.setVisible(false);
 							btn_deleteProjekt.setDisable(false);
 						}
 					}).start();
-					projektData.remove(index);
+					projektData.remove(tbl_projektTabelle.getSelectionModel().getSelectedIndex());
 					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 				}
 			} catch (Exception e) {

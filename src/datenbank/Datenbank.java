@@ -24,6 +24,7 @@ public class Datenbank {
 
 	// Variablen
 	private Sql2o sql2o;
+	private Query query;
 
 	/**
 	 * DB Anmeldedaten werden im Konstruktor konfiguriert.
@@ -50,7 +51,8 @@ public class Datenbank {
 	 * Speichert ein projektDaten und alle enthaltenen Phasen, Kompetenzen und
 	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * 
-	 * @param projekt das zu speichernde Projekt
+	 * @param projekt
+	 *            das zu speichernde Projekt
 	 * @return boolean
 	 */
 	private void speicherProjekt(Projekt projekt) {
@@ -73,7 +75,7 @@ public class Datenbank {
 			String sql = "INSERT INTO projekte(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
 					+ "VALUES(:name, :ersteller, :gemeldet, :startDate, :endDate, :meldeDatum)";
 
-			Query query = con.createQuery(sql);
+			query = con.createQuery(sql);
 			con.createQuery(sql).addParameter("name", projekt.getName())
 					.addParameter("ersteller", projekt.getErsteller()).addParameter("gemeldet", projekt.isgemeldet())
 					.addParameter("startDate", projekt.getStartDate()).addParameter("endDate", projekt.getEndDate())
@@ -83,11 +85,11 @@ public class Datenbank {
 				sql = "INSERT INTO phasen(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
 				query = con.createQuery(sql);
 
-				for (Phase phase : projekt.getPhasen()) {
-					query.addParameter("name", phase.getName()).addParameter("projekt", projekt.getName())
-							.addParameter("startDate", phase.getStartDate()).addParameter("endDate", phase.getEndDate())
+				projekt.getPhasen().forEach(p -> {
+					query.addParameter("name", p.getName()).addParameter("projekt", projekt.getName())
+							.addParameter("startDate", p.getStartDate()).addParameter("endDate", p.getEndDate())
 							.addToBatch();
-				}
+				});
 				query.executeBatch();
 			}
 
@@ -97,28 +99,29 @@ public class Datenbank {
 					+ "VALUES(:person, :phase, :projekt, :pt, :zugehoerigkeit)";
 			if (!projekt.getPhasen().isEmpty()) {
 				query = con.createQuery(sql);
-				for (Phase phase : projekt.getPhasen()) {
-					if (!phase.getAufwände().isEmpty()) {
-						for (Aufwand aufwand : phase.getAufwände()) {
-							query.addParameter("person", aufwand.getName()).addParameter("phase", phase.getName())
-									.addParameter("projekt", projekt.getName()).addParameter("pt", aufwand.getPt())
-									.addParameter("zugehoerigkeit", aufwand.getZugehoerigkeit()).addToBatch();
-						}
+				projekt.getPhasen().forEach(p -> {
+					if (!p.getAufwände().isEmpty()) {
+						p.getAufwände().forEach(a -> {
+							query.addParameter("person", a.getName()).addParameter("phase", p.getName())
+									.addParameter("projekt", projekt.getName()).addParameter("pt", a.getPt())
+									.addParameter("zugehoerigkeit", a.getZugehoerigkeit()).addToBatch();
+						});
 					}
-				}
+				});
 				query.executeBatch();
+
 				if (!projekt.getKompetenzen().isEmpty()) {
 					sql = "INSERT INTO kompetenzen (name, projekt, risikozuschlag) "
 							+ "VALUES(:name, :projekt, :risikozuschlag)";
 					query = con.createQuery(sql);
-					for (Kompetenz kompetenz : projekt.getKompetenzen()) {
-						query.addParameter("name", kompetenz.getName()).addParameter("projekt", projekt.getName())
-								.addParameter("risikozuschlag", kompetenz.getRisikozuschlag()).addToBatch();
-					}
+
+					projekt.getKompetenzen().forEach(k -> {
+						query.addParameter("name", k.getName()).addParameter("projekt", projekt.getName())
+								.addParameter("risikozuschlag", k.getRisikozuschlag()).addToBatch();
+					});
 					query.executeBatch();
 				}
 			}
-
 			con.commit();
 		} catch (Sql2oException e) {
 			System.out.println(e.getMessage());
@@ -130,7 +133,8 @@ public class Datenbank {
 	 * Ein projektDaten wird anhand des übergebenen projektDaten Objektes aus
 	 * der Datenbank geholt und als komplettes projektDaten zurückgegeben.
 	 * 
-	 * @param projekt das aus der Datenbank zu holende Projekt
+	 * @param projekt
+	 *            das aus der Datenbank zu holende Projekt
 	 * @return projektDaten
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -184,7 +188,8 @@ public class Datenbank {
 	 * wird es zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt das zu updatende Projekte
+	 * @param projekt
+	 *            das zu updatende Projekte
 	 * @return boolean
 	 */
 	public void updateProjekt(Projekt projekt) {
@@ -215,7 +220,8 @@ public class Datenbank {
 	 * Kompetenzen, Aufwände), werden anhand des Projektname aus der Datenbank
 	 * gelöscht.
 	 * 
-	 * @param projekt das zu löschende projektDaten
+	 * @param projekt
+	 *            das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public void deleteProjekt(Projekt projekt) {

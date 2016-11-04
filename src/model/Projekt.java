@@ -23,6 +23,11 @@ public class Projekt {
 	private StringProperty startDate;
 	private StringProperty endDate;
 	private StringProperty meldeDatum;
+	
+	
+	public Projekt(String name){
+		this.setName(name);
+	}
 
 	/**
 	 * Konstruktor um die Grundinformationen eines Projektes abbilden zu können

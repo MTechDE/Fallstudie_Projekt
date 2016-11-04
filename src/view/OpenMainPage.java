@@ -71,11 +71,8 @@ public class OpenMainPage extends Stage {
 						ButtonType buttonTypeOne = new ButtonType("Speichern & Verlassen");
 						ButtonType buttonTypeTwo = new ButtonType("Ohne speichern verlassen");
 						ButtonType buttonTypeCancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
-
 						alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
-
 						Optional<ButtonType> result = alert.showAndWait();
-
 						if (result.get() == buttonTypeOne)
 							MainViewController.saveProjektRemote();
 						if (result.get() == buttonTypeCancel)

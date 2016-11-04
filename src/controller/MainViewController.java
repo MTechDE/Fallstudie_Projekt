@@ -41,7 +41,7 @@ import view.OpenStartPage;
 /**
  * Controller für die Haupt View
  * 
- * @author Tim Krießler, Daniel Sogl
+ * @author Daniel Sogl, Tim Krießler 
  */
 public class MainViewController {
 
@@ -106,13 +106,9 @@ public class MainViewController {
 	@FXML
 	private Label lbl_Extern;
 
-	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
+	// Diese Listen aktualisieren sich automatisch und damit auch die Tabellen
 	private ObservableList<Kompetenz> kompetenzen = FXCollections.observableArrayList();
-
-	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
 	private ObservableList<Phase> phasen = FXCollections.observableArrayList();
-
-	// Diese Liste aktualisiert sich automatisch und damit auch die Tabelle
 	private ObservableList<String> aufwaende = FXCollections.observableArrayList();
 
 	// Variablen
@@ -132,7 +128,7 @@ public class MainViewController {
 		// Importiere projektDaten
 		projekt = OpenMainPage.tmpProjekt;
 
-		// Initialisiere Tabelle
+		// Initialisiere Tabellen
 		tbl_kompetenz.setPlaceholder(new Label("Keine Kompetenzen angelegt"));
 		tbl_phase.setPlaceholder(new Label("Keine Phasen angelegt"));
 		tblCell_kompetenz.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -314,12 +310,8 @@ public class MainViewController {
 	 * Aktualisiert die Kompetenztabelle
 	 */
 	public void aktualisiereKompetenzen() {
-		Kompetenz kompetenz = new Kompetenz(" ", 0.0);
-		projekt.setSingleKompetenz(kompetenz);
-		kompetenzen.add(kompetenz);
-		tbl_kompetenz.setItems(kompetenzen);
-		projekt.getKompetenzen().remove(kompetenz);
-		kompetenzen.remove(kompetenz);
+		tbl_kompetenz.getColumns().get(0).setVisible(false);
+		tbl_kompetenz.getColumns().get(0).setVisible(true);
 	}
 
 	/**
@@ -351,12 +343,8 @@ public class MainViewController {
 	 * Aktualisiert die Phasen Tabelle
 	 */
 	public void aktualisierePhasen() {
-		Phase phase = new Phase(" ", "", "");
-		projekt.setSinglePhase(phase);
-		phasen.add(phase);
-		tbl_phase.setItems(phasen);
-		projekt.getPhasen().remove(phase);
-		phasen.remove(phase);
+		tbl_phase.getColumns().get(0).setVisible(false);
+		tbl_phase.getColumns().get(0).setVisible(true);
 	}
 
 	/**
@@ -793,7 +781,7 @@ public class MainViewController {
 			txt_mak_extern.setText("0,0");
 
 			// Durchsuche die Aufwände nach dem Passenden Aufwand
-			phaseSelected.getAufwände().parallelStream()
+			phaseSelected.getAufwände().stream()
 					.filter(a -> a.getZugehoerigkeit().equals(kompetenzSelected.getName())).forEach(a -> {
 						if (a.getName().equals("intern")) {
 							txt_pt_intern.setText(String.valueOf(a.getPt()).replace(".", ","));
