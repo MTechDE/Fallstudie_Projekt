@@ -41,7 +41,7 @@ import view.OpenStartPage;
 /**
  * Controller für die Haupt View
  * 
- * @author Daniel Sogl, Tim Krießler 
+ * @author Daniel Sogl, Tim Krießler
  */
 public class MainViewController {
 
@@ -166,7 +166,8 @@ public class MainViewController {
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-
+				// Überprüfe ob ein Element aktiv ist, oder nur ins "leere"
+				// geklickt wurde
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
 						&& !tbl_phase.getItems().isEmpty()
 						&& (tbl_phase.getSelectionModel().getSelectedItem() instanceof Phase)) {
@@ -182,6 +183,8 @@ public class MainViewController {
 					if (!tbl_phase.getItems().isEmpty())
 						btn_deletePhase.setDisable(false);
 
+					// Überprüfe ob ein Element aktiv ist, oder nur ins "leere"
+					// geklickt wurde
 					if (!tbl_phase.getItems().isEmpty() && !tbl_kompetenz.getItems().isEmpty()
 							&& tbl_phase.getSelectionModel().getSelectedItem().getClass() == Phase.class) {
 						Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
@@ -191,14 +194,9 @@ public class MainViewController {
 						String enddatum = phaseSelected.getEndDate();
 
 						arbeitstage = calculateDate(startdatum, enddatum);
-
 						txt_mak_pt_intern.setText(arbeitstage + " PT");
 						txt_mak_pt_extern.setText(arbeitstage + " PT");
-
 						indexPhaseClicked = true;
-						// was passiert wenn eine phase und eine Kompetenz
-						// ausgewählt
-						// wurden
 						if (indexKompetenzClicked) {
 							btn_aufwand_festlegen.setDisable(false);
 							fülleFelder();
@@ -244,8 +242,7 @@ public class MainViewController {
 			}
 		});
 
-		btn_aufwand_festlegen.setDisable(true);
-
+		// Überprüft, ob die PT oder MAK geändert wurden
 		txt_pt_intern.textProperty().addListener((observable, oldValue, newValue) -> {
 			btn_aufwand_festlegen.setDisable(false);
 		});
@@ -310,6 +307,7 @@ public class MainViewController {
 	 * Aktualisiert die Kompetenztabelle
 	 */
 	public void aktualisiereKompetenzen() {
+		// Workaround um die Tabelle zu aktualisieren
 		tbl_kompetenz.getColumns().get(0).setVisible(false);
 		tbl_kompetenz.getColumns().get(0).setVisible(true);
 	}
@@ -343,6 +341,7 @@ public class MainViewController {
 	 * Aktualisiert die Phasen Tabelle
 	 */
 	public void aktualisierePhasen() {
+		// Workaround um die Tabelle zu aktualisieren
 		tbl_phase.getColumns().get(0).setVisible(false);
 		tbl_phase.getColumns().get(0).setVisible(true);
 	}
@@ -355,7 +354,6 @@ public class MainViewController {
 	 */
 	@FXML
 	public void chobx_aufwand_selected(ActionEvent event) throws Exception {
-
 		String chobx_aufwand_selection = chobx_aufwand.getValue();
 		switch (chobx_aufwand_selection) {
 		case "Personentage (PT)":
@@ -396,8 +394,6 @@ public class MainViewController {
 	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
-
-		boolean fehler = false;
 		int startDatum = Integer.parseInt(dtpkr_start.getValue().toString().replaceAll("-", ""));
 		int endDatum = Integer.parseInt(dtpkr_end.getValue().toString().replaceAll("-", ""));
 		if (endDatum <= startDatum) {
@@ -405,9 +401,9 @@ public class MainViewController {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
 			alert.showAndWait();
-			fehler = true;
-		}
-		return fehler;
+			return true;
+		} else
+			return false;
 	}
 
 	/**
@@ -448,6 +444,7 @@ public class MainViewController {
 					break;
 				}
 
+				// Setzt neue Aufwände anhand der Zugehörigkeit
 				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream()
 						.anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
 					projekt.getPhasen().get(phasenIndex)
@@ -483,10 +480,9 @@ public class MainViewController {
 	}
 
 	/**
-	 * Speichert das Projekt auserhalb der offenen View
+	 * Speichert das Projekt außerhalb der geöffneten View
 	 */
 	public static void saveProjektRemote() {
-		// Kein Thread damit die Startview ebenfalls Aktuell ist
 		Datenbank db = new Datenbank();
 		db.updateProjekt(projekt);
 	}
@@ -604,7 +600,6 @@ public class MainViewController {
 			new OpenStartPage();
 			stage.close();
 		}
-
 	}
 
 	/**
@@ -662,9 +657,6 @@ public class MainViewController {
 		case 31:
 			personentage += 0.548 * daysBetween;
 			break;
-
-		default:
-			break;
 		}
 		return Math.round(personentage);
 	}
@@ -686,6 +678,7 @@ public class MainViewController {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
+		// Exportiere die Daten im Hintergrund
 		if (file != null) {
 			new Thread(new Runnable() {
 				@Override
@@ -718,6 +711,8 @@ public class MainViewController {
 				projekt.getPhasen().remove(tbl_phase.getSelectionModel().getSelectedIndex());
 				phasen.remove(tbl_phase.getSelectionModel().getSelectedIndex());
 
+				// Falls es keine Phasen mehr gibt soll der löschen Button
+				// deaktiviert werden
 				if (tbl_phase.getItems().isEmpty())
 					btn_deletePhase.setDisable(true);
 
@@ -772,17 +767,16 @@ public class MainViewController {
 	 */
 	public void fülleFelder() {
 		try {
-			Phase phaseSelected = tbl_phase.getSelectionModel().getSelectedItem();
-			Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
 			txt_pt_intern.setText("0,0");
 			txt_pt_extern.setText("0,0");
 			txt_mak_intern.setText("0,0");
 			txt_mak_extern.setText("0,0");
 
-			// Durchsuche die Aufwände nach dem Passenden Aufwand
-			phaseSelected.getAufwände().stream()
-					.filter(a -> a.getZugehoerigkeit().equals(kompetenzSelected.getName())).forEach(a -> {
+			// Durchsuche die Aufwände nach dem Passenden Aufwand und schreib ihn in die Textfelder
+			tbl_phase.getSelectionModel().getSelectedItem().getAufwände().stream().filter(
+					a -> a.getZugehoerigkeit().equals(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()))
+					.forEach(a -> {
 						if (a.getName().equals("intern")) {
 							txt_pt_intern.setText(String.valueOf(a.getPt()).replace(".", ","));
 							txt_mak_intern.setText(String.valueOf(a.getPt() / arbeitstage).replace(".", ","));

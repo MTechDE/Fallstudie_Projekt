@@ -13,7 +13,7 @@ import model.Kompetenz;
 /**
  * Viewcontroller für die Kompetenz ändern View
  * 
- * @author Tim Krießler
+ * @author Tim Krießler, Daniel Sogl
  *
  */
 public class ChangeKompetenzViewController {
@@ -35,7 +35,7 @@ public class ChangeKompetenzViewController {
 	@FXML
 	private void initialize() {
 		txt_kompetenz_aendern.setText(kompetenz.getName());
-		txt_risikozuschlag_aendern.setText(String.valueOf(kompetenz.getRisikozuschlag()));
+		txt_risikozuschlag_aendern.setText(String.valueOf(kompetenz.getRisikozuschlag()).replace(".", ","));
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class ChangeKompetenzViewController {
 			}
 			
 			kompetenz.setName(txt_kompetenz_aendern.getText());
-			kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText()));
+			kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText().replace(",", ".")));
 			MainViewController.somethingChanged = true;
 			btn_abbrechen_click(event);
 		} else {

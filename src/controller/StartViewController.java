@@ -127,25 +127,20 @@ public class StartViewController {
 		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-
 				if (tbl_projektTabelle.getFocusModel().getFocusedIndex() >= 0)
 					btn_deleteProjekt.setDisable(false);
 				// Doppelklick + Linke Maustaste
-				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)) {
-					// Überprüft ob auf einen Tabelleneintrag mit einem
-					// projektDaten
-					// geklickt wurde
-					if (tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-						try {
-							// Öffne Hauptfenster
-							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
-							// Schließe Fenster
-							Node source = (Node) mouseEvent.getSource();
-							Stage stage = (Stage) source.getScene().getWindow();
-							stage.close();
-						} catch (Exception e) {
-							System.out.println(e.getMessage());
-						}
+				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
+						&& tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
+					try {
+						// Öffne Hauptfenster
+						new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
+						// Schließe Fenster
+						Node source = (Node) mouseEvent.getSource();
+						Stage stage = (Stage) source.getScene().getWindow();
+						stage.close();
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
 					}
 				}
 			}
@@ -154,6 +149,7 @@ public class StartViewController {
 
 	/**
 	 * Actionlistener für den Projekt löschen Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */
@@ -171,7 +167,7 @@ public class StartViewController {
 
 				if (result.get() == buttonTypeOne) {
 					Projekt projekt = new Projekt(tbl_projektTabelle.getSelectionModel().getSelectedItem().getName());
-//					 Starte einen Thread
+					// Starte einen Thread
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
@@ -184,6 +180,9 @@ public class StartViewController {
 					}).start();
 					projektData.remove(tbl_projektTabelle.getSelectionModel().getSelectedIndex());
 					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
+					
+					if(projektData.isEmpty())
+						btn_deleteProjekt.setDisable(true);
 				}
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -193,6 +192,7 @@ public class StartViewController {
 
 	/**
 	 * Eventlistener für den Neues Projekt Button
+	 * 
 	 * @param event
 	 * @throws Exception
 	 */

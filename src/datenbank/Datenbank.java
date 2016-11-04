@@ -51,8 +51,7 @@ public class Datenbank {
 	 * Speichert ein projektDaten und alle enthaltenen Phasen, Kompetenzen und
 	 * Aufwände. Bereits vorhandene Daten werden überschrieben (UPDATE).
 	 * 
-	 * @param projekt
-	 *            das zu speichernde Projekt
+	 * @param projekt das zu speichernde Projekt
 	 * @return boolean
 	 */
 	private void speicherProjekt(Projekt projekt) {
@@ -72,7 +71,7 @@ public class Datenbank {
 
 		try (Connection con = sql2o.beginTransaction()) {
 
-			String sql = "INSERT INTO projekte(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
+			String sql = "INSERT INTO projekt(name, ersteller, gemeldet, startDate, endDate, meldeDatum) "
 					+ "VALUES(:name, :ersteller, :gemeldet, :startDate, :endDate, :meldeDatum)";
 
 			query = con.createQuery(sql);
@@ -82,7 +81,7 @@ public class Datenbank {
 					.addParameter("meldeDatum", projekt.getMeldeDatum()).executeUpdate();
 
 			if (!projekt.getPhasen().isEmpty()) {
-				sql = "INSERT INTO phasen(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
+				sql = "INSERT INTO phase(name, projekt, startDate, endDate) VALUES(:name, :projekt, :startDate, :endDate)";
 				query = con.createQuery(sql);
 
 				projekt.getPhasen().forEach(p -> {
@@ -111,7 +110,7 @@ public class Datenbank {
 				query.executeBatch();
 
 				if (!projekt.getKompetenzen().isEmpty()) {
-					sql = "INSERT INTO kompetenzen (name, projekt, risikozuschlag) "
+					sql = "INSERT INTO kompetenz (name, projekt, risikozuschlag) "
 							+ "VALUES(:name, :projekt, :risikozuschlag)";
 					query = con.createQuery(sql);
 
@@ -133,8 +132,7 @@ public class Datenbank {
 	 * Ein projektDaten wird anhand des übergebenen projektDaten Objektes aus
 	 * der Datenbank geholt und als komplettes projektDaten zurückgegeben.
 	 * 
-	 * @param projekt
-	 *            das aus der Datenbank zu holende Projekt
+	 * @param projekt das aus der Datenbank zu holende Projekt
 	 * @return projektDaten
 	 */
 	public Projekt getProjekt(Projekt projekt) {
@@ -147,7 +145,7 @@ public class Datenbank {
 		try (Connection con = sql2o.open()) {
 
 			// Hole Phasen anhand des Projektnamen
-			String sql = "SELECT name, startDate, endDate FROM phasen WHERE projekt=:projektName";
+			String sql = "SELECT name, startDate, endDate FROM phase WHERE projekt=:projektName";
 			phasen = con.createQuery(sql).addParameter("projektName", newprojekt.getName())
 					.executeAndFetch(Phase.class);
 
@@ -164,7 +162,7 @@ public class Datenbank {
 			}
 
 			// Hole die Kompetenzen aus der DB
-			sql = "SELECT DISTINCT  name, risikozuschlag FROM kompetenzen WHERE projekt=:projektName";
+			sql = "SELECT DISTINCT  name, risikozuschlag FROM kompetenz WHERE projekt=:projektName";
 			kompetenzen = con.createQuery(sql).addParameter("projektName", newprojekt.getName())
 					.executeAndFetch(Kompetenz.class);
 			if (!kompetenzen.isEmpty())
@@ -188,8 +186,7 @@ public class Datenbank {
 	 * wird es zunächst komplett gelöscht und anschließend neu in die Datenbank
 	 * geschrieben.
 	 * 
-	 * @param projekt
-	 *            das zu updatende Projekte
+	 * @param projekt das zu updatende Projekte
 	 * @return boolean
 	 */
 	public void updateProjekt(Projekt projekt) {
@@ -206,7 +203,7 @@ public class Datenbank {
 	public List<Projekt> getProjekte() {
 		List<Projekt> projekte = new ArrayList<Projekt>();
 
-		String sql = "SELECT * FROM projekte";
+		String sql = "SELECT * FROM projekt";
 		try (Connection con = sql2o.open()) {
 			projekte = con.createQuery(sql).executeAndFetch(Projekt.class);
 		} catch (Sql2oException e) {
@@ -220,15 +217,14 @@ public class Datenbank {
 	 * Kompetenzen, Aufwände), werden anhand des Projektname aus der Datenbank
 	 * gelöscht.
 	 * 
-	 * @param projekt
-	 *            das zu löschende projektDaten
+	 * @param projekt das zu löschende projektDaten
 	 * @return boolean
 	 */
 	public void deleteProjekt(Projekt projekt) {
 		String sql1 = "DELETE FROM aufwand WHERE projekt=:projektName";
-		String sql2 = "DELETE FROM phasen WHERE projekt=:projektName";
-		String sql3 = "DELETE FROM projekte WHERE name=:projektName";
-		String sql4 = "DELETE FROM kompetenzen WHERE projekt=:projektName";
+		String sql2 = "DELETE FROM phase WHERE projekt=:projektName";
+		String sql3 = "DELETE FROM projekt WHERE name=:projektName";
+		String sql4 = "DELETE FROM kompetenz WHERE projekt=:projektName";
 		try (Connection con = sql2o.open()) {
 			con.createQuery(sql1).addParameter("projektName", projekt.getName()).executeUpdate();
 			con.createQuery(sql2).addParameter("projektName", projekt.getName()).executeUpdate();

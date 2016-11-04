@@ -16,7 +16,7 @@ import model.Phase;
 /**
  * Viewcontroller für die Phase ändern View
  * 
- * @author Tim Krießler
+ * @author Tim Krießler, Daniel Sogl
  *
  */
 public class ChangePhaseViewController {

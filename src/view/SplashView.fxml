@@ -23,7 +23,7 @@
             <Image url="file:@../../resources/VanillaSky.png" />
          </image>
       </ImageView>
-      <Label layoutX="532.0" layoutY="363.0" text="V 0.9.0" textFill="WHITE">
+      <Label layoutX="532.0" layoutY="363.0" text="V 0.10.0" textFill="WHITE">
          <font>
             <Font name="Segoe UI" size="18.0" />
          </font>
