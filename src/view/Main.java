@@ -18,10 +18,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		if(Configuration.DEBUG)
-			System.out.println("Debug");
-		
 		try {
 			// Lade die FXML Datei
 			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
