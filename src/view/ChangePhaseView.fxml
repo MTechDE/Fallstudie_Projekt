@@ -17,8 +17,8 @@
             <Tooltip text="Phase eingeben" />
          </tooltip>
       </TextField>
-      <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="48.0" layoutY="105.0" prefHeight="41.0" prefWidth="209.0" promptText="Startdatum" />
-      <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="48.0" layoutY="153.0" prefHeight="41.0" prefWidth="209.0" onAction="#datepicker_ende_selected" promptText="Enddatum" />
+      <DatePicker fx:id="dtpkr_startdatum_aendern" layoutX="48.0" layoutY="105.0" onAction="#datepicker_ende_selected" prefHeight="41.0" prefWidth="209.0" promptText="Startdatum" />
+      <DatePicker fx:id="dtpkr_enddatum_aendern" layoutX="48.0" layoutY="153.0" onAction="#datepicker_ende_selected" prefHeight="41.0" prefWidth="209.0" promptText="Enddatum" />
       <Button fx:id="btn_aendern" layoutX="48.0" layoutY="204.0" mnemonicParsing="false" onAction="#btn_aendern_click" prefHeight="39.0" prefWidth="209.0" text="Speichern">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">

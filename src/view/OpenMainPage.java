@@ -41,7 +41,7 @@ public class OpenMainPage extends Stage {
 				tmpProjekt = myDB.getProjekt(projekt);
 				MainViewController.somethingChanged = false;
 			} catch (Exception e) {
-				if(Configuration.DEBUG)
+				if (Configuration.DEBUG)
 					System.out.println(e.getMessage());
 			}
 		}
@@ -52,7 +52,7 @@ public class OpenMainPage extends Stage {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.setResizable(false);
-			if(MainViewController.somethingChanged)
+			if (MainViewController.somethingChanged)
 				stage.setTitle("* " + projekt.getName());
 			else
 				stage.setTitle(projekt.getName());
@@ -77,13 +77,13 @@ public class OpenMainPage extends Stage {
 						Optional<ButtonType> result = alert.showAndWait();
 						if (result.get() == buttonTypeOne)
 							MainViewController.saveProjektRemote();
-						if (result.get() == buttonTypeCancel)
+						else if (result.get() == buttonTypeCancel)
 							event.consume();
 					}
 				}
 			});
 		} catch (Exception e) {
-			if(Configuration.DEBUG)
+			if (Configuration.DEBUG)
 				System.out.println(e.getMessage());
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText("Bitte starten Sie die Anwendung neu.");

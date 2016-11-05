@@ -141,7 +141,7 @@ public class StartViewController {
 						Stage stage = (Stage) source.getScene().getWindow();
 						stage.close();
 					} catch (Exception e) {
-						if(Configuration.DEBUG)
+						if (Configuration.DEBUG)
 							System.out.println(e.getMessage());
 					}
 				}
@@ -182,12 +182,12 @@ public class StartViewController {
 					}).start();
 					projektData.remove(tbl_projektTabelle.getSelectionModel().getSelectedIndex());
 					lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
-					
-					if(projektData.isEmpty())
+
+					if (projektData.isEmpty())
 						btn_deleteProjekt.setDisable(true);
 				}
 			} catch (Exception e) {
-				if(Configuration.DEBUG)
+				if (Configuration.DEBUG)
 					System.out.println(e.getMessage());
 			}
 		}
@@ -221,7 +221,10 @@ public class StartViewController {
 			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Füllen Sie alle Felder aus");
+			if (txt_newProjekt_name.getText().trim().isEmpty())
+				alert.setContentText("Geben Sie einen Projektnamen an!");
+			else if (txt_newProjekt_ersteller.getText().trim().isEmpty())
+				alert.setContentText("Geben Sie einen Projektersteller an!");
 			alert.showAndWait();
 		}
 	}

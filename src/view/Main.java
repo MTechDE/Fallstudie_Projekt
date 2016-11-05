@@ -28,7 +28,7 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch (Exception e) {
-			if(Configuration.DEBUG)
+			if (Configuration.DEBUG)
 				System.out.println(e.getMessage());
 		}
 	}

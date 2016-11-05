@@ -38,7 +38,7 @@
          <tooltip>
             <Tooltip text="Phase eingeben" />
          </tooltip></TextField>
-      <DatePicker fx:id="dtpkr_start" layoutX="14.0" layoutY="173.0" prefHeight="41.0" prefWidth="224.0" promptText="Startdatum" showWeekNumbers="true">
+      <DatePicker fx:id="dtpkr_start" layoutX="14.0" layoutY="173.0" onAction="#datepicker_ende_selected" prefHeight="41.0" prefWidth="224.0" promptText="Startdatum" showWeekNumbers="true">
          <tooltip>
             <Tooltip text="Startdatum" />
          </tooltip></DatePicker>

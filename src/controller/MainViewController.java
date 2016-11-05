@@ -176,7 +176,7 @@ public class MainViewController {
 						new OpenChangeView(tbl_phase.getSelectionModel().getSelectedItem());
 						aktualisierePhasen();
 					} catch (Exception e) {
-						if(Configuration.DEBUG)
+						if (Configuration.DEBUG)
 							System.out.println(e.getMessage());
 					}
 				}
@@ -205,7 +205,7 @@ public class MainViewController {
 						}
 					}
 				} catch (Exception e) {
-					if(Configuration.DEBUG)
+					if (Configuration.DEBUG)
 						System.out.println(e.getMessage());
 				}
 			}
@@ -223,7 +223,7 @@ public class MainViewController {
 						new OpenChangeView(tbl_kompetenz.getSelectionModel().getSelectedItem());
 						aktualisiereKompetenzen();
 					} catch (Exception e) {
-						if(Configuration.DEBUG)
+						if (Configuration.DEBUG)
 							System.out.println(e.getMessage());
 					}
 				}
@@ -241,7 +241,7 @@ public class MainViewController {
 						}
 					}
 				} catch (Exception e) {
-					if(Configuration.DEBUG)
+					if (Configuration.DEBUG)
 						System.out.println(e.getMessage());
 				}
 			}
@@ -271,40 +271,38 @@ public class MainViewController {
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
-		if (!txt_kompetenz.getText().trim().isEmpty() && !txt_risikozuschlag.getText().trim().isEmpty()) {
-			if (!kompetenzen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
+		if (txt_kompetenz.getText().trim().isEmpty() || txt_risikozuschlag.getText().trim().isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			if (txt_kompetenz.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie eine Kompetenzbezeichnung an!");
+			else if (txt_risikozuschlag.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie einen Risikozuschlag an!");
+			alert.showAndWait();
 
-				// Risikozuschlag von -,% und falschem Dezimalzeichen
-				// befreien
+		} else if (!kompetenzen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
 
-				try {
-					String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
-					risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
-					risikozuschlagString = risikozuschlagString.replaceAll("-", "");
-					Double risikozuschlag = Double.parseDouble(risikozuschlagString);
+			// Risikozuschlag von -,% und falschem Dezimalzeichen
+			// befreien
 
-					Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
+			try {
+				String risikozuschlagString = txt_risikozuschlag.getText().replaceAll("%", "");
+				risikozuschlagString = risikozuschlagString.replaceAll(",", ".");
+				risikozuschlagString = risikozuschlagString.replaceAll("-", "");
+				Double risikozuschlag = Double.parseDouble(risikozuschlagString);
 
-					projekt.setSingleKompetenz(kompetenz);
-					kompetenzen.add(kompetenz);
-					tbl_kompetenz.setItems(kompetenzen);
-					checkChanges();
-				} catch (Exception e) {
-					if(Configuration.DEBUG)
-						System.out.println(e.getMessage());
-				}
+				Kompetenz kompetenz = new Kompetenz(txt_kompetenz.getText(), risikozuschlag);
 
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
-				alert.showAndWait();
+				projekt.setSingleKompetenz(kompetenz);
+				kompetenzen.add(kompetenz);
+				tbl_kompetenz.setItems(kompetenzen);
+				checkChanges();
+			} catch (Exception e) {
+				if (Configuration.DEBUG)
+					System.out.println(e.getMessage());
 			}
 		} else {
 			Alert alert = new Alert(AlertType.ERROR);
-			if (txt_risikozuschlag.getText().trim().isEmpty())
-				alert.setContentText("Risikozuschlag eingeben.");
-			if (txt_kompetenz.getText().trim().isEmpty())
-				alert.setContentText("Kompetenzbezeichnung darf nicht leer sein.");
+			alert.setContentText("Der angegebene Kompetenzname ist bereits vorhanden!");
 			alert.showAndWait();
 		}
 	}
@@ -328,7 +326,12 @@ public class MainViewController {
 	public void btn_phase_click(ActionEvent event) throws Exception {
 		if (txt_phase.getText().trim().isEmpty() || dtpkr_start.getValue() == null || dtpkr_end.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte füllen Sie alle Felder aus!");
+			if (txt_phase.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie einen Phasennamen an!");
+			else if (dtpkr_start.getValue() == null)
+				alert.setContentText("Bitte geben Sie ein Startdatum an!");
+			else if (dtpkr_end.getValue() == null)
+				alert.setContentText("Bitte geben Sie eine Enddatum an!");
 			alert.showAndWait();
 		} else if (!phasen.parallelStream().anyMatch(p -> p.getName().equals(txt_phase.getText()))) {
 			Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
@@ -400,14 +403,17 @@ public class MainViewController {
 	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
-		int startDatum = Integer.parseInt(dtpkr_start.getValue().toString().replaceAll("-", ""));
-		int endDatum = Integer.parseInt(dtpkr_end.getValue().toString().replaceAll("-", ""));
-		if (endDatum <= startDatum) {
-			dtpkr_end.setValue(dtpkr_start.getValue().plusDays(1));
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
-			alert.showAndWait();
-			return true;
+		if (dtpkr_start.getValue() != null && dtpkr_end.getValue() != null) {
+			int startDatum = Integer.parseInt(dtpkr_start.getValue().toString().replaceAll("-", ""));
+			int endDatum = Integer.parseInt(dtpkr_end.getValue().toString().replaceAll("-", ""));
+			if (endDatum <= startDatum) {
+				dtpkr_end.setValue(dtpkr_start.getValue().plusDays(1));
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
+				alert.showAndWait();
+				return true;
+			} else
+				return false;
 		} else
 			return false;
 	}
@@ -428,11 +434,17 @@ public class MainViewController {
 				|| (auswahl == 1
 						&& (txt_mak_intern.getText().isEmpty() || txt_mak_extern.getText().trim().isEmpty()))) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte Aufwände für intern und extern eingeben!");
+			if (auswahl == 0 && txt_pt_intern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie die Internen PT an!");
+			else if (auswahl == 0 && txt_pt_extern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie die Externen PT an!");
+			else if (auswahl == 1 && txt_mak_intern.getText().isEmpty())
+				alert.setContentText("Bitte geben Sie die internen MAK an!");
+			else if (auswahl == 1 && txt_mak_extern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie die externen MAK an!");
 			alert.showAndWait();
 		} else {
 			try {
-
 				int phasenIndex = tbl_phase.getSelectionModel().getSelectedIndex();
 				Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
@@ -480,7 +492,7 @@ public class MainViewController {
 				checkChanges();
 				btn_aufwand_festlegen.setDisable(true);
 			} catch (Exception e) {
-				if(Configuration.DEBUG)
+				if (Configuration.DEBUG)
 					System.out.println(e.getMessage());
 			}
 		}
@@ -562,7 +574,7 @@ public class MainViewController {
 						try {
 							btn_projekt_speichern_click(event);
 						} catch (Exception e) {
-							if(Configuration.DEBUG)
+							if (Configuration.DEBUG)
 								System.out.println(e.getMessage());
 						}
 						btn_sendProjekt.setDisable(false);
@@ -597,7 +609,7 @@ public class MainViewController {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.get() == buttonTypeOne) {
-				btn_projekt_speichern_click(event);
+				myDB.updateProjekt(projekt);
 				new OpenStartPage();
 				stage.close();
 			} else if (result.get() == buttonTypeTwo) {
@@ -726,7 +738,7 @@ public class MainViewController {
 
 				checkChanges();
 			} catch (Exception e) {
-				if(Configuration.DEBUG)
+				if (Configuration.DEBUG)
 					System.out.println(e.getMessage());
 			}
 		}
@@ -766,7 +778,7 @@ public class MainViewController {
 				checkChanges();
 
 			} catch (Exception e) {
-				if(Configuration.DEBUG)
+				if (Configuration.DEBUG)
 					System.out.println(e.getMessage());
 			}
 		}
@@ -783,7 +795,8 @@ public class MainViewController {
 			txt_mak_intern.setText("0,0");
 			txt_mak_extern.setText("0,0");
 
-			// Durchsuche die Aufwände nach dem Passenden Aufwand und schreib ihn in die Textfelder
+			// Durchsuche die Aufwände nach dem Passenden Aufwand und schreib
+			// ihn in die Textfelder
 			tbl_phase.getSelectionModel().getSelectedItem().getAufwände().stream().filter(
 					a -> a.getZugehoerigkeit().equals(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()))
 					.forEach(a -> {
@@ -796,7 +809,7 @@ public class MainViewController {
 						}
 					});
 		} catch (Exception e) {
-			if(Configuration.DEBUG)
+			if (Configuration.DEBUG)
 				System.out.println(e.getMessage());
 		}
 	}

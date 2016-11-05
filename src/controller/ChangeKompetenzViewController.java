@@ -49,7 +49,11 @@ public class ChangeKompetenzViewController {
 
 		if (txt_kompetenz_aendern.getText().trim().isEmpty() || txt_risikozuschlag_aendern.getText().trim().isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte füllen Sie alle Felder aus!");
+			if(txt_kompetenz_aendern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie einen Kompetenznamen an!");
+			else if (txt_risikozuschlag_aendern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie einen Risikozuschlag an!");
+				
 			alert.showAndWait();
 		} else if (!MainViewController.projekt.getKompetenzen().stream()
 				.anyMatch(obj -> obj.getName().equals(txt_kompetenz_aendern.getText())) || kompetenz.getName().equals(txt_kompetenz_aendern.getText())) {

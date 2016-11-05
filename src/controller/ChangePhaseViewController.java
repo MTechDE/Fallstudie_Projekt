@@ -55,7 +55,12 @@ public class ChangePhaseViewController {
 		if (txt_phase_aendern.getText().trim().isEmpty() || dtpkr_startdatum_aendern.getValue() == null
 				|| dtpkr_enddatum_aendern.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Bitte Füllen Sie alle Felder aus!");
+			if(txt_phase_aendern.getText().trim().isEmpty())
+				alert.setContentText("Bitte geben Sie einen Phasennamen an!");
+			else if(dtpkr_startdatum_aendern.getValue() == null)
+				alert.setContentText("Bitte geben Sie eine Startdatum an!");
+			else if(dtpkr_enddatum_aendern.getValue() == null)
+				alert.setContentText("Bitte geben Sie eine Enddatum an!");
 			alert.showAndWait();
 		} else if (!MainViewController.projekt.getPhasen().stream()
 				.anyMatch(obj -> obj.getName().equals(txt_phase_aendern.getText()))
@@ -94,17 +99,19 @@ public class ChangePhaseViewController {
 	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
-		boolean fehler = false;
-		int startDatum = Integer.parseInt(dtpkr_startdatum_aendern.getValue().toString().replaceAll("-", ""));
-		int endDatum = Integer.parseInt(dtpkr_enddatum_aendern.getValue().toString().replaceAll("-", ""));
-		if (endDatum <= startDatum) {
-			dtpkr_enddatum_aendern.setValue(dtpkr_startdatum_aendern.getValue().plusDays(1));
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
-			alert.showAndWait();
-			fehler = true;
-		}
-		return fehler;
+		if(dtpkr_startdatum_aendern.getValue() != null){
+			int startDatum = Integer.parseInt(dtpkr_startdatum_aendern.getValue().toString().replaceAll("-", ""));
+			int endDatum = Integer.parseInt(dtpkr_enddatum_aendern.getValue().toString().replaceAll("-", ""));
+			if (endDatum <= startDatum) {
+				dtpkr_enddatum_aendern.setValue(dtpkr_startdatum_aendern.getValue().plusDays(1));
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setContentText("Das Enddatum darf nicht gleich wie das Startdatum sein oder davor liegen.");
+				alert.showAndWait();
+				return true;
+			} else
+				return false;
+		} else
+			return false;
 	}
 
 	/**
