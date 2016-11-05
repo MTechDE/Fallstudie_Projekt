@@ -28,7 +28,7 @@ public class Datenbank {
 	private Query query;
 
 	/**
-	 * DB Anmeldedaten werden im Konstruktor konfiguriert.
+	 * DB Anmeldedaten werden im Konstruktor konfiguriert
 	 */
 	public Datenbank() {
 		sql2o = new Sql2o("jdbc:mysql://lolstats.org:3306/fallstudie", "fallstudie_user", "bYv735!r");

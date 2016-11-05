@@ -157,6 +157,7 @@ public class StartViewController {
 	 */
 	@FXML
 	public void btn_deleteProjekt_click(ActionEvent event) throws Exception {
+		// Überprüft ob die Tabelle leer ist
 		if (!tbl_projektTabelle.getItems().isEmpty()) {
 			try {
 				Alert alert = new Alert(AlertType.CONFIRMATION);

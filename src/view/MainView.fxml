@@ -182,7 +182,7 @@
          </tooltip>
       </DatePicker>
       <Separator layoutX="472.0" layoutY="81.0" orientation="VERTICAL" prefHeight="593.0" prefWidth="19.0" />
-      <ImageView fx:id="img_loadingSpinner" fitHeight="38.0" fitWidth="40.0" layoutX="809.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="img_saveBtnImg" fitHeight="38.0" fitWidth="40.0" layoutX="809.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="file:@../../resources/loading.gif" />
          </image>
@@ -239,5 +239,15 @@
             </LinearGradient>
          </textFill>
       </Label>
+      <ImageView fx:id="img_sendBtnImg" fitHeight="38.0" fitWidth="40.0" layoutX="809.0" layoutY="495.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:@../../resources/loading.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="img_exportBtnImg" fitHeight="38.0" fitWidth="40.0" layoutX="809.0" layoutY="586.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="file:@../../resources/loading.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

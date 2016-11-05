@@ -99,9 +99,11 @@ public class MainViewController {
 	@FXML
 	private DatePicker dtpkr_meldeDatum;
 	@FXML
-	private ImageView img_loadingSpinner;
-	@FXML
 	private ImageView img_saveBtnImg;
+	@FXML
+	private ImageView img_sendBtnImg;
+	@FXML
+	private ImageView img_exportBtnImg;
 	@FXML
 	private Label lbl_Intern;
 	@FXML
@@ -148,7 +150,9 @@ public class MainViewController {
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
-		img_loadingSpinner.setVisible(false);
+		img_exportBtnImg.setVisible(false);
+		img_sendBtnImg.setVisible(false);
+		img_saveBtnImg.setVisible(false);
 		lbl_Intern.setVisible(false);
 		lbl_Extern.setVisible(false);
 		btn_aufwand_festlegen.setVisible(false);
@@ -216,6 +220,7 @@ public class MainViewController {
 			@Override
 			public void handle(MouseEvent mouseEvent) {
 
+				// Überprüft ob ein Doppelklick getätigt wurde und ob auf einen Eintrag geklickt wurde
 				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
 						&& !tbl_kompetenz.getItems().isEmpty()
 						&& (tbl_kompetenz.getSelectionModel().getSelectedItem() instanceof Kompetenz)) {
@@ -228,6 +233,7 @@ public class MainViewController {
 					}
 				}
 
+				// Befüllt die Felder
 				try {
 					if (!tbl_kompetenz.getItems().isEmpty())
 						btn_deleteKompetenz.setDisable(false);
@@ -248,16 +254,16 @@ public class MainViewController {
 		});
 
 		// Überprüft, ob die PT oder MAK geändert wurden
-		txt_pt_intern.textProperty().addListener((observable, oldValue, newValue) -> {
+		txt_pt_intern.textProperty().addListener((observable) -> {
 			btn_aufwand_festlegen.setDisable(false);
 		});
-		txt_pt_extern.textProperty().addListener((observable, oldValue, newValue) -> {
+		txt_pt_extern.textProperty().addListener((observable) -> {
 			btn_aufwand_festlegen.setDisable(false);
 		});
-		txt_mak_intern.textProperty().addListener((observable, oldValue, newValue) -> {
+		txt_mak_intern.textProperty().addListener((observable) -> {
 			btn_aufwand_festlegen.setDisable(false);
 		});
-		txt_mak_extern.textProperty().addListener((observable, oldValue, newValue) -> {
+		txt_mak_extern.textProperty().addListener((observable) -> {
 			btn_aufwand_festlegen.setDisable(false);
 		});
 	}
@@ -271,6 +277,7 @@ public class MainViewController {
 	@FXML
 	public void btn_kompetenz_click(ActionEvent event) throws Exception {
 
+		// Überprüfe ob alle Felder befüllt wurden
 		if (txt_kompetenz.getText().trim().isEmpty() || txt_risikozuschlag.getText().trim().isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			if (txt_kompetenz.getText().trim().isEmpty())
@@ -279,7 +286,8 @@ public class MainViewController {
 				alert.setContentText("Bitte geben Sie einen Risikozuschlag an!");
 			alert.showAndWait();
 
-		} else if (!kompetenzen.parallelStream().anyMatch(obj -> obj.getName().equals(txt_kompetenz.getText()))) {
+			// Überprüft ob der Name bereits verwendet wurde
+		} else if (!kompetenzen.parallelStream().anyMatch(k -> k.getName().equals(txt_kompetenz.getText()))) {
 
 			// Risikozuschlag von -,% und falschem Dezimalzeichen
 			// befreien
@@ -324,6 +332,8 @@ public class MainViewController {
 	 */
 	@FXML
 	public void btn_phase_click(ActionEvent event) throws Exception {
+		
+		// Überprüft ob alle Felder befüllt wurden
 		if (txt_phase.getText().trim().isEmpty() || dtpkr_start.getValue() == null || dtpkr_end.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			if (txt_phase.getText().trim().isEmpty())
@@ -333,6 +343,7 @@ public class MainViewController {
 			else if (dtpkr_end.getValue() == null)
 				alert.setContentText("Bitte geben Sie eine Enddatum an!");
 			alert.showAndWait();
+			// Überprüft ob der Namen bereits verwendet wurde
 		} else if (!phasen.parallelStream().anyMatch(p -> p.getName().equals(txt_phase.getText()))) {
 			Phase phase = new Phase(txt_phase.getText(), dtpkr_start.getValue().toString(),
 					dtpkr_end.getValue().toString());
@@ -356,7 +367,8 @@ public class MainViewController {
 	}
 
 	/**
-	 * Actionlistener für das Aufwands Menü
+	 * Actionlistener für das Aufwands Menü.
+	 * Setzt die passenden Eingabefelder
 	 * 
 	 * @param event
 	 * @throws Exception
@@ -403,6 +415,7 @@ public class MainViewController {
 	 */
 	@FXML
 	public boolean datepicker_ende_selected(ActionEvent event) throws Exception {
+		// Überprüft ob das Enddatum vor dem Startdatum liegt
 		if (dtpkr_start.getValue() != null && dtpkr_end.getValue() != null) {
 			int startDatum = Integer.parseInt(dtpkr_start.getValue().toString().replaceAll("-", ""));
 			int endDatum = Integer.parseInt(dtpkr_end.getValue().toString().replaceAll("-", ""));
@@ -430,6 +443,7 @@ public class MainViewController {
 		double ptExtern = 0;
 		int auswahl = chobx_aufwand.getSelectionModel().getSelectedIndex();
 
+		// Überprüft ob alle Felder befüllt wurden
 		if ((auswahl == 0 && (txt_pt_intern.getText().trim().isEmpty() || txt_pt_extern.getText().trim().isEmpty()))
 				|| (auswahl == 1
 						&& (txt_mak_intern.getText().isEmpty() || txt_mak_extern.getText().trim().isEmpty()))) {
@@ -448,6 +462,7 @@ public class MainViewController {
 				int phasenIndex = tbl_phase.getSelectionModel().getSelectedIndex();
 				Kompetenz kompetenzSelected = tbl_kompetenz.getSelectionModel().getSelectedItem();
 
+				// Setze PT anhand der getroffenen Auswahl
 				switch (auswahl) {
 				case 0:
 					ptIntern = Double.parseDouble(txt_pt_intern.getText().replace(",", "."));
@@ -462,7 +477,7 @@ public class MainViewController {
 					break;
 				}
 
-				// Setzt neue Aufwände anhand der Zugehörigkeit
+				// Setzt neue Aufwände anhand der Zugehörigkeit falls noch nicht geschehen
 				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream()
 						.anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
 					projekt.getPhasen().get(phasenIndex)
@@ -470,7 +485,8 @@ public class MainViewController {
 					projekt.getPhasen().get(phasenIndex)
 							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
 				}
-
+				
+				// Setzt die angegebenen PT in den passenden Aufwänden
 				for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
 
 					if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("intern")
@@ -519,15 +535,18 @@ public class MainViewController {
 		Scene scene = source.getScene();
 
 		try {
-			// Der Speichervorgang in der DB wird im Hintergrund ausgeführt
+			/*
+			 * Speichervorgang wird in einem neuen Thread ausgeführt
+			 * um die Anwendung nicht einzufrieren
+			 */
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					img_loadingSpinner.setVisible(true);
+					img_saveBtnImg.setVisible(true);
 					btn_projekt_speichern.setDisable(true);
 					myDB.updateProjekt(projekt);
 					btn_projekt_speichern.setDisable(false);
-					img_loadingSpinner.setVisible(false);
+					img_saveBtnImg.setVisible(false);
 				}
 			}).start();
 			somethingChanged = false;
@@ -548,6 +567,8 @@ public class MainViewController {
 	 */
 	@FXML
 	public void btn_sendProjekt_click(ActionEvent event) throws Exception {
+		
+		// Überprüft ob das Meldedatum gesetzt wurde
 		if (dtpkr_meldeDatum.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setHeaderText("Ungültiges Meldedatum");
@@ -558,16 +579,19 @@ public class MainViewController {
 			Scene scene = source.getScene();
 			Stage stage = (Stage) scene.getWindow();
 
+			// Öffne einen Speichern Dialog und übergebe den Pfad an die Export Klasse
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Projektdaten exportieren");
 			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 			File file = fileChooser.showSaveDialog(stage);
 
 			if (file != null) {
+				// Exportiere die Datei in einem neuen Thread
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
 						btn_sendProjekt.setDisable(true);
+						img_sendBtnImg.setVisible(true);
 						projekt.setgemeldet(true);
 						projekt.setMeldeDatum(dtpkr_meldeDatum.getValue().toString());
 						Excel.ExportToExcel(projekt, file.getAbsolutePath());
@@ -577,6 +601,7 @@ public class MainViewController {
 							if (Configuration.DEBUG)
 								System.out.println(e.getMessage());
 						}
+						img_sendBtnImg.setVisible(false);
 						btn_sendProjekt.setDisable(false);
 					}
 				}).start();
@@ -596,6 +621,7 @@ public class MainViewController {
 		Node source = (Node) event.getSource();
 		Stage stage = (Stage) source.getScene().getWindow();
 
+		// Überprüft ob Daten verändert wurden
 		if (somethingChanged) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setContentText("Bitte wählen Sie eine der folgenden Auswahlmöglichkeiten!");
@@ -623,7 +649,7 @@ public class MainViewController {
 	}
 
 	/**
-	 * Berechne die ANzahl der Arbeitstage zwischen zwei Daten
+	 * Berechne die Anzahl der Arbeitstage zwischen zwei Daten
 	 * 
 	 * @param startDatum
 	 * @param endDatum
@@ -682,7 +708,7 @@ public class MainViewController {
 	}
 
 	/**
-	 * Actionlistener für den Export Button
+	 * Actionlistener für den Export Button.
 	 * 
 	 * @param event
 	 * @throws Exception
@@ -693,17 +719,22 @@ public class MainViewController {
 		Scene scene = source.getScene();
 		Stage stage = (Stage) scene.getWindow();
 
+		// Öffne einen SPeichern Dialog und übergebe den Pfad an die Export Klasse
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Projektdaten exportieren");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("xlsx", "*.xlsx"));
 		File file = fileChooser.showSaveDialog(stage);
 
-		// Exportiere die Daten im Hintergrund
+		// Exprtiere die Daten in einem neuen Thread
 		if (file != null) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
+					btn_export.setDisable(true);
+					img_exportBtnImg.setVisible(true);
 					Excel.ExportToExcel(projekt, file.getAbsolutePath());
+					img_exportBtnImg.setVisible(false);
+					btn_export.setDisable(false);
 				}
 			}).start();
 		}

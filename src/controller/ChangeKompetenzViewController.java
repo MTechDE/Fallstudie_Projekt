@@ -47,14 +47,15 @@ public class ChangeKompetenzViewController {
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
 
+		// Überprüfe ob alle Felder ausgefüllt wurden
 		if (txt_kompetenz_aendern.getText().trim().isEmpty() || txt_risikozuschlag_aendern.getText().trim().isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			if(txt_kompetenz_aendern.getText().trim().isEmpty())
 				alert.setContentText("Bitte geben Sie einen Kompetenznamen an!");
 			else if (txt_risikozuschlag_aendern.getText().trim().isEmpty())
 				alert.setContentText("Bitte geben Sie einen Risikozuschlag an!");
-				
 			alert.showAndWait();
+			// Überprüfe ob der Name bereits verwendet wurde
 		} else if (!MainViewController.projekt.getKompetenzen().stream()
 				.anyMatch(obj -> obj.getName().equals(txt_kompetenz_aendern.getText())) || kompetenz.getName().equals(txt_kompetenz_aendern.getText())) {
 			
@@ -68,6 +69,7 @@ public class ChangeKompetenzViewController {
 				}
 			}
 			
+			// Setzt den neuen Namen
 			kompetenz.setName(txt_kompetenz_aendern.getText());
 			kompetenz.setRisikozuschlag(Double.parseDouble(txt_risikozuschlag_aendern.getText().replace(",", ".")));
 			MainViewController.somethingChanged = true;
@@ -80,7 +82,8 @@ public class ChangeKompetenzViewController {
 	}
 
 	/**
-	 * Actionlistener für den Abbrechen-Button
+	 * Actionlistener für den Abbrechen-Button.
+	 * Schließt die Ändern View
 	 * 
 	 * @param event
 	 * @throws Exception
@@ -95,7 +98,7 @@ public class ChangeKompetenzViewController {
 	/**
 	 * Controller wird zu änderndes Kompetenzobjekt direkt zugewiesen
 	 * 
-	 * @param k
+	 * @param k Setzt Kompetenz
 	 */
 	public static void setKompetenz(Kompetenz k) {
 		kompetenz = k;

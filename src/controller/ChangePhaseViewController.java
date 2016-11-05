@@ -52,6 +52,8 @@ public class ChangePhaseViewController {
 	 */
 	@FXML
 	private void btn_aendern_click(ActionEvent event) throws Exception {
+		
+		// Überprüfe ob alle Felder gefüllt sind
 		if (txt_phase_aendern.getText().trim().isEmpty() || dtpkr_startdatum_aendern.getValue() == null
 				|| dtpkr_enddatum_aendern.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -62,6 +64,7 @@ public class ChangePhaseViewController {
 			else if(dtpkr_enddatum_aendern.getValue() == null)
 				alert.setContentText("Bitte geben Sie eine Enddatum an!");
 			alert.showAndWait();
+			// Überprüfe ob der  Namen bereits verwendet wurde
 		} else if (!MainViewController.projekt.getPhasen().stream()
 				.anyMatch(obj -> obj.getName().equals(txt_phase_aendern.getText()))
 				|| txt_phase_aendern.getText().equals(phase.getName())) {
@@ -78,7 +81,8 @@ public class ChangePhaseViewController {
 	}
 
 	/**
-	 * Actionlistener für den ABbrechen-Button
+	 * Actionlistener für den Abbrechen-Button.
+	 * Schließt die Ändern View
 	 * 
 	 * @param event
 	 * @throws Exception
@@ -91,7 +95,8 @@ public class ChangePhaseViewController {
 	}
 
 	/**
-	 * Actionlistener für den Endedatum-Datepicker
+	 * Actionlistener für den Endedatum-Datepicker.
+	 * Überprüft ob das Enddatum vor dem Startdatum liegt.
 	 * 
 	 * @param event
 	 * @return
