@@ -87,66 +87,73 @@ public class StartViewController {
 		// Falls keine Projekte gefunden wurden, wird dieser Text in der Tabelle
 		// angezeigt
 		tbl_projektTabelle.setPlaceholder(new Label("Keine Projekte gefunden"));
+		
+		// Überprüfe ob die Datenbank online ist.
+		if(myDB.testConnection()){
+			// Zellen werden automatisch gefüllt, anhand der projektDaten-Klasse
+			tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+			tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
+			tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
+			tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
+			tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().gemeldetProperty());
+			tblCell_projektSendDate.setCellValueFactory(cellData -> cellData.getValue().getMeldeDatumProperty());
 
-		// Zellen werden automatisch gefüllt, anhand der projektDaten-Klasse
-		tblCell_projektName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		tblCell_projektErsteller.setCellValueFactory(cellData -> cellData.getValue().erstellerProperty());
-		tblCell_projektStart.setCellValueFactory(cellData -> cellData.getValue().startDateProperty());
-		tblCell_projektEnd.setCellValueFactory(cellData -> cellData.getValue().endDateProperty());
-		tblCell_projektSend.setCellValueFactory(cellData -> cellData.getValue().gemeldetProperty());
-		tblCell_projektSendDate.setCellValueFactory(cellData -> cellData.getValue().getMeldeDatumProperty());
+			// Weise Daten der Tabelle zu
+			projektData = FXCollections.observableArrayList(myDB.getProjekte());
+			lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
 
-		// Weise Daten der Tabelle zu
-		projektData = FXCollections.observableArrayList(myDB.getProjekte());
-		lbl_projekteGefunden.setText(String.valueOf(projektData.size()));
+			// Tabelle wird gefiltert durch das Suchfeld
+			FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
+			txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
+				filteredData.setPredicate(projekt -> {
+					if (newValue == null || newValue.isEmpty()) {
+						return true;
+					}
+					String lowerCaseFilter = newValue.toLowerCase();
 
-		// Tabelle wird gefiltert durch das Suchfeld
-		FilteredList<Projekt> filteredData = new FilteredList<>(projektData, p -> true);
-		txt_searchProjekt_name.textProperty().addListener((observable, oldValue, newValue) -> {
-			filteredData.setPredicate(projekt -> {
-				if (newValue == null || newValue.isEmpty()) {
-					return true;
-				}
-				String lowerCaseFilter = newValue.toLowerCase();
-
-				if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
-					return true;
-				}
-				return false;
+					if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
+						return true;
+					}
+					return false;
+				});
 			});
-		});
 
-		// Lade Daten in die Tabelle
-		SortedList<Projekt> sortedData = new SortedList<>(filteredData);
-		sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
+			// Lade Daten in die Tabelle
+			SortedList<Projekt> sortedData = new SortedList<>(filteredData);
+			sortedData.comparatorProperty().bind(tbl_projektTabelle.comparatorProperty());
 
-		// Lade Projekte in die Tabelle
-		if (!projektData.isEmpty())
-			tbl_projektTabelle.setItems(sortedData);
+			// Lade Projekte in die Tabelle
+			if (!projektData.isEmpty())
+				tbl_projektTabelle.setItems(sortedData);
 
-		// Reagiert auf Klicks auf ein Element in der Tabelle
-		tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent mouseEvent) {
-				if (tbl_projektTabelle.getFocusModel().getFocusedIndex() >= 0)
-					btn_deleteProjekt.setDisable(false);
-				// Doppelklick + Linke Maustaste
-				if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
-						&& tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
-					try {
-						// Öffne Hauptfenster
-						new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
-						// Schließe Fenster
-						Node source = (Node) mouseEvent.getSource();
-						Stage stage = (Stage) source.getScene().getWindow();
-						stage.close();
-					} catch (Exception e) {
-						if (Configuration.DEBUG)
-							System.out.println(e.getMessage());
+			// Reagiert auf Klicks auf ein Element in der Tabelle
+			tbl_projektTabelle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+					if (tbl_projektTabelle.getFocusModel().getFocusedIndex() >= 0)
+						btn_deleteProjekt.setDisable(false);
+					// Doppelklick + Linke Maustaste
+					if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
+							&& tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
+						try {
+							// Öffne Hauptfenster
+							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
+							// Schließe Fenster
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
+							stage.close();
+						} catch (Exception e) {
+							if (Configuration.DEBUG)
+								System.out.println(e.getMessage());
+						}
 					}
 				}
-			}
-		});
+			});
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Datenbank offline! Bitte probieren Sie in ein paar Minuten neu!");
+			alert.showAndWait();
+		}
 	}
 
 	/**

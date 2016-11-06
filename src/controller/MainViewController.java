@@ -128,7 +128,7 @@ public class MainViewController {
 	@FXML
 	private void initialize() {
 
-		// Importiere projektDaten
+		// Importiere Projekt
 		projekt = OpenMainPage.tmpProjekt;
 
 		// Initialisiere Tabellen
@@ -146,7 +146,7 @@ public class MainViewController {
 		tbl_kompetenz.setItems(kompetenzen);
 		tbl_phase.setItems(phasen);
 
-		// UI wird initialisiert
+		//Initialisiere UI Elemente
 		aufwaende.add("Personentage (PT)");
 		aufwaende.add("Mitarbeiterkapazität (MAK)");
 		chobx_aufwand.setItems(aufwaende);
@@ -156,16 +156,16 @@ public class MainViewController {
 		lbl_Intern.setVisible(false);
 		lbl_Extern.setVisible(false);
 		btn_aufwand_festlegen.setVisible(false);
-
-		if (projekt.isgemeldet())
-			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
-
 		txt_pt_intern.setVisible(false);
 		txt_pt_extern.setVisible(false);
 		txt_mak_intern.setVisible(false);
 		txt_mak_extern.setVisible(false);
 		txt_mak_pt_intern.setVisible(false);
 		txt_mak_pt_extern.setVisible(false);
+
+		// Setze das Meldedatum
+		if (projekt.isgemeldet())
+			dtpkr_meldeDatum.setValue(LocalDate.parse(projekt.getMeldeDatum()));
 
 		// ActionHandler Tabelle Phase
 		tbl_phase.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -475,32 +475,30 @@ public class MainViewController {
 					ptIntern = Double.parseDouble(txt_mak_intern.getText().replace(",", ".").replace("-", "")) * arbeitstage;
 					ptExtern = Double.parseDouble(txt_mak_extern.getText().replace(",", ".").replace("-", "")) * arbeitstage;
 					break;
-				default:
-					break;
 				}
 
 				// Setzt neue Aufwände anhand der Zugehörigkeit falls noch nicht geschehen
 				if (!projekt.getPhasen().get(phasenIndex).getAufwände().stream()
 						.anyMatch(obj -> obj.getZugehoerigkeit().equals(kompetenzSelected.getName()))) {
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName()));
+							.setSingleAufwand(new Aufwand("intern", kompetenzSelected.getName(), ptIntern));
 					projekt.getPhasen().get(phasenIndex)
-							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName()));
-				}
-				
-				// Setzt die angegebenen PT in den passenden Aufwänden
-				for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
+							.setSingleAufwand(new Aufwand("extern", kompetenzSelected.getName(), ptExtern));
+				} else {
+					// Setzt die angegebenen PT in den passenden Aufwänden
+					for (int i = 0; i < projekt.getPhasen().get(phasenIndex).getAufwände().size(); i++) {
 
-					if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("intern")
-							&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
-									.equals(kompetenzSelected.getName())) {
-						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptIntern);
-					}
+						if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("intern")
+								&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
+										.equals(kompetenzSelected.getName())) {
+							projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptIntern);
+						}
 
-					if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("extern")
-							&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
-									.equals(kompetenzSelected.getName())) {
-						projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptExtern);
+						if (projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getName().equals("extern")
+								&& projekt.getPhasen().get(phasenIndex).getAufwände().get(i).getZugehoerigkeit()
+										.equals(kompetenzSelected.getName())) {
+							projekt.getPhasen().get(phasenIndex).getAufwände().get(i).setPt(ptExtern);
+						}
 					}
 				}
 
@@ -800,11 +798,12 @@ public class MainViewController {
 				// Kompetenz
 				for (int i = 0; i < projekt.getPhasen().size(); i++) {
 					projekt.getPhasen().get(i).getAufwände().removeIf(a -> a.getZugehoerigkeit()
-							.equalsIgnoreCase(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()));
+							.equals(tbl_kompetenz.getSelectionModel().getSelectedItem().getName()));
 				}
 				projekt.getKompetenzen().remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 				kompetenzen.remove(tbl_kompetenz.getSelectionModel().getSelectedIndex());
 
+				// Falls keine Kompetenzrn mehr vorhanden sind wird der Button wieder diabled
 				if (tbl_kompetenz.getItems().isEmpty())
 					btn_deleteKompetenz.setDisable(true);
 
