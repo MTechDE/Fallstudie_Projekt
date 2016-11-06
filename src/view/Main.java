@@ -9,17 +9,19 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * Läd die Start View
+ * Öffnet die Start View
  * 
  * @author Daniel Sogl
  *
  */
 
 public class Main extends Application {
+	/**
+	 * Lade die FXML Datei und öffne diese
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			// Lade die FXML Datei
 			Parent root = FXMLLoader.load(getClass().getResource("StartView.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setTitle("Vanilla Sky");

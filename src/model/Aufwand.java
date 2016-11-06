@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Speichert die Aufwände
+ * Bildet einen Aufwand ab
  * 
  * @author Daniel Sogl
  */

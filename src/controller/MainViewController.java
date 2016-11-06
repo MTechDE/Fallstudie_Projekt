@@ -465,13 +465,15 @@ public class MainViewController {
 				// Setze PT anhand der getroffenen Auswahl
 				switch (auswahl) {
 				case 0:
-					ptIntern = Double.parseDouble(txt_pt_intern.getText().replace(",", "."));
-					ptExtern = Double.parseDouble(txt_pt_extern.getText().replace(",", "."));
+					// Entfernt Minuszeichen und macht aus einem , ein .
+					ptIntern = Double.parseDouble(txt_pt_intern.getText().replace(",", ".").replace("-", ""));
+					ptExtern = Double.parseDouble(txt_pt_extern.getText().replace(",", ".").replace("-", ""));
 					break;
 				case 1:
 					// Berechnung der PT: MAK * verfügbare Werktage der Phase
-					ptIntern = Double.parseDouble(txt_mak_intern.getText().replace(",", ".")) * arbeitstage;
-					ptExtern = Double.parseDouble(txt_mak_extern.getText().replace(",", ".")) * arbeitstage;
+					// Entfernt Minuszeichen und macht aus einem , ein .
+					ptIntern = Double.parseDouble(txt_mak_intern.getText().replace(",", ".").replace("-", "")) * arbeitstage;
+					ptExtern = Double.parseDouble(txt_mak_extern.getText().replace(",", ".").replace("-", "")) * arbeitstage;
 					break;
 				default:
 					break;

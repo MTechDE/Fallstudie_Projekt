@@ -16,7 +16,8 @@ import model.Phase;
 import model.Projekt;
 
 /**
- * Schnittstelle zwischen der MySQL Datenbank und dem Programm
+ * Schnittstelle zwischen der MySQL Datenbank und dem model
+ * Verwendet die sql2o Bibliothek
  * 
  * @author Daniel Sogl
  */

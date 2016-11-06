@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
- * 
+ * Öffnet die Start View
  * @author Daniel Sogl
  *
  */

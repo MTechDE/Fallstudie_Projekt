@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Speichert Kompetenzen
+ * Bildet eine Kompetenz ab
  * 
  * @author Daniel Sogl
  */

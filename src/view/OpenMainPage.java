@@ -19,7 +19,7 @@ import javafx.stage.WindowEvent;
 import model.Projekt;
 
 /**
- * 
+ * Öffnet die Haupt View
  * @author Daniel Sogl
  *
  */

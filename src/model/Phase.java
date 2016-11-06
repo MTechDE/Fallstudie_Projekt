@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 import model.Aufwand;
 
 /**
- * Speichert Phasen
+ * Bildet eine Phase ab und speichert Aufwände
  * 
  * @author Daniel Sogl
  */

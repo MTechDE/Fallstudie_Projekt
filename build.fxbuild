@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ASCII"?>
 <anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.jdt/1.0" buildDirectory="${project}/build" cssToBin="true">
   <deploy splashImage="" packagingFormat="exe" proxyResolution="true">
-    <application name="Fallstudie_" mainclass="view.Main" preloaderclass="view.Splash" version="1.0 - RC3" toolkit="fx"/>
+    <application name="Fallstudie_" mainclass="view.Main" preloaderclass="view.Splash" version="0.13.0" toolkit="fx"/>
     <info title="Vanilla Sky" vendor="Soft ICE"/>
   </deploy>
   <signjar alias="" keypass=""/>

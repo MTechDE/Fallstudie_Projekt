@@ -15,8 +15,8 @@ import model.Kompetenz;
 import model.Phase;
 
 /**
- * 
- * @author Daniel Sogl, Tim Krießler
+ * Öffnet die passende Bearbeitungs View
+ * @author Tim Krießler, Daniel Sogl
  *
  */
 public class OpenChangeView extends Stage {

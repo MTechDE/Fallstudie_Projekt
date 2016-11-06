@@ -9,7 +9,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
- * Speichert Projekte
+ * Bildet ein Projekt ab und speichert Phasen
+ * sowie Kompetenzen.
  * 
  * @author Daniel Sogl
  *
