@@ -41,7 +41,7 @@ public class ChangeKompetenzViewController {
 	/**
 	 * Actionlistener für den Ändern-Button
 	 * 
-	 * @param event
+	 * @param event das Clickevent
 	 * @throws Exception
 	 */
 	@FXML

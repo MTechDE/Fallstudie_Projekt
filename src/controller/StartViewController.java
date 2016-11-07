@@ -109,10 +109,11 @@ public class StartViewController {
 					if (newValue == null || newValue.isEmpty()) {
 						return true;
 					}
+					// Unabhänig von der Groß/Kleinschreibung
 					String lowerCaseFilter = newValue.toLowerCase();
 
 					if (projekt.getName().toLowerCase().contains(lowerCaseFilter)) {
-						return true;
+						return true;	
 					}
 					return false;
 				});
@@ -136,11 +137,11 @@ public class StartViewController {
 					if (mouseEvent.getClickCount() == 2 && (mouseEvent.getButton() == MouseButton.PRIMARY)
 							&& tbl_projektTabelle.getSelectionModel().getSelectedItem() instanceof Projekt) {
 						try {
+							Node source = (Node) mouseEvent.getSource();
+							Stage stage = (Stage) source.getScene().getWindow();
 							// Öffne Hauptfenster
 							new OpenMainPage(tbl_projektTabelle.getSelectionModel().getSelectedItem(), false);
 							// Schließe Fenster
-							Node source = (Node) mouseEvent.getSource();
-							Stage stage = (Stage) source.getScene().getWindow();
 							stage.close();
 						} catch (Exception e) {
 							if (Configuration.DEBUG)
@@ -218,6 +219,7 @@ public class StartViewController {
 				// Öffne Hauptfenster
 				Node source = (Node) event.getSource();
 				Stage stage = (Stage) source.getScene().getWindow();
+				
 				new OpenMainPage(newProjekt, true);
 
 				// Schließe Fenster
