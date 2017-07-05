@@ -4,7 +4,7 @@ Software zur Erstellung von Aufwandschaetzungen und Planung von Mitarbeitern als
 
 ## Instalation
 1. Installiere das aktuellste Java JDK
-2. Installiere Eclipse in der aktuellsten Version (Neo)
+2. Installiere Eclipse in der aktuellsten Version (Neon)
 3. Installiere GitHub Desktop und melde dich mit deinem GitHub Account an
 4. Clone das Projekt in dein gewünschtes Verzeichnis und öffene es mit Eclipse
 5. Füge in Eclipse folgende Erweiterungen hinzu (Help -> Install new Software): 
@@ -12,8 +12,6 @@ Software zur Erstellung von Aufwandschaetzungen und Planung von Mitarbeitern als
 6. Installiere den JavaFX Scene Builder (http://gluonhq.com/labs/scene-builder/#download)
 7. In den Eclipse Einstellungen den Pfad zur Scenebuilder.exe Date eintragen (C:\Users\MeinBenutzerName\AppData\Local\SceneBuilder\SceneBuilder.exe)
 8. Importiere die Libarys in das Javaprojekt (Properties -> Java Build Path)
-9. Starte die Test Klasse under src->Test 
-10. Starte die Mail-Kalsse unter UI->Main
 	
 ## Programmierregeln
 Um einen einheitlichen Code zu schreiben, sollten folgende Regeln beachtet werden.
